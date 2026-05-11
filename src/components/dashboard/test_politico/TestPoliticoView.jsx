@@ -158,23 +158,23 @@ const TestPoliticoView = () => {
 
   if (!started) {
     return (
-      <div className="w-full h-full min-h-[80vh] flex flex-col items-center justify-center p-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="max-w-2xl text-center space-y-8 bg-white p-12 rounded-[3rem] shadow-xl border border-slate-100">
+      <div className="w-full h-full min-h-[80vh] flex flex-col items-center justify-center p-6 animate-in fade-in slide-in-from-bottom-4 duration-500 transition-colors">
+        <div className="max-w-2xl text-center space-y-8 bg-white dark:bg-slate-800 p-12 rounded-[3rem] shadow-xl border border-slate-100 dark:border-slate-700 transition-colors">
           <div className="w-24 h-24 bg-gradient-to-br from-[#001D4A] to-blue-600 rounded-full flex items-center justify-center mx-auto shadow-2xl">
             <BarChart2 size={40} className="text-white" />
           </div>
           <div>
-            <h1 className="text-4xl md:text-5xl font-[1000] text-[#001D4A] tracking-tighter uppercase italic mb-4">VotoMetro <span className="text-red-600">CR 2026</span></h1>
-            <p className="text-slate-500 text-lg md:text-xl font-medium leading-relaxed">
+            <h1 className="text-4xl md:text-5xl font-[1000] text-[#001D4A] dark:text-white tracking-tighter uppercase italic mb-4 transition-colors">VotoMetro <span className="text-red-600">CR 2026</span></h1>
+            <p className="text-slate-500 dark:text-slate-400 text-lg md:text-xl font-medium leading-relaxed transition-colors">
               Descubre qué partido político se alinea realmente con tus ideales y valores para las próximas elecciones en Costa Rica.
             </p>
           </div>
           
           <div className="grid grid-cols-2 gap-4 text-left max-w-md mx-auto py-6">
-            <div className="flex items-center gap-3"><Shield size={20} className="text-blue-500" /> <span className="font-bold text-sm text-slate-600 uppercase">Seguridad</span></div>
-            <div className="flex items-center gap-3"><TrendingUp size={20} className="text-green-500" /> <span className="font-bold text-sm text-slate-600 uppercase">Economía</span></div>
-            <div className="flex items-center gap-3"><Users size={20} className="text-purple-500" /> <span className="font-bold text-sm text-slate-600 uppercase">Derechos</span></div>
-            <div className="flex items-center gap-3"><Landmark size={20} className="text-slate-500" /> <span className="font-bold text-sm text-slate-600 uppercase">Estado</span></div>
+            <div className="flex items-center gap-3"><Shield size={20} className="text-blue-500" /> <span className="font-bold text-sm text-slate-600 dark:text-slate-300 uppercase">Seguridad</span></div>
+            <div className="flex items-center gap-3"><TrendingUp size={20} className="text-green-500" /> <span className="font-bold text-sm text-slate-600 dark:text-slate-300 uppercase">Economía</span></div>
+            <div className="flex items-center gap-3"><Users size={20} className="text-purple-500" /> <span className="font-bold text-sm text-slate-600 dark:text-slate-300 uppercase">Derechos</span></div>
+            <div className="flex items-center gap-3"><Landmark size={20} className="text-slate-500 dark:text-slate-400" /> <span className="font-bold text-sm text-slate-600 dark:text-slate-300 uppercase">Estado</span></div>
           </div>
 
           <button 
@@ -192,11 +192,11 @@ const TestPoliticoView = () => {
   if (showResults) {
     const winner = results[0];
     return (
-      <div className="w-full max-w-4xl mx-auto p-6 py-12 animate-in slide-in-from-bottom-10 duration-700">
+      <div className="w-full max-w-4xl mx-auto p-6 py-12 animate-in slide-in-from-bottom-10 duration-700 transition-colors">
         
         <div className="text-center mb-12">
-          <h2 className="text-sm font-black text-slate-400 uppercase tracking-[0.3em] mb-2">Resultados del Análisis</h2>
-          <h1 className="text-4xl md:text-5xl font-[1000] text-[#001D4A] tracking-tighter uppercase italic">Tu Afinidad <span className="text-red-600">Política</span></h1>
+          <h2 className="text-sm font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mb-2">Resultados del Análisis</h2>
+          <h1 className="text-4xl md:text-5xl font-[1000] text-[#001D4A] dark:text-white tracking-tighter uppercase italic transition-colors">Tu Afinidad <span className="text-red-600">Política</span></h1>
         </div>
 
         {/* WINNER CARD */}
@@ -224,31 +224,31 @@ const TestPoliticoView = () => {
         </div>
 
         {/* PERFIL IDEOLÓGICO */}
-        <div className="bg-white rounded-[2rem] p-8 md:p-10 shadow-lg border border-slate-100 mb-12">
-          <h3 className="text-xl font-black text-[#001D4A] uppercase tracking-tighter italic mb-6 flex items-center gap-3">
+        <div className="bg-white dark:bg-slate-800 rounded-[2rem] p-8 md:p-10 shadow-lg border border-slate-100 dark:border-slate-700 mb-12 transition-colors">
+          <h3 className="text-xl font-black text-[#001D4A] dark:text-white uppercase tracking-tighter italic mb-6 flex items-center gap-3 transition-colors">
             <User size={24} className="text-red-600" /> 📍 Tu Perfil Ideológico
           </h3>
-          <p className="text-slate-600 text-lg leading-relaxed font-medium">
+          <p className="text-slate-600 dark:text-slate-300 text-lg leading-relaxed font-medium transition-colors">
             {generateIdeologyProfile()}
           </p>
         </div>
 
         {/* RANKING COMPLETO */}
-        <h3 className="text-xl font-black text-[#001D4A] uppercase tracking-tighter italic mb-6 ml-2">📊 Ranking Completo</h3>
+        <h3 className="text-xl font-black text-[#001D4A] dark:text-white uppercase tracking-tighter italic mb-6 ml-2 transition-colors">📊 Ranking Completo</h3>
         <div className="space-y-4">
           {results.map((result, idx) => (
-            <div key={result.id} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4 group hover:border-blue-200 transition-colors">
-              <div className="w-12 h-12 flex-shrink-0 rounded-full overflow-hidden border-2 border-slate-100 group-hover:border-blue-200">
+            <div key={result.id} className="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-center gap-4 group hover:border-blue-200 dark:hover:border-blue-500 transition-colors">
+              <div className="w-12 h-12 flex-shrink-0 rounded-full overflow-hidden border-2 border-slate-100 dark:border-slate-700 group-hover:border-blue-200 dark:group-hover:border-blue-500 transition-colors">
                 {result.data.bandera}
               </div>
               <div className="flex-grow">
                 <div className="flex justify-between items-end mb-2">
-                  <h4 className="font-bold text-slate-800">{result.data.nombre}</h4>
-                  <span className="font-black text-[#001D4A]">{Math.round(result.score)}%</span>
+                  <h4 className="font-bold text-slate-800 dark:text-white transition-colors">{result.data.nombre}</h4>
+                  <span className="font-black text-[#001D4A] dark:text-white transition-colors">{Math.round(result.score)}%</span>
                 </div>
-                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden transition-colors">
                   <div 
-                    className={`h-full rounded-full transition-all duration-1000 ${idx === 0 ? 'bg-green-500' : 'bg-[#001D4A]'}`}
+                    className={`h-full rounded-full transition-all duration-1000 ${idx === 0 ? 'bg-green-500' : 'bg-[#001D4A] dark:bg-blue-500'}`}
                     style={{ width: `${result.score}%` }}
                   ></div>
                 </div>
@@ -265,7 +265,7 @@ const TestPoliticoView = () => {
               setShowResults(false);
               setStarted(false);
             }}
-            className="inline-flex items-center gap-2 text-slate-400 hover:text-[#001D4A] font-black text-sm uppercase tracking-widest transition-colors"
+            className="inline-flex items-center gap-2 text-slate-400 hover:text-[#001D4A] dark:hover:text-blue-400 font-black text-sm uppercase tracking-widest transition-colors"
           >
             <RefreshCw size={16} /> Volver a tomar el test
           </button>
@@ -283,22 +283,22 @@ const TestPoliticoView = () => {
       {/* HEADER & PROGRESS */}
       <div className="mb-12">
         <div className="flex justify-between items-center mb-4">
-          <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Pregunta {currentQuestion + 1} de {QUESTIONS.length}</span>
-          <span className="text-xs font-black text-[#001D4A] uppercase tracking-widest">{Math.round(progress)}%</span>
+          <span className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Pregunta {currentQuestion + 1} de {QUESTIONS.length}</span>
+          <span className="text-xs font-black text-[#001D4A] dark:text-blue-400 uppercase tracking-widest transition-colors">{Math.round(progress)}%</span>
         </div>
-        <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+        <div className="w-full h-3 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden transition-colors">
           <div className="h-full bg-gradient-to-r from-[#001D4A] to-blue-500 rounded-full transition-all duration-500" style={{ width: `${progress}%` }}></div>
         </div>
       </div>
 
       {/* QUESTION CARD */}
-      <div className="bg-white rounded-[3rem] p-8 md:p-12 shadow-xl border border-slate-100 text-center relative mb-12 animate-in slide-in-from-right-8 duration-300" key={question.id}>
-        <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-50 px-6 py-2 rounded-full border border-slate-200 flex items-center gap-2 shadow-sm">
+      <div className="bg-white dark:bg-slate-800 rounded-[3rem] p-8 md:p-12 shadow-xl border border-slate-100 dark:border-slate-700 text-center relative mb-12 animate-in slide-in-from-right-8 duration-300 transition-colors" key={question.id}>
+        <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-50 dark:bg-slate-900 px-6 py-2 rounded-full border border-slate-200 dark:border-slate-600 flex items-center gap-2 shadow-sm transition-colors">
           {getCategoryIcon(question.category)}
-          <span className="text-xs font-black uppercase tracking-widest text-slate-600">{question.category}</span>
+          <span className="text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">{question.category}</span>
         </div>
         
-        <h2 className="text-3xl md:text-4xl font-black text-[#001D4A] leading-tight mt-6 mb-12">
+        <h2 className="text-3xl md:text-4xl font-black text-[#001D4A] dark:text-white leading-tight mt-6 mb-12 transition-colors">
           "{question.text}"
         </h2>
 

@@ -32,7 +32,7 @@ const PlanesView = () => {
   const fileInputRef = useRef(null);
   const resultsRef = useRef(null);
   const dropdownRef = useRef(null);
-  const apiKey = ""; 
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY; 
 
   useEffect(() => {
     if (!window.pdfjsLib) {
@@ -127,7 +127,7 @@ const PlanesView = () => {
     - DEVUELVE SOLO JSON: {"economia":[], "salud":[], "educacion":[], "seguridad":[], "ambiente":[], "deportes":[], "infraestructura":[], "tecnologia":[]}.`;
 
     try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -157,46 +157,46 @@ const PlanesView = () => {
       <main className="container mx-auto px-6 max-w-6xl">
         
         {/* Card de Configuración */}
-        <div className="bg-white rounded-[3rem] shadow-xl border border-slate-100 p-8 md:p-12 mb-12 relative overflow-visible transition-all duration-500">
+        <div className="bg-white dark:bg-slate-800 rounded-[3rem] shadow-xl border border-slate-100 dark:border-slate-700 p-8 md:p-12 mb-12 relative overflow-visible transition-all duration-500">
           <div className="grid md:grid-cols-2 gap-12 items-start relative z-10">
             <div className="space-y-6">
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <h2 className="text-4xl font-black tracking-tighter leading-tight">
+                <h2 className="text-4xl font-black tracking-tighter leading-tight dark:text-white transition-colors">
                   Analizá el <span style={{ color: accentColor }}>Plan de Gobierno</span>
                 </h2>
                 {selectedParty && (
-                  <div className="flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-full shadow-sm border border-slate-100 animate-in fade-in zoom-in">
+                  <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-700 px-4 py-2 rounded-full shadow-sm border border-slate-100 dark:border-slate-600 animate-in fade-in zoom-in transition-colors">
                      <div className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black text-white" style={{ backgroundColor: accentColor }}>
                        {selectedParty.short[0]}
                      </div>
-                     <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">{selectedParty.name}</span>
+                     <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-300 transition-colors">{selectedParty.name}</span>
                   </div>
                 )}
               </div>
               
               {/* Selector tipo Dropdown */}
               <div className="relative" ref={dropdownRef}>
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 block">Selecciona el Partido</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-2 block transition-colors">Selecciona el Partido</label>
                 <button 
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className={`w-full bg-slate-50 border-2 rounded-2xl px-6 py-4 flex items-center justify-between transition-all ${isDropdownOpen ? 'border-slate-300 ring-4 ring-slate-100' : 'border-slate-100'}`}
+                  className={`w-full bg-slate-50 dark:bg-slate-700 border-2 rounded-2xl px-6 py-4 flex items-center justify-between transition-all ${isDropdownOpen ? 'border-slate-300 dark:border-slate-500 ring-4 ring-slate-100 dark:ring-slate-600' : 'border-slate-100 dark:border-slate-600'}`}
                 >
                   {selectedParty ? (
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[10px] font-black" style={{ backgroundColor: selectedParty.color }}>
                         {selectedParty.short}
                       </div>
-                      <span className="font-bold text-slate-700">{selectedParty.name}</span>
+                      <span className="font-bold text-slate-700 dark:text-white transition-colors">{selectedParty.name}</span>
                     </div>
                   ) : (
-                    <span className="text-slate-400 font-bold text-sm italic">Elige un partido político...</span>
+                    <span className="text-slate-400 dark:text-slate-400 font-bold text-sm italic transition-colors">Elige un partido político...</span>
                   )}
                   <ChevronDown className={`text-slate-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} size={20} />
                 </button>
 
                 {/* Lista Desplegable */}
                 {isDropdownOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-3xl shadow-2xl border border-slate-100 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-700 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 transition-colors">
                     <div className="max-h-[300px] overflow-y-auto p-2">
                       {PARTIDOS_CR.map((p) => (
                         <button
@@ -205,14 +205,14 @@ const PlanesView = () => {
                             setSelectedParty(p);
                             setIsDropdownOpen(false);
                           }}
-                          className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-colors group"
+                          className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors group"
                         >
                           <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-xs font-black shadow-sm" style={{ backgroundColor: p.color }}>
                             {p.short}
                           </div>
                           <div className="text-left">
-                            <p className="font-black text-slate-700 leading-none mb-1">{p.short}</p>
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{p.name}</p>
+                            <p className="font-black text-slate-700 dark:text-white leading-none mb-1 transition-colors">{p.short}</p>
+                            <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest transition-colors">{p.name}</p>
                           </div>
                         </button>
                       ))}
@@ -223,7 +223,7 @@ const PlanesView = () => {
 
               <div 
                 onClick={() => fileInputRef.current.click()}
-                className={`border-4 border-dashed rounded-3xl p-8 text-center cursor-pointer transition-all ${fileName ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200 hover:border-slate-300'}`}
+                className={`border-4 border-dashed rounded-3xl p-8 text-center cursor-pointer transition-all ${fileName ? 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800' : 'bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500'}`}
               >
                 <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept=".pdf,.txt" className="hidden" />
                 {loadingPdfLib ? (
@@ -234,10 +234,10 @@ const PlanesView = () => {
                 ) : fileName ? (
                   <div className="flex items-center justify-center gap-3 py-4">
                     <FileText className="text-green-500" />
-                    <span className="font-bold text-slate-700 truncate max-w-[200px]">{fileName}</span>
+                    <span className="font-bold text-slate-700 dark:text-white truncate max-w-[200px] transition-colors">{fileName}</span>
                   </div>
                 ) : (
-                  <div className="text-slate-400 flex flex-col items-center gap-2 py-4">
+                  <div className="text-slate-400 dark:text-slate-500 flex flex-col items-center gap-2 py-4 transition-colors">
                     <FileUp size={32} />
                     <span className="text-[10px] font-black uppercase tracking-widest">Subir archivo del Plan</span>
                   </div>
@@ -245,14 +245,14 @@ const PlanesView = () => {
               </div>
             </div>
             
-            <div className="bg-slate-50 rounded-[2.5rem] p-8 space-y-6 flex flex-col justify-center h-full">
+            <div className="bg-slate-50 dark:bg-slate-700/50 rounded-[2.5rem] p-8 space-y-6 flex flex-col justify-center h-full transition-colors">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg transition-colors duration-500 flex-shrink-0" style={{ backgroundColor: accentColor }}>
                    <Zap />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-slate-600 leading-tight">Procesaremos el texto del documento para encontrar propuestas reales.</p>
-                  <p className="text-[10px] text-slate-400 font-bold mt-2 uppercase tracking-widest">Basado en Inteligencia Artificial</p>
+                  <p className="text-sm font-bold text-slate-600 dark:text-slate-300 leading-tight transition-colors">Procesaremos el texto del documento para encontrar propuestas reales.</p>
+                  <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold mt-2 uppercase tracking-widest transition-colors">Basado en Inteligencia Artificial</p>
                 </div>
               </div>
               
@@ -289,20 +289,20 @@ const PlanesView = () => {
                 }}
                 disabled={!analysisResult}
                 className={`aspect-square rounded-[2.5rem] flex flex-col items-center justify-center gap-4 transition-all border-2 ${
-                  !analysisResult ? 'opacity-30 cursor-not-allowed bg-white border-slate-100' :
+                  !analysisResult ? 'opacity-30 cursor-not-allowed bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700' :
                   selectedArea === area.id 
                     ? 'text-white border-transparent shadow-2xl scale-105 z-10' 
-                    : 'bg-white text-slate-400 border-white hover:border-slate-100'
+                    : 'bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border-white dark:border-slate-800 hover:border-slate-100 dark:hover:border-slate-700'
                 }`}
-                style={{ backgroundColor: selectedArea === area.id ? accentColor : 'white' }}
+                style={{ backgroundColor: selectedArea === area.id ? accentColor : undefined }}
               >
-                <div className={`p-4 rounded-2xl ${selectedArea === area.id ? 'bg-white/20' : 'bg-slate-50'}`}>
+                <div className={`p-4 rounded-2xl ${selectedArea === area.id ? 'bg-white/20' : 'bg-slate-50 dark:bg-slate-700 transition-colors'}`}>
                   {React.cloneElement(area.icon, { size: 32 })}
                 </div>
                 <div className="text-center">
                   <span className="font-black text-[10px] uppercase tracking-widest block">{area.label}</span>
                   {analysisResult && (
-                    <span className={`text-[9px] font-bold ${selectedArea === area.id ? 'text-white/60' : 'text-slate-300'}`}>
+                    <span className={`text-[9px] font-bold ${selectedArea === area.id ? 'text-white/60' : 'text-slate-300 dark:text-slate-500 transition-colors'}`}>
                       {analysisResult[area.id]?.length || 0} propuestas
                     </span>
                   )}
@@ -315,15 +315,15 @@ const PlanesView = () => {
         {/* Panel de Resultados */}
         <div ref={resultsRef} className="min-h-[200px]">
           {analysisResult && selectedArea ? (
-            <div className="bg-white rounded-[4rem] shadow-2xl border border-slate-100 overflow-hidden animate-in slide-in-from-bottom-10">
-              <div className="p-8 md:p-12 border-b border-slate-50 flex items-center justify-between" style={{ backgroundColor: lightAccent }}>
+            <div className="bg-white dark:bg-slate-800 rounded-[4rem] shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden animate-in slide-in-from-bottom-10 transition-colors">
+              <div className="p-8 md:p-12 border-b border-slate-50 dark:border-slate-700/50 flex items-center justify-between transition-colors" style={{ backgroundColor: lightAccent }}>
                 <div className="flex items-center gap-6">
                   <div className="w-16 h-16 rounded-[1.5rem] text-white flex items-center justify-center shadow-lg" style={{ backgroundColor: accentColor }}>
                     {React.cloneElement(areasTematicas.find(a => a.id === selectedArea).icon, { size: 32 })}
                   </div>
                   <div>
-                    <h4 className="text-3xl font-black tracking-tighter uppercase">{areasTematicas.find(a => a.id === selectedArea).label}</h4>
-                    <p className="text-[10px] font-black uppercase tracking-widest opacity-60">Datos verificados del plan oficial</p>
+                    <h4 className="text-3xl font-black tracking-tighter uppercase text-slate-900">{areasTematicas.find(a => a.id === selectedArea).label}</h4>
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-60 text-slate-900">Datos verificados del plan oficial</p>
                   </div>
                 </div>
                 <Target className="text-slate-200" size={40} />
@@ -332,11 +332,11 @@ const PlanesView = () => {
               <div className="p-8 md:p-12 space-y-4">
                 {analysisResult[selectedArea]?.length > 0 ? (
                   analysisResult[selectedArea].map((prop, i) => (
-                    <div key={i} className="flex gap-6 p-6 rounded-[2rem] bg-slate-50 hover:bg-white border-2 border-transparent hover:border-slate-100 transition-all group">
+                    <div key={i} className="flex gap-6 p-6 rounded-[2rem] bg-slate-50 dark:bg-slate-700/30 hover:bg-white dark:hover:bg-slate-700 border-2 border-transparent hover:border-slate-100 dark:hover:border-slate-600 transition-all group">
                       <div className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-black text-xs text-white shadow-md" style={{ backgroundColor: accentColor }}>
                         {i + 1}
                       </div>
-                      <p className="font-bold text-slate-700 text-lg leading-relaxed">{prop}</p>
+                      <p className="font-bold text-slate-700 dark:text-slate-200 text-lg leading-relaxed transition-colors">{prop}</p>
                     </div>
                   ))
                 ) : (
@@ -348,8 +348,8 @@ const PlanesView = () => {
               </div>
             </div>
           ) : (
-             <div className="bg-slate-100/50 border-2 border-dashed border-slate-200 rounded-[3rem] py-24 flex flex-col items-center justify-center text-slate-300">
-               <Search size={48} className="mb-4 opacity-20" />
+             <div className="bg-slate-100/50 dark:bg-slate-800/50 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-[3rem] py-24 flex flex-col items-center justify-center text-slate-300 dark:text-slate-600 transition-colors">
+               <Search size={48} className="mb-4 opacity-20 dark:opacity-40" />
                <p className="font-black uppercase tracking-[0.4em] text-xs text-center">Selecciona un partido y sube su PDF para ver los resultados</p>
             </div>
           )}

@@ -19,39 +19,74 @@ VoteOn es una plataforma ciudadana interactiva diseñada para fomentar la educac
 - **Backend & Base de Datos:** Supabase (PostgreSQL, Storage, Auth)
 - **Inteligencia Artificial:** API REST nativa de Google Gemini (Gemini-2.5-Flash)
 
-## ⚙️ Configuración del Entorno Local
+## 🏗️ Arquitectura y Organización del Código
+
+El proyecto sigue una arquitectura modular basada en componentes y vistas funcionales de React, estructurado para mantener escalabilidad y buenas prácticas:
+
+- `/src/components/dashboard/`: Contiene los módulos principales de la plataforma (Asamblea, Comunidad, Partidos, Planes, Test Político, Chatbot y Configuración).
+- `/src/components/auth/`: Lógica y vistas de autenticación, registro y recuperación de contraseñas.
+- `/src/data/`: Archivos estáticos de datos centralizados (e.g., `partidosData.js`) para evitar duplicación y centralizar la información.
+- `/src/lib/`: Configuración e inicialización de clientes externos (e.g., `supabaseClient.js`).
+- `/src/index.css`: Archivo principal de estilos de Tailwind CSS, incluyendo la configuración de temas globales (modo oscuro/claro) y variables CSS (Tailwind utilities).
+
+## 🗄️ Diseño de Base de Datos (Supabase / PostgreSQL)
+
+El sistema utiliza un esquema relacional para asegurar integridad referencial y escalar de forma efectiva.
+
+### Tablas Principales:
+1. **`profiles`**: Extiende la tabla de autenticación nativa de Supabase (`auth.users`).
+   - Campos: `id` (UUID), `full_name`, `provincia`, `cedula`, `bio`, `party`, `is_politician`, `cargo`, `cargo_info`.
+   - Propósito: Almacenar la identidad cívica o perfil político del usuario.
+2. **`posts`**: Almacena las publicaciones del módulo Comunidad.
+   - Campos: `id`, `author_id` (FK a `profiles`), `text`, `media` (URL de imagen), `likes`, `reposts`, `created_at`.
+3. **`comments`**: Estructura anidada para las respuestas en publicaciones.
+   - Campos: `id`, `post_id` (FK a `posts`), `author_id` (FK a `profiles`), `text`, `created_at`.
+
+### Integridad y Seguridad (RLS):
+Se han aplicado políticas RLS (*Row Level Security*) rigurosas:
+- **Lectura:** Pública para `posts` y `comments` permitiendo visibilidad comunitaria.
+- **Escritura/Modificación:** Restringida exclusivamente al `auth.uid()` del usuario creador.
+- **Storage:** Bucket `comunidad_media` configurado para aceptar únicamente imágenes desde clientes autenticados.
+
+## ⚙️ Configuración del Entorno Local y Despliegue
 
 Para correr este proyecto en tu máquina, asegúrate de tener instalado **Node.js** y sigue estos pasos:
 
 1. **Clonar el repositorio:**
-   \`\`\`bash
+   ```bash
    git clone <url-del-repo>
    cd ProyectoDesa
-   \`\`\`
+   ```
 
 2. **Instalar dependencias:**
-   \`\`\`bash
+   ```bash
    npm install
-   \`\`\`
+   ```
 
 3. **Configurar Variables de Entorno (.env):**
-   Crea o edita el archivo \`.env\` en la raíz del proyecto y agrega tus credenciales:
-   \`\`\`env
+   Crea o edita el archivo `.env` en la raíz del proyecto y agrega tus credenciales:
+   ```env
    VITE_SUPABASE_URL=tu_supabase_url
    VITE_SUPABASE_ANON_KEY=tu_supabase_anon_key
    VITE_GEMINI_API_KEY=tu_api_key_de_gemini
-   \`\`\`
+   ```
 
 4. **Configuración de Supabase (Base de datos):**
    - Asegúrate de tener habilitada la autenticación por Email/Contraseña.
-   - Crea un bucket en Supabase Storage llamado \`comunidad_media\` y hazlo **público** para permitir la subida de imágenes.
-   - Crea las tablas correspondientes (\`posts\` y \`comments\`) en la base de datos de Supabase si deseas utilizar el backend completo del módulo Comunidad.
+   - Crea un bucket en Supabase Storage llamado `comunidad_media` y hazlo **público** para permitir la subida de imágenes.
 
 5. **Iniciar el servidor de desarrollo:**
-   \`\`\`bash
+   ```bash
    npm run dev
-   \`\`\`
+   ```
    Abre [http://localhost:5173](http://localhost:5173) para ver la aplicación.
+
+### Construcción para Producción
+Para compilar y preparar el proyecto para despliegue (ej. Vercel, Netlify):
+```bash
+npm run build
+```
+Esto generará los assets optimizados en la carpeta `/dist/`.
 
 ## 🤝 Contribuciones
 

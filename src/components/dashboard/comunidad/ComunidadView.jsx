@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { 
   Send, Heart, MessageSquare, User, Image as ImageIcon, ThumbsDown, 
-  ShieldAlert, Globe, ArrowLeft, ChevronDown, ChevronUp, Repeat, Save, X
+  ShieldAlert, Globe, ArrowLeft, ChevronDown, ChevronUp, Repeat, Save, X, Trash2
 } from 'lucide-react';
 import { partidosData } from '../../../data/partidosData';
 import { supabase } from '../../../lib/supabaseClient';
@@ -130,7 +130,7 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
       setIsEditingProfile(false);
       return;
     }
-    const { error } = await supabase.auth.updateUser({
+    const { error: authError } = await supabase.auth.updateUser({
       data: {
         full_name: editFullName,
         province: editProvince,
@@ -141,12 +141,31 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
         cargo_info: editCargoInfo
       }
     });
-    if (!error) {
-      setIsEditingProfile(false);
-      alert("Perfil actualizado. Es posible que debas recargar la página para ver algunos cambios reflejados.");
-    } else {
-      alert("Error al actualizar perfil: " + error.message);
+
+    if (authError) {
+      alert("Error al actualizar autenticación: " + authError.message);
+      return;
     }
+
+    if (user?.id) {
+      const { error: profileError } = await supabase.from('profiles').update({
+        full_name: editFullName,
+        provincia: editProvince,
+        cedula: editDni,
+        bio: editBio,
+        party: editParty,
+        cargo: editCargo,
+        cargo_info: editCargoInfo
+      }).eq('id', user.id);
+      
+      if (profileError) {
+        alert("Error al actualizar la tabla de perfiles en Supabase. Verifica las políticas RLS: " + profileError.message);
+        return;
+      }
+    }
+
+    setIsEditingProfile(false);
+    alert("Perfil actualizado. Los cambios ya se guardaron en la base de datos.");
   };
 
   const handleMediaUpload = async (e) => {
@@ -210,32 +229,27 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
     }
   };
 
-  const handleReaction = (postId, type) => {
-    const existingReaction = userReactions[postId];
-    let likesMod = 0;
-    let dislikesMod = 0;
+  const handleReaction = (postId) => {
+    const isLiked = userReactions[postId] === 'like';
+    let likesMod = isLiked ? -1 : 1;
 
-    if (existingReaction === type) {
-      // Quitar reacción
-      if (type === 'like') likesMod = -1;
-      if (type === 'dislike') dislikesMod = -1;
+    if (isLiked) {
       const nuevasReacts = {...userReactions};
       delete nuevasReacts[postId];
       setUserReactions(nuevasReacts);
     } else {
-      // Cambiar o poner reacción
-      if (existingReaction === 'like') likesMod = -1;
-      if (existingReaction === 'dislike') dislikesMod = -1;
-      
-      if (type === 'like') likesMod += 1;
-      if (type === 'dislike') dislikesMod += 1;
-      
-      setUserReactions({...userReactions, [postId]: type});
+      setUserReactions({...userReactions, [postId]: 'like'});
     }
 
     setPosts(posts.map(p => {
       if (p.id === postId) {
-        return { ...p, likes: p.likes + likesMod, dislikes: p.dislikes + dislikesMod };
+        const newLikes = Math.max(0, (p.likes || 0) + likesMod);
+        
+        if (supabase) {
+          supabase.from('posts').update({ likes: newLikes }).eq('id', postId).then();
+        }
+
+        return { ...p, likes: newLikes };
       }
       return p;
     }));
@@ -245,11 +259,22 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
     setPosts(posts.map(p => {
       if (p.id === postId) {
         const hasReposted = p.repostedBy?.includes(miUserId);
+        let newReposts = p.reposts || 0;
+        let newRepostedBy = p.repostedBy || [];
+
         if (hasReposted) {
-          return { ...p, reposts: Math.max(0, (p.reposts || 1) - 1), repostedBy: p.repostedBy.filter(id => id !== miUserId) };
+          newReposts = Math.max(0, newReposts - 1);
+          newRepostedBy = newRepostedBy.filter(id => id !== miUserId);
         } else {
-          return { ...p, reposts: (p.reposts || 0) + 1, repostedBy: [...(p.repostedBy || []), miUserId] };
+          newReposts += 1;
+          newRepostedBy = [...newRepostedBy, miUserId];
         }
+
+        if (supabase) {
+          supabase.from('posts').update({ reposts: newReposts }).eq('id', postId).then();
+        }
+
+        return { ...p, reposts: newReposts, repostedBy: newRepostedBy };
       }
       return p;
     }));
@@ -309,6 +334,20 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
     }
   };
 
+  const handleDeleteComment = async (postId, commentId) => {
+    if (window.confirm("¿Seguro que deseas eliminar este comentario?")) {
+      if (supabase) {
+        const { error } = await supabase.from('comments').delete().eq('id', commentId).eq('author_id', miUserId);
+        if (!error) {
+          fetchComments(postId);
+          fetchPosts(); // para actualizar el commentCount
+        } else {
+          alert("Error al eliminar comentario: " + error.message);
+        }
+      }
+    }
+  };
+
   const filteredPosts = useMemo(() => {
     let list = [...posts];
     if (view.type === 'profile') {
@@ -336,19 +375,19 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
   }, [posts, view, profileTab, commentsData, user]);
 
   return (
-    <div className="w-full bg-[#f8fafc] text-slate-900 font-sans pb-24 animate-in fade-in duration-500 pt-8">
+    <div className="w-full bg-[#f8fafc] dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans pb-24 animate-in fade-in duration-500 pt-8 transition-colors">
       
       {/* Sub-Navegación Interna de Comunidad */}
       <div className="max-w-3xl mx-auto px-6 mb-8 flex items-center justify-between">
          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setView({ type: 'feed', userId: null })}>
-            <div className="bg-[#001D4A] p-2 rounded-xl text-white group-hover:bg-blue-800 transition-colors">
+            <div className="bg-[#001D4A] dark:bg-blue-900 p-2 rounded-xl text-white group-hover:bg-blue-800 transition-colors">
               <Globe size={24} />
             </div>
-            <h2 className="text-3xl font-black text-[#001D4A] uppercase tracking-tighter italic">Debate<span className="text-red-600">CR</span></h2>
+            <h2 className="text-3xl font-black text-[#001D4A] dark:text-white uppercase tracking-tighter italic transition-colors">Debate<span className="text-red-600">CR</span></h2>
          </div>
          <button 
             onClick={() => setView({ type: 'profile', userId: miUserId })} 
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-full border transition-all shadow-sm font-black text-xs uppercase tracking-widest ${view.type === 'profile' ? 'bg-[#001D4A] text-white border-[#001D4A]' : 'bg-white text-[#001D4A] border-slate-200 hover:bg-slate-50'}`}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-full border transition-all shadow-sm font-black text-xs uppercase tracking-widest ${view.type === 'profile' ? 'bg-[#001D4A] dark:bg-blue-600 text-white border-[#001D4A] dark:border-blue-600' : 'bg-white dark:bg-slate-800 text-[#001D4A] dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'}`}
          >
             <User size={16} /> Mi Perfil
          </button>
@@ -359,48 +398,48 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
         {/* VISTA DE PERFIL */}
         {view.type === 'profile' && (
           <div className="mb-12 animate-in fade-in slide-in-from-top-4">
-            <button onClick={() => setView({ type: 'feed', userId: null })} className="flex items-center gap-2 text-slate-500 hover:text-[#001D4A] mb-6 text-sm font-bold transition-colors uppercase tracking-widest italic">
+            <button onClick={() => setView({ type: 'feed', userId: null })} className="flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-[#001D4A] dark:hover:text-white mb-6 text-sm font-bold transition-colors uppercase tracking-widest italic">
               <ArrowLeft size={16} /> Volver al muro global
             </button>
             <div className="bg-gradient-to-r from-[#001D4A] to-blue-700 h-32 rounded-t-[3rem] shadow-lg relative overflow-hidden">
                <div className="absolute inset-0 bg-white/10 pattern-dots"></div>
             </div>
-            <div className="bg-white p-8 md:p-10 rounded-b-[3rem] border-x border-b border-slate-100 relative shadow-xl">
-              <div className="absolute -top-14 left-10 w-28 h-28 bg-white rounded-[2rem] p-2 border border-slate-100 shadow-2xl rotate-3">
-                <div className="w-full h-full bg-slate-100 rounded-[1.5rem] flex items-center justify-center text-4xl font-black text-[#001D4A] uppercase border-2 border-dashed border-slate-300">
+            <div className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-b-[3rem] border-x border-b border-slate-100 dark:border-slate-700 relative shadow-xl transition-colors">
+              <div className="absolute -top-14 left-10 w-28 h-28 bg-white dark:bg-slate-800 rounded-[2rem] p-2 border border-slate-100 dark:border-slate-700 shadow-2xl rotate-3 transition-colors">
+                <div className="w-full h-full bg-slate-100 dark:bg-slate-700 rounded-[1.5rem] flex items-center justify-center text-4xl font-black text-[#001D4A] dark:text-white uppercase border-2 border-dashed border-slate-300 dark:border-slate-500 transition-colors">
                    {(view.userId === miUserId ? userName : posts.find(p => p.authorId === view.userId)?.authorName || "U")?.charAt(0)}
                 </div>
               </div>
               <div className="pt-16">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <h2 className="text-3xl font-black italic uppercase tracking-tighter text-[#001D4A]">
+                    <h2 className="text-3xl font-black italic uppercase tracking-tighter text-[#001D4A] dark:text-white transition-colors">
                       {view.userId === miUserId ? userName : posts.find(p => p.authorId === view.userId)?.authorName || "Usuario"}
                     </h2>
                     {renderPartyPin(view.userId)}
                   </div>
                   {view.userId === miUserId && !isEditingProfile && (
-                    <button onClick={() => setIsEditingProfile(true)} className="px-4 py-2 bg-slate-100 text-[#001D4A] rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#001D4A] hover:text-white transition-colors">
+                    <button onClick={() => setIsEditingProfile(true)} className="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-[#001D4A] dark:text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#001D4A] dark:hover:bg-blue-600 hover:text-white transition-colors">
                       Editar
                     </button>
                   )}
                 </div>
                 
                 {isEditingProfile && view.userId === miUserId ? (
-                  <div className="mt-6 bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                  <div className="mt-6 bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 transition-colors">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-black text-[#001D4A] uppercase text-sm">Editar Perfil</h3>
-                      <button onClick={() => setIsEditingProfile(false)} className="text-slate-400 hover:text-red-600"><X size={18} /></button>
+                      <h3 className="font-black text-[#001D4A] dark:text-white uppercase text-sm">Editar Perfil</h3>
+                      <button onClick={() => setIsEditingProfile(false)} className="text-slate-400 dark:text-slate-500 hover:text-red-600"><X size={18} /></button>
                     </div>
                     <div className="space-y-4">
                       
                       <div>
-                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 ml-1">Nombre Completo</label>
+                        <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-1.5 ml-1">Nombre Completo</label>
                         <input 
                           type="text" 
                           value={editFullName}
                           onChange={(e) => setEditFullName(e.target.value)}
-                          className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:border-[#002B7F] outline-none text-sm font-medium"
+                          className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-[#002B7F] dark:focus:border-blue-500 outline-none text-sm font-medium text-slate-900 dark:text-white transition-colors"
                         />
                       </div>
 
@@ -410,7 +449,7 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
                           <select 
                             value={editProvince}
                             onChange={(e) => setEditProvince(e.target.value)}
-                            className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:border-[#002B7F] outline-none text-sm font-medium"
+                            className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-[#002B7F] dark:focus:border-blue-500 outline-none text-sm font-medium text-slate-900 dark:text-white transition-colors"
                           >
                             <option value="">Selecciona...</option>
                             {provincias.map(p => <option key={p} value={p}>{p}</option>)}
@@ -422,7 +461,7 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
                             type="text" 
                             value={editDni}
                             onChange={(e) => setEditDni(e.target.value)}
-                            className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:border-[#002B7F] outline-none text-sm font-medium"
+                            className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-[#002B7F] dark:focus:border-blue-500 outline-none text-sm font-medium text-slate-900 dark:text-white transition-colors"
                           />
                         </div>
                       </div>
@@ -433,7 +472,7 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
                           value={editBio}
                           onChange={(e) => setEditBio(e.target.value)}
                           rows="2"
-                          className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:border-[#002B7F] outline-none text-sm font-medium resize-none"
+                          className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-[#002B7F] dark:focus:border-blue-500 outline-none text-sm font-medium text-slate-900 dark:text-white resize-none transition-colors"
                         ></textarea>
                       </div>
 
@@ -442,7 +481,7 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
                         <select 
                           value={editParty}
                           onChange={(e) => setEditParty(e.target.value)}
-                          className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:border-[#002B7F] outline-none text-sm font-medium"
+                          className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-[#002B7F] dark:focus:border-blue-500 outline-none text-sm font-medium text-slate-900 dark:text-white transition-colors"
                         >
                           <option value="">Ninguna o Independiente</option>
                           {Object.values(partidosData).map(p => (
@@ -458,7 +497,7 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
                               type="text" 
                               value={editCargo}
                               onChange={(e) => setEditCargo(e.target.value)}
-                              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:border-[#002B7F] outline-none text-sm font-medium"
+                              className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-[#002B7F] dark:focus:border-blue-500 outline-none text-sm font-medium text-slate-900 dark:text-white transition-colors"
                             />
                           </div>
                           <div>
@@ -467,7 +506,7 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
                               type="text" 
                               value={editCargoInfo}
                               onChange={(e) => setEditCargoInfo(e.target.value)}
-                              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:border-[#002B7F] outline-none text-sm font-medium"
+                              className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-[#002B7F] dark:focus:border-blue-500 outline-none text-sm font-medium text-slate-900 dark:text-white transition-colors"
                             />
                           </div>
                         </div>
@@ -492,14 +531,14 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
                   </>
                 )}
                 
-                <div className="flex gap-6 mt-6 pt-6 border-t border-slate-50">
+                <div className="flex gap-6 mt-6 pt-6 border-t border-slate-50 dark:border-slate-700">
                    <div className="text-center cursor-pointer group" onClick={() => setProfileTab('posts')}>
-                     <p className={`text-2xl font-black transition-colors ${profileTab === 'posts' ? 'text-[#001D4A]' : 'text-slate-300 group-hover:text-slate-400'}`}>{posts.filter(p => p.authorId === view.userId || p.repostedBy?.includes(view.userId)).length}</p>
-                     <p className={`text-[10px] uppercase font-bold transition-colors ${profileTab === 'posts' ? 'text-slate-500' : 'text-slate-300'}`}>Publicaciones</p>
+                     <p className={`text-2xl font-black transition-colors ${profileTab === 'posts' ? 'text-[#001D4A] dark:text-white' : 'text-slate-300 dark:text-slate-600 group-hover:text-slate-400 dark:group-hover:text-slate-500'}`}>{posts.filter(p => p.authorId === view.userId || p.repostedBy?.includes(view.userId)).length}</p>
+                     <p className={`text-[10px] uppercase font-bold transition-colors ${profileTab === 'posts' ? 'text-slate-500 dark:text-slate-400' : 'text-slate-300 dark:text-slate-600'}`}>Publicaciones</p>
                    </div>
                    <div className="text-center cursor-pointer group" onClick={() => setProfileTab('replies')}>
-                     <p className={`text-2xl font-black transition-colors ${profileTab === 'replies' ? 'text-[#001D4A]' : 'text-slate-300 group-hover:text-slate-400'}`}>{posts.filter(p => commentsData[p.id]?.some(c => c.authorId === view.userId)).length}</p>
-                     <p className={`text-[10px] uppercase font-bold transition-colors ${profileTab === 'replies' ? 'text-slate-500' : 'text-slate-300'}`}>Respuestas</p>
+                     <p className={`text-2xl font-black transition-colors ${profileTab === 'replies' ? 'text-[#001D4A] dark:text-white' : 'text-slate-300 dark:text-slate-600 group-hover:text-slate-400 dark:group-hover:text-slate-500'}`}>{posts.filter(p => commentsData[p.id]?.some(c => c.authorId === view.userId)).length}</p>
+                     <p className={`text-[10px] uppercase font-bold transition-colors ${profileTab === 'replies' ? 'text-slate-500 dark:text-slate-400' : 'text-slate-300 dark:text-slate-600'}`}>Respuestas</p>
                    </div>
                 </div>
               </div>
@@ -509,18 +548,18 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
 
         {/* VISTA FEED - CREAR POST */}
         {view.type === 'feed' && (
-          <div className="bg-white rounded-[3rem] p-8 lg:p-10 border border-slate-100 shadow-xl mb-12 relative overflow-hidden group">
-            <div className="absolute -right-10 -top-10 w-40 h-40 bg-blue-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700"></div>
+          <div className="bg-white dark:bg-slate-800 rounded-[3rem] p-8 lg:p-10 border border-slate-100 dark:border-slate-700 shadow-xl mb-12 relative overflow-hidden group transition-colors">
+            <div className="absolute -right-10 -top-10 w-40 h-40 bg-blue-50 dark:bg-blue-900/20 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700"></div>
             <form onSubmit={handlePost} className="space-y-6 relative z-10">
               <div className="flex gap-4">
-                <div className="w-14 h-14 bg-slate-100 rounded-[1.5rem] flex-shrink-0 flex items-center justify-center text-[#001D4A] font-black uppercase text-xl shadow-inner border border-slate-200">
+                <div className="w-14 h-14 bg-slate-100 dark:bg-slate-700 rounded-[1.5rem] flex-shrink-0 flex items-center justify-center text-[#001D4A] dark:text-white font-black uppercase text-xl shadow-inner border border-slate-200 dark:border-slate-600 transition-colors">
                   {userName ? userName.charAt(0) : "U"}
                 </div>
                 <textarea 
                   value={newPost} 
                   onChange={(e) => setNewPost(e.target.value)} 
                   placeholder="¿Cuál es tu opinión sobre el acontecer nacional?" 
-                  className="w-full bg-slate-50 border border-slate-200 rounded-[2rem] p-5 text-base lg:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-white resize-none placeholder:text-slate-400 min-h-[120px] transition-all" 
+                  className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-[2rem] p-5 text-base lg:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:focus:bg-slate-800 resize-none placeholder:text-slate-400 dark:placeholder:text-slate-500 min-h-[120px] transition-all text-slate-900 dark:text-white" 
                 />
               </div>
               {mediaUrl && (
@@ -537,7 +576,7 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
                   onChange={handleMediaUpload} 
                   className="hidden" 
                 />
-                <button type="button" onClick={() => fileInputRef.current?.click()} disabled={uploadingMedia} className="flex items-center gap-2 text-slate-500 hover:text-[#001D4A] font-black text-xs uppercase tracking-widest transition-colors bg-slate-50 px-4 py-2 rounded-full border border-slate-200 hover:border-slate-300 disabled:opacity-50">
+                <button type="button" onClick={() => fileInputRef.current?.click()} disabled={uploadingMedia} className="flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-[#001D4A] dark:hover:text-white font-black text-xs uppercase tracking-widest transition-colors bg-slate-50 dark:bg-slate-700 px-4 py-2 rounded-full border border-slate-200 dark:border-slate-600 disabled:opacity-50">
                   <ImageIcon size={18} /> {uploadingMedia ? 'Subiendo...' : 'Adjuntar Imagen'}
                 </button>
                 <button disabled={!newPost.trim()} className="bg-[#001D4A] hover:bg-blue-800 disabled:opacity-30 disabled:hover:bg-[#001D4A] text-white px-8 py-4 rounded-full font-black uppercase italic text-xs tracking-widest shadow-xl transition-all flex items-center gap-3">
@@ -551,12 +590,12 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
         {/* LISTA DE POSTS */}
         <div className="space-y-8">
           {filteredPosts.map((post) => (
-            <article key={post.id} className="bg-white rounded-[3rem] border border-slate-100 overflow-hidden shadow-sm hover:shadow-lg transition-all">
+            <article key={post.id} className="bg-white dark:bg-slate-800 rounded-[3rem] border border-slate-100 dark:border-slate-700 overflow-hidden shadow-sm hover:shadow-lg transition-all">
               <div className="p-8 lg:p-10 space-y-6">
                 
                 {/* Cabecera de Repost (si aplica) */}
                 {view.type === 'profile' && profileTab === 'posts' && post.authorId !== view.userId && post.repostedBy?.includes(view.userId) && (
-                  <div className="flex items-center gap-2 text-slate-400 -mb-2">
+                  <div className="flex items-center gap-2 text-slate-400 dark:text-slate-500 -mb-2">
                     <Repeat size={14} />
                     <span className="text-[10px] font-black uppercase tracking-widest italic">{view.userId === miUserId ? 'Republicaste' : `Usuario Republicó`}</span>
                   </div>
@@ -565,26 +604,26 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
                 {/* Cabecera del Post */}
                 <div className="flex items-center justify-between">
                   <button onClick={() => setView({ type: 'profile', userId: post.authorId })} className="flex items-center gap-4 group text-left">
-                    <div className="w-12 h-12 bg-slate-100 rounded-[1.2rem] flex items-center justify-center font-black text-lg uppercase text-[#001D4A] group-hover:bg-[#001D4A] group-hover:text-white transition-colors border border-slate-200 shadow-sm">
+                    <div className="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded-[1.2rem] flex items-center justify-center font-black text-lg uppercase text-[#001D4A] dark:text-white group-hover:bg-[#001D4A] dark:group-hover:bg-blue-600 transition-colors border border-slate-200 dark:border-slate-600 shadow-sm">
                        {post.authorName?.charAt(0)}
                     </div>
                     <div>
                       <div className="flex items-center">
-                        <h4 className="font-black text-base lg:text-lg group-hover:text-blue-600 transition-colors uppercase italic text-[#001D4A]">{post.authorName}</h4>
+                        <h4 className="font-black text-base lg:text-lg group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors uppercase italic text-[#001D4A] dark:text-white">{post.authorName}</h4>
                         {renderPartyPin(post.authorId)}
                       </div>
-                      <p className="text-[10px] text-slate-400 font-bold tracking-widest uppercase">
+                      <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold tracking-widest uppercase">
                         {(post.authorId === miUserId && user?.user_metadata?.is_politician) ? user?.user_metadata?.cargo || 'Político' : 'Ciudadano'}
                       </p>
                     </div>
                   </button>
-                  <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
+                  <span className="text-[10px] text-slate-400 dark:text-slate-400 font-black uppercase tracking-widest bg-slate-50 dark:bg-slate-700 px-3 py-1 rounded-full border border-slate-100 dark:border-slate-600">
                      {post.createdAt.toLocaleDateString()}
                   </span>
                 </div>
                 
                 {/* Contenido */}
-                <p className="text-slate-600 text-base lg:text-lg leading-relaxed font-medium pl-2">{post.text}</p>
+                <p className="text-slate-600 dark:text-slate-300 text-base lg:text-lg leading-relaxed font-medium pl-2">{post.text}</p>
                 {post.media && (
                    <div className="rounded-[2rem] overflow-hidden border border-slate-100 shadow-sm">
                       <img src={post.media} alt="Post content" className="w-full h-auto max-h-[500px] object-cover" />
@@ -592,18 +631,15 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
                 )}
                 
                 {/* Botonera de interacciones */}
-                <div className="flex items-center gap-3 pt-6 border-t border-slate-50 flex-wrap">
-                  <button onClick={() => handleReaction(post.id, 'like')} className={`flex items-center gap-2 px-5 py-2.5 rounded-full transition-all font-black text-xs border ${userReactions[post.id] === 'like' ? 'bg-blue-50 border-blue-200 text-blue-600' : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'}`}>
-                    <Heart size={18} className={userReactions[post.id] === 'like' ? "fill-blue-600 text-blue-600" : ""} /> <span>{post.likes || 0}</span>
+                <div className="flex items-center gap-3 pt-6 border-t border-slate-50 dark:border-slate-700 flex-wrap">
+                  <button onClick={() => handleReaction(post.id)} className={`flex items-center gap-2 px-5 py-2.5 rounded-full transition-all font-black text-xs border ${userReactions[post.id] === 'like' ? 'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-900 text-red-600 dark:text-red-400' : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-600'}`}>
+                    <Heart size={18} className={userReactions[post.id] === 'like' ? "fill-red-600 text-red-600 dark:fill-red-400 dark:text-red-400" : ""} /> <span>{post.likes || 0}</span>
                   </button>
-                  <button onClick={() => handleReaction(post.id, 'dislike')} className={`flex items-center gap-2 px-5 py-2.5 rounded-full transition-all font-black text-xs border ${userReactions[post.id] === 'dislike' ? 'bg-red-50 border-red-200 text-red-600' : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'}`}>
-                    <ThumbsDown size={18} className={userReactions[post.id] === 'dislike' ? "fill-red-600 text-red-600" : ""} /> <span>{post.dislikes || 0}</span>
-                  </button>
-                  <button onClick={() => handleRepost(post.id)} className={`flex items-center gap-2 px-5 py-2.5 rounded-full transition-all font-black text-xs border ${post.repostedBy?.includes(miUserId) ? 'bg-green-50 border-green-200 text-green-600' : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'}`}>
+                  <button onClick={() => handleRepost(post.id)} className={`flex items-center gap-2 px-5 py-2.5 rounded-full transition-all font-black text-xs border ${post.repostedBy?.includes(miUserId) ? 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-900 text-green-600 dark:text-green-400' : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-600'}`}>
                     <Repeat size={18} /> <span>{post.reposts || 0}</span>
                   </button>
                   <div className="flex-grow"></div>
-                  <button onClick={() => toggleComments(post.id)} className={`flex items-center gap-2 px-6 py-2.5 rounded-full transition-all font-black text-xs border ${(activeComments[post.id] || (view.type === 'profile' && profileTab === 'replies')) ? 'bg-slate-100 border-slate-300 text-[#001D4A]' : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'}`}>
+                  <button onClick={() => toggleComments(post.id)} className={`flex items-center gap-2 px-6 py-2.5 rounded-full transition-all font-black text-xs border ${(activeComments[post.id] || (view.type === 'profile' && profileTab === 'replies')) ? 'bg-slate-100 dark:bg-slate-600 border-slate-300 dark:border-slate-500 text-[#001D4A] dark:text-white' : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-600'}`}>
                     <MessageSquare size={18} /> <span>{post.commentCount || 0} Respuestas</span>
                     {(activeComments[post.id] || (view.type === 'profile' && profileTab === 'replies')) ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                   </button>
@@ -611,18 +647,25 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
 
                 {/* COMENTARIOS */}
                 {(activeComments[post.id] || (view.type === 'profile' && profileTab === 'replies')) && (
-                  <div className="mt-6 pt-6 border-t border-slate-100 animate-in slide-in-from-top-4 duration-300 bg-slate-50 -mx-8 -mb-8 px-8 pb-8 rounded-b-[3rem]">
+                  <div className="mt-6 pt-6 border-t border-slate-100 dark:border-slate-700 animate-in slide-in-from-top-4 duration-300 bg-slate-50 dark:bg-slate-900 -mx-8 -mb-8 px-8 pb-8 rounded-b-[3rem]">
                     <div className="space-y-4 mb-6 max-h-80 overflow-y-auto pr-2">
                       {commentsData[post.id]?.map((comment) => (
-                        <div key={comment.id} className="bg-white p-5 rounded-[2rem] border border-slate-200 shadow-sm">
+                        <div key={comment.id} className="bg-white dark:bg-slate-800 p-5 rounded-[2rem] border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
                           <div className="flex items-center justify-between mb-2">
-                            <span onClick={() => setView({ type: 'profile', userId: comment.authorId })} className="font-black text-[11px] text-[#001D4A] uppercase italic cursor-pointer hover:text-blue-600 transition-colors flex items-center">
+                            <span onClick={() => setView({ type: 'profile', userId: comment.authorId })} className="font-black text-[11px] text-[#001D4A] dark:text-blue-400 uppercase italic cursor-pointer hover:text-blue-600 dark:hover:text-blue-300 transition-colors flex items-center">
                                {comment.authorName}
                                {renderPartyPin(comment.authorId)}
                             </span>
-                            <span className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{comment.createdAt.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                            <div className="flex items-center gap-3">
+                              {comment.authorId === miUserId && (
+                                <button onClick={() => handleDeleteComment(post.id, comment.id)} className="text-red-400 hover:text-red-600 transition-colors" title="Eliminar Comentario">
+                                  <Trash2 size={12} />
+                                </button>
+                              )}
+                              <span className="text-[9px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest">{comment.createdAt.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                            </div>
                           </div>
-                          <p className="text-sm text-slate-600 font-medium leading-relaxed">{comment.text}</p>
+                          <p className="text-sm text-slate-600 dark:text-slate-300 font-medium leading-relaxed">{comment.text}</p>
                         </div>
                       ))}
                       {(!commentsData[post.id] || commentsData[post.id].length === 0) && (
@@ -632,13 +675,13 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
                     
                     {/* Input de Comentario */}
                     <div className="relative flex items-center gap-3">
-                      <div className="w-10 h-10 bg-white rounded-full flex-shrink-0 flex items-center justify-center text-[#001D4A] font-black uppercase text-sm border border-slate-200">
+                      <div className="w-10 h-10 bg-white dark:bg-slate-700 rounded-full flex-shrink-0 flex items-center justify-center text-[#001D4A] dark:text-white font-black uppercase text-sm border border-slate-200 dark:border-slate-600 transition-colors">
                         {userName ? userName.charAt(0) : "U"}
                       </div>
                       <input 
                         onKeyDown={(e) => { if(e.key === 'Enter') { handleAddComment(post.id, e.target.value); e.target.value = ''; } }}
                         placeholder="Escribe tu respuesta y presiona Enter..." 
-                        className="w-full bg-white border border-slate-200 rounded-full px-6 py-4 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all font-medium placeholder:text-slate-400"
+                        className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-full px-6 py-4 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all font-medium placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-900 dark:text-white"
                       />
                     </div>
                   </div>
@@ -648,9 +691,9 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
           ))}
           
           {filteredPosts.length === 0 && (
-             <div className="bg-white border-2 border-dashed border-slate-200 rounded-[3rem] p-20 text-center flex flex-col items-center">
-                <MessageSquare size={48} className="text-slate-200 mb-4" />
-                <h3 className="text-xl font-black text-slate-400 uppercase tracking-widest italic">No hay publicaciones</h3>
+             <div className="bg-white dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-[3rem] p-20 text-center flex flex-col items-center transition-colors">
+                <MessageSquare size={48} className="text-slate-200 dark:text-slate-600 mb-4" />
+                <h3 className="text-xl font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest italic">No hay publicaciones</h3>
              </div>
           )}
 

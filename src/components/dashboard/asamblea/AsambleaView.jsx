@@ -130,30 +130,30 @@ const AsambleaView = () => {
   ];
 
   return (
-    <div className="w-full bg-[#f8fafc] text-slate-900 font-sans selection:bg-blue-100 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8 pb-20">
+    <div className="w-full bg-[#f8fafc] dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans selection:bg-blue-100 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8 pb-20 transition-colors">
       <main className="w-full max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-24 space-y-24">
         
         {/* Sección 1: ¿Qué es la Asamblea? e Historia */}
         <section id="historia" className="grid xl:grid-cols-2 gap-16 items-start w-full">
            <div className="space-y-8 w-full">
               <div className="space-y-4">
-                <span className="bg-blue-100 text-blue-700 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest italic">Sobre la Institución</span>
-                <h2 className="text-6xl lg:text-7xl font-black text-[#001D4A] tracking-tighter leading-none uppercase italic">¿Qué es la <br/> Asamblea?</h2>
-                <p className="text-slate-500 font-medium text-xl leading-relaxed max-w-2xl">
+                <span className="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest italic transition-colors">Sobre la Institución</span>
+                <h2 className="text-6xl lg:text-7xl font-black text-[#001D4A] dark:text-white tracking-tighter leading-none uppercase italic transition-colors">¿Qué es la <br/> Asamblea?</h2>
+                <p className="text-slate-500 dark:text-slate-300 font-medium text-xl leading-relaxed max-w-2xl transition-colors">
                   Es el **Primer Poder de la República**, donde reside el Poder Legislativo. Su función principal es dictar, reformar y derogar las leyes que rigen a Costa Rica.
                 </p>
               </div>
 
-              <div className="bg-white p-10 rounded-[3rem] border border-slate-200 shadow-sm space-y-4 w-full">
+              <div className="bg-white dark:bg-slate-800 p-10 rounded-[3rem] border border-slate-200 dark:border-slate-700 shadow-sm space-y-4 w-full transition-colors">
                 <div className="flex items-center gap-3 text-red-600">
                   <History size={28} />
                   <h4 className="font-black uppercase text-sm tracking-widest">Un poco de Historia</h4>
                 </div>
-                <p className="text-base text-slate-600 leading-relaxed font-medium italic">
+                <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed font-medium italic transition-colors">
                   Desde la Constitución de 1949, la Asamblea Legislativa adoptó su forma actual unicameral (una sola cámara). Ha sido el pilar de la abolición del ejército y el desarrollo del estado social de derecho en nuestra nación.
                 </p>
-                <div className="pt-6 mt-4 flex gap-4 border-t border-slate-100">
-                  <div className="flex-1 text-center border-r border-slate-100">
+                <div className="pt-6 mt-4 flex gap-4 border-t border-slate-100 dark:border-slate-700 transition-colors">
+                  <div className="flex-1 text-center border-r border-slate-100 dark:border-slate-700 transition-colors">
                     <p className="text-4xl font-black text-blue-600">1949</p>
                     <p className="text-[10px] lg:text-xs uppercase font-bold text-slate-400 mt-1">Constitución Actual</p>
                   </div>
@@ -167,8 +167,8 @@ const AsambleaView = () => {
 
            <div className="relative group w-full h-full flex">
               <div className="absolute -inset-4 bg-gradient-to-r from-red-500 to-blue-500 rounded-[4rem] opacity-10 blur-2xl group-hover:opacity-20 transition-opacity"></div>
-              <div className="bg-white rounded-[4rem] border border-slate-200 overflow-hidden relative shadow-xl w-full flex flex-col">
-                <div className="p-10 lg:p-12 bg-[#001D4A] text-white">
+              <div className="bg-white dark:bg-slate-800 rounded-[4rem] border border-slate-200 dark:border-slate-700 overflow-hidden relative shadow-xl w-full flex flex-col transition-colors">
+                <div className="p-10 lg:p-12 bg-[#001D4A] dark:bg-slate-900 text-white transition-colors">
                   <BookOpen size={40} className="mb-4 text-blue-400" />
                   <h3 className="text-4xl font-black italic uppercase tracking-tighter">Funciones Clave</h3>
                 </div>
@@ -181,12 +181,12 @@ const AsambleaView = () => {
                     { t: "Tratados Int.", d: "Aprobar o improbar los convenios internacionales y acuerdos diplomáticos, integrándolos al ordenamiento." }
                   ].map((f, i) => (
                     <div key={i} className="flex gap-6 items-start">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 shrink-0 mt-1">
+                      <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 mt-1 transition-colors">
                         <CheckCircle size={18} />
                       </div>
                       <div>
-                        <h5 className="font-black text-[#001D4A] uppercase text-sm italic tracking-widest mb-1">{f.t}</h5>
-                        <p className="text-sm text-slate-500 font-medium leading-relaxed">{f.d}</p>
+                        <h5 className="font-black text-[#001D4A] dark:text-white uppercase text-sm italic tracking-widest mb-1 transition-colors">{f.t}</h5>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed transition-colors">{f.d}</p>
                       </div>
                     </div>
                   ))}
@@ -196,9 +196,9 @@ const AsambleaView = () => {
         </section>
 
         {/* Sección 2: Hemiciclo (El Mapa) */}
-        <section id="hemiciclo" className="space-y-12 text-center bg-white rounded-[4rem] p-8 lg:p-16 shadow-sm border border-slate-100 overflow-hidden w-full relative">
+        <section id="hemiciclo" className="space-y-12 text-center bg-white dark:bg-slate-800 rounded-[4rem] p-8 lg:p-16 shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden w-full relative transition-colors">
            <div className="space-y-4 relative z-10">
-              <h3 className="text-4xl lg:text-5xl font-black text-[#001D4A] uppercase tracking-tighter italic">Distribución del Plenario</h3>
+              <h3 className="text-4xl lg:text-5xl font-black text-[#001D4A] dark:text-white uppercase tracking-tighter italic transition-colors">Distribución del Plenario</h3>
               <p className="text-slate-400 font-bold text-sm uppercase tracking-widest italic">Pasa el cursor sobre un punto para identificar al diputado</p>
            </div>
            
@@ -219,21 +219,21 @@ const AsambleaView = () => {
                       }}
                     />
                  ))}
-                 <path d="M400,530 h200 v40 q0,10 -10,10 h-180 q-10,0 -10,-10 z" fill="#001D4A" />
+                 <path d="M400,530 h200 v40 q0,10 -10,10 h-180 q-10,0 -10,-10 z" className="fill-[#001D4A] dark:fill-slate-700 transition-colors" />
                  <text x="500" y="555" textAnchor="middle" fill="white" className="text-xs font-black uppercase tracking-widest italic">Directorio Legislativo</text>
               </svg>
 
               {hoveredDiputado && (
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/95 backdrop-blur-xl p-10 rounded-[3rem] shadow-2xl border border-slate-200 w-96 text-center animate-in zoom-in-95 duration-200 z-30 pointer-events-none">
-                   <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-4 italic">Diputado de la República</p>
-                   <h5 className="font-black text-[#001D4A] uppercase text-2xl leading-tight mb-4 italic tracking-tighter">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl p-10 rounded-[3rem] shadow-2xl border border-slate-200 dark:border-slate-700 w-96 text-center animate-in zoom-in-95 duration-200 z-30 pointer-events-none transition-colors">
+                   <p className="text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-[0.2em] mb-4 italic">Diputado de la República</p>
+                   <h5 className="font-black text-[#001D4A] dark:text-white uppercase text-2xl leading-tight mb-4 italic tracking-tighter transition-colors">
                       {hoveredDiputado.name}
                    </h5>
-                   <div className="inline-block px-5 py-2 bg-slate-100 rounded-full mb-8">
-                      <p className="text-xs font-bold text-slate-600 uppercase tracking-widest italic">{hoveredDiputado.party}</p>
+                   <div className="inline-block px-5 py-2 bg-slate-100 dark:bg-slate-700 rounded-full mb-8 transition-colors">
+                      <p className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest italic transition-colors">{hoveredDiputado.party}</p>
                    </div>
-                   <div className="pt-6 border-t border-slate-100">
-                      <p className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center justify-center gap-2 italic">
+                   <div className="pt-6 border-t border-slate-100 dark:border-slate-700 transition-colors">
+                      <p className="text-xs font-black text-slate-400 dark:text-slate-400 uppercase tracking-widest flex items-center justify-center gap-2 italic">
                         <MapPin size={16} className="text-red-500" /> Provincia de {hoveredDiputado.province}
                       </p>
                    </div>
@@ -241,7 +241,7 @@ const AsambleaView = () => {
               )}
            </div>
 
-           <div className="flex flex-wrap justify-center gap-6 max-w-5xl mx-auto pt-10 border-t border-slate-50 relative z-10">
+           <div className="flex flex-wrap justify-center gap-6 max-w-5xl mx-auto pt-10 border-t border-slate-50 dark:border-slate-700 relative z-10 transition-colors">
               {[
                 { label: "Pueblo Soberano", color: "#3b82f6" },
                 { label: "PLN", color: "#10b981" },
@@ -249,9 +249,9 @@ const AsambleaView = () => {
                 { label: "PUSC", color: "#ef4444" },
                 { label: "Agenda Ciudadana", color: "#8b5cf6" }
               ].map((p, i) => (
-                <div key={i} className="flex items-center gap-3 bg-slate-50 px-5 py-3 rounded-2xl border border-slate-100">
+                <div key={i} className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 px-5 py-3 rounded-2xl border border-slate-100 dark:border-slate-700 transition-colors">
                    <div className="w-4 h-4 rounded-full" style={{background: p.color}}></div>
-                   <span className="text-xs font-black uppercase text-slate-500 tracking-tighter italic">{p.label}</span>
+                   <span className="text-xs font-black uppercase text-slate-500 dark:text-slate-400 tracking-tighter italic transition-colors">{p.label}</span>
                 </div>
               ))}
            </div>
@@ -261,19 +261,19 @@ const AsambleaView = () => {
         <section id="proyectos" className="space-y-12 w-full">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="space-y-4">
-              <h3 className="text-5xl font-black text-[#001D4A] uppercase tracking-tighter italic">Control de Leyes</h3>
+              <h3 className="text-5xl font-black text-[#001D4A] dark:text-white uppercase tracking-tighter italic transition-colors">Control de Leyes</h3>
               <p className="text-slate-400 font-bold text-sm uppercase tracking-widest italic">Estado actual de las iniciativas legislativas 2024</p>
             </div>
-            <div className="flex bg-white p-2 rounded-full border border-slate-200 shadow-sm self-start md:self-end">
+            <div className="flex bg-white dark:bg-slate-800 p-2 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm self-start md:self-end transition-colors">
               <button 
                 onClick={() => setActiveTab('proyectos')}
-                className={`px-8 py-3 rounded-full text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'proyectos' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'}`}
+                className={`px-8 py-3 rounded-full text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'proyectos' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'}`}
               >
                 Aprobados
               </button>
               <button 
                 onClick={() => setActiveTab('desaprobados')}
-                className={`px-8 py-3 rounded-full text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'desaprobados' ? 'bg-red-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'}`}
+                className={`px-8 py-3 rounded-full text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'desaprobados' ? 'bg-red-600 text-white shadow-lg' : 'text-slate-400 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'}`}
               >
                 Archivados
               </button>
@@ -290,18 +290,18 @@ const AsambleaView = () => {
               { title: "Reforma Educativa", id: "Exp. 20.120", desc: "Cambios curriculares en secundaria.", status: "Rechazado", color: "bg-red-400" },
               { title: "Jornadas 4-3", id: "Exp. 21.182", desc: "Propuesta de horarios laborales extendidos.", status: "Inconstitucional", color: "bg-red-500" }
             ]).map((item, idx) => (
-              <div key={idx} className="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group w-full">
+              <div key={idx} className="bg-white dark:bg-slate-800 p-10 rounded-[3rem] border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all group w-full">
                 <div className="flex justify-between items-start mb-8">
                   <div className={`w-14 h-14 rounded-2xl ${item.color} flex items-center justify-center text-white shadow-lg`}>
                     {activeTab === 'proyectos' ? <Gavel size={28} /> : <XCircle size={28} />}
                   </div>
-                  <span className="text-[10px] font-black bg-slate-100 px-4 py-1.5 rounded-full text-slate-500 uppercase tracking-widest italic">{item.id}</span>
+                  <span className="text-[10px] font-black bg-slate-100 dark:bg-slate-700 px-4 py-1.5 rounded-full text-slate-500 dark:text-slate-300 uppercase tracking-widest italic transition-colors">{item.id}</span>
                 </div>
-                <h4 className="text-2xl font-black text-[#001D4A] uppercase italic tracking-tighter mb-4">{item.title}</h4>
+                <h4 className="text-2xl font-black text-[#001D4A] dark:text-white uppercase italic tracking-tighter mb-4 transition-colors">{item.title}</h4>
                 <p className="text-sm text-slate-400 font-bold mb-8 italic leading-relaxed">{item.desc}</p>
-                <div className="pt-6 border-t border-slate-50 flex items-center justify-between">
-                  <span className="text-xs font-black uppercase text-blue-600">{item.status}</span>
-                  <ChevronRight size={20} className="text-slate-300 group-hover:translate-x-2 transition-transform" />
+                <div className="pt-6 border-t border-slate-50 dark:border-slate-700 flex items-center justify-between transition-colors">
+                  <span className="text-xs font-black uppercase text-blue-600 dark:text-blue-400">{item.status}</span>
+                  <ChevronRight size={20} className="text-slate-300 dark:text-slate-500 group-hover:translate-x-2 transition-transform" />
                 </div>
               </div>
             ))}
@@ -310,7 +310,7 @@ const AsambleaView = () => {
 
         {/* Sección 4: Calendario Legislativo y FAQ */}
         <section id="calendario" className="grid xl:grid-cols-2 gap-16 items-start w-full">
-           <div className="bg-[#001D4A] p-12 lg:p-16 rounded-[4rem] text-white shadow-2xl relative overflow-hidden w-full h-full flex flex-col">
+           <div className="bg-[#001D4A] dark:bg-slate-900 p-12 lg:p-16 rounded-[4rem] text-white shadow-2xl relative overflow-hidden w-full h-full flex flex-col transition-colors">
               <Calendar size={250} className="absolute -bottom-10 -right-10 text-white/5 rotate-12" />
               <div className="relative z-10 space-y-10 flex-grow">
                 <h3 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter italic leading-none">Próximas <br/> Sesiones</h3>
@@ -336,14 +336,14 @@ const AsambleaView = () => {
            </div>
 
            <div className="space-y-10 w-full">
-              <div className="bg-white p-10 lg:p-12 rounded-[3rem] border border-slate-200 shadow-sm w-full">
+              <div className="bg-white dark:bg-slate-800 p-10 lg:p-12 rounded-[3rem] border border-slate-200 dark:border-slate-700 shadow-sm w-full transition-colors">
                  <div className="flex items-center gap-4 mb-6">
-                    <div className="bg-blue-100 p-4 rounded-2xl text-blue-600">
+                    <div className="bg-blue-100 dark:bg-blue-900/50 p-4 rounded-2xl text-blue-600 dark:text-blue-400 transition-colors">
                        <Timer size={28} />
                     </div>
-                    <h4 className="font-black text-[#001D4A] text-2xl uppercase italic tracking-tighter leading-none">Tiempos de <br/> Debate</h4>
+                    <h4 className="font-black text-[#001D4A] dark:text-white text-2xl uppercase italic tracking-tighter leading-none transition-colors">Tiempos de <br/> Debate</h4>
                  </div>
-                 <p className="text-slate-500 font-medium text-base leading-relaxed mb-8">
+                 <p className="text-slate-500 dark:text-slate-300 font-medium text-base leading-relaxed mb-8 transition-colors">
                     Cada fracción tiene tiempos asignados por el Reglamento de la Asamblea para discutir proyectos. Esto asegura un debate democrático y ordenado.
                  </p>
                  <div className="space-y-4">
@@ -358,27 +358,27 @@ const AsambleaView = () => {
               </div>
 
               {/* Preguntas Frecuentes */}
-              <div className="bg-white p-10 lg:p-12 rounded-[3rem] border border-slate-200 shadow-sm w-full">
+              <div className="bg-white dark:bg-slate-800 p-10 lg:p-12 rounded-[3rem] border border-slate-200 dark:border-slate-700 shadow-sm w-full transition-colors">
                  <div className="flex items-center gap-4 mb-8">
-                    <div className="bg-slate-100 p-4 rounded-2xl text-slate-600">
+                    <div className="bg-slate-100 dark:bg-slate-700 p-4 rounded-2xl text-slate-600 dark:text-slate-300 transition-colors">
                        <Info size={28} />
                     </div>
-                    <h4 className="font-black text-[#001D4A] text-2xl uppercase italic tracking-tighter leading-none">Preguntas <br/> Frecuentes</h4>
+                    <h4 className="font-black text-[#001D4A] dark:text-white text-2xl uppercase italic tracking-tighter leading-none transition-colors">Preguntas <br/> Frecuentes</h4>
                  </div>
                  
                  <div className="space-y-4">
                     {faqs.map((faq, index) => (
-                      <div key={index} className="border border-slate-100 rounded-2xl overflow-hidden transition-all">
+                      <div key={index} className="border border-slate-100 dark:border-slate-700 rounded-2xl overflow-hidden transition-all">
                         <button 
                           onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                          className="w-full p-5 text-left flex justify-between items-center bg-slate-50 hover:bg-slate-100 transition-colors"
+                          className="w-full p-5 text-left flex justify-between items-center bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                         >
-                          <span className="font-bold text-slate-700 text-sm md:text-base italic">{faq.q}</span>
+                          <span className="font-bold text-slate-700 dark:text-slate-200 text-sm md:text-base italic transition-colors">{faq.q}</span>
                           <ChevronDown size={20} className={`text-slate-400 transition-transform ${openFaq === index ? 'rotate-180' : ''}`} />
                         </button>
                         {openFaq === index && (
-                          <div className="p-5 bg-white border-t border-slate-100 animate-in fade-in slide-in-from-top-2">
-                            <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium">{faq.a}</p>
+                          <div className="p-5 bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700 animate-in fade-in slide-in-from-top-2 transition-colors">
+                            <p className="text-slate-500 dark:text-slate-300 text-sm md:text-base leading-relaxed font-medium transition-colors">{faq.a}</p>
                           </div>
                         )}
                       </div>
@@ -394,7 +394,7 @@ const AsambleaView = () => {
               href="https://www.asamblea.go.cr/" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="group flex flex-col md:flex-row items-center gap-6 bg-gradient-to-br from-[#001D4A] to-blue-900 px-10 py-8 rounded-[3rem] shadow-2xl hover:shadow-blue-900/30 hover:-translate-y-1 transition-all w-full max-w-4xl"
+              className="group flex flex-col md:flex-row items-center gap-6 bg-gradient-to-br from-[#001D4A] to-blue-900 dark:from-slate-800 dark:to-slate-900 px-10 py-8 rounded-[3rem] shadow-2xl hover:shadow-blue-900/30 hover:-translate-y-1 transition-all w-full max-w-4xl"
             >
               <div className="bg-white/10 p-5 rounded-2xl text-white group-hover:scale-110 transition-transform">
                 <ExternalLink size={36} />
@@ -403,7 +403,7 @@ const AsambleaView = () => {
                 <h4 className="text-2xl lg:text-3xl font-black text-white uppercase italic tracking-tighter mb-2">Visita el Sitio Oficial</h4>
                 <p className="text-blue-200 font-medium text-sm md:text-base">Accede a transmisiones en vivo, proyectos de ley completos y actas de las comisiones directamente desde el portal oficial de la Asamblea Legislativa de Costa Rica.</p>
               </div>
-              <div className="bg-white text-[#001D4A] w-14 h-14 rounded-full flex items-center justify-center shrink-0 group-hover:bg-blue-50 transition-colors">
+              <div className="bg-white dark:bg-slate-700 text-[#001D4A] dark:text-white w-14 h-14 rounded-full flex items-center justify-center shrink-0 group-hover:bg-blue-50 dark:group-hover:bg-slate-600 transition-colors">
                 <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform" />
               </div>
             </a>
