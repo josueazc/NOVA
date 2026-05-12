@@ -55,7 +55,12 @@ const DatabaseTables = () => {
             { name: "bio", type: "text", constraint: "Opcional", desc: "Pequeña biografía o descripción del usuario." },
             { name: "party", type: "text", constraint: "Opcional", desc: "Partido político al que simpatiza o está afiliado." },
             { name: "is_politician", type: "boolean", constraint: "Default: false", desc: "Bandera que indica si el usuario es una figura pública." },
-            { name: "cargo", type: "text", constraint: "Opcional", desc: "Cargo público actual (si is_politician es true)." }
+            { name: "cargo", type: "text", constraint: "Opcional", desc: "Cargo público actual (si is_politician es true)." },
+            { name: "badges", type: "text[]", constraint: "Array", desc: "Insignias y medallas obtenidas (Gamificación)." },
+            { name: "points", type: "integer", constraint: "Default: 0", desc: "Puntos de reputación cívica." },
+            { name: "level", type: "integer", constraint: "Default: 1", desc: "Nivel de usuario en el sistema de comunidad." },
+            { name: "followers_count", type: "integer", constraint: "Default: 0", desc: "Cantidad de usuarios que lo siguen." },
+            { name: "following_count", type: "integer", constraint: "Default: 0", desc: "Cantidad de usuarios que sigue." }
           ]}
         />
 
@@ -69,6 +74,16 @@ const DatabaseTables = () => {
             { name: "media", type: "text", constraint: "Opcional", desc: "URL de la imagen almacenada en Supabase Storage Bucket." },
             { name: "likes", type: "integer", constraint: "Default: 0", desc: "Contador de me gustas." },
             { name: "created_at", type: "timestamp", constraint: "Default: now()", desc: "Fecha y hora exacta de la publicación." }
+          ]}
+        />
+
+        <TableDefinition 
+          tableName="followers" 
+          description="Tabla de relación para el sistema de seguidores y seguidos."
+          columns={[
+            { name: "follower_id", type: "uuid", constraint: "PK, FK a profiles", desc: "Usuario que sigue a otra cuenta." },
+            { name: "following_id", type: "uuid", constraint: "PK, FK a profiles", desc: "Usuario que está siendo seguido." },
+            { name: "created_at", type: "timestamp", constraint: "Default: now()", desc: "Fecha de inicio del seguimiento." }
           ]}
         />
 

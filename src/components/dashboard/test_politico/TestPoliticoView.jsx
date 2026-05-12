@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { 
   CheckCircle, ChevronRight, AlertCircle, RefreshCw, BarChart2,
-  Shield, TrendingUp, Landmark, Users, Leaf, Gavel
+  Shield, TrendingUp, Landmark, Users, Leaf, Gavel, Brain, Target, MessageSquare, BookOpen, Scale
 } from 'lucide-react';
 import { partidosData } from '../../../data/partidosData';
 
@@ -158,33 +158,97 @@ const TestPoliticoView = () => {
 
   if (!started) {
     return (
-      <div className="w-full h-full min-h-[80vh] flex flex-col items-center justify-center p-6 animate-in fade-in slide-in-from-bottom-4 duration-500 transition-colors">
-        <div className="max-w-2xl text-center space-y-8 bg-white dark:bg-slate-800 p-12 rounded-[3rem] shadow-xl border border-slate-100 dark:border-slate-700 transition-colors">
-          <div className="w-24 h-24 bg-gradient-to-br from-[#001D4A] to-blue-600 rounded-full flex items-center justify-center mx-auto shadow-2xl">
-            <BarChart2 size={40} className="text-white" />
+      <div className="w-full max-w-5xl mx-auto p-6 py-12 animate-in fade-in slide-in-from-bottom-4 duration-500 transition-colors">
+        
+        {/* Header Hero */}
+        <div className="text-center space-y-8 bg-white dark:bg-slate-800 p-10 md:p-16 rounded-[3rem] shadow-xl border border-slate-100 dark:border-slate-700 transition-colors mb-12 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 dark:bg-slate-700/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
+          <div className="relative z-10">
+            <div className="w-20 h-20 bg-[#002B7F] rounded-2xl flex items-center justify-center mx-auto shadow-2xl mb-8 rotate-3 hover:rotate-0 transition-transform">
+              <BarChart2 size={36} className="text-white" />
+            </div>
+            <h1 className="text-4xl md:text-6xl font-[1000] text-[#002B7F] dark:text-white tracking-tighter uppercase mb-4 transition-colors">
+              Brújula <span className="text-[#EF1C24]">Electoral</span>
+            </h1>
+            <p className="text-slate-500 dark:text-slate-400 text-lg md:text-xl font-medium leading-relaxed max-w-2xl mx-auto transition-colors">
+              Descubre qué partido político de Costa Rica se alinea matemáticamente con tus valores. Basado en planes de gobierno y votaciones reales.
+            </p>
+            
+            <div className="mt-10">
+              <button 
+                onClick={handleStart}
+                className="bg-[#002B7F] text-white px-12 py-5 rounded-full text-lg font-black uppercase tracking-widest hover:bg-[#001f5c] transition-all shadow-[0_10px_30px_-10px_rgba(0,43,127,0.5)] active:scale-95 flex items-center justify-center gap-3 mx-auto group"
+              >
+                Comenzar Evaluación <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mt-4">25 Preguntas • 3 Minutos • 100% Anónimo</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-4xl md:text-5xl font-[1000] text-[#001D4A] dark:text-white tracking-tighter uppercase italic mb-4 transition-colors">VotoMetro <span className="text-red-600">CR 2026</span></h1>
-            <p className="text-slate-500 dark:text-slate-400 text-lg md:text-xl font-medium leading-relaxed transition-colors">
-              Descubre qué partido político se alinea realmente con tus ideales y valores para las próximas elecciones en Costa Rica.
+        </div>
+
+        {/* Info Cards Grid */}
+        <div className="grid md:grid-cols-2 gap-8 mb-12">
+          
+          {/* Card 1: Importancia */}
+          <div className="bg-white dark:bg-slate-800 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all">
+            <div className="w-12 h-12 bg-red-50 dark:bg-red-900/20 rounded-xl flex items-center justify-center text-[#EF1C24] mb-6">
+              <Brain size={24} />
+            </div>
+            <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-4">El Poder del Voto Informado</h3>
+            <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed text-sm md:text-base">
+              Votar por tradición o fanatismo debilita la democracia. Una decisión cívica fundamentada en propuestas reales y compatibilidad ideológica es tu mayor herramienta para exigir rendición de cuentas y frenar el populismo. Esta herramienta elimina el ruido mediático para enfocarse en los datos.
             </p>
           </div>
-          
-          <div className="grid grid-cols-2 gap-4 text-left max-w-md mx-auto py-6">
-            <div className="flex items-center gap-3"><Shield size={20} className="text-blue-500" /> <span className="font-bold text-sm text-slate-600 dark:text-slate-300 uppercase">Seguridad</span></div>
-            <div className="flex items-center gap-3"><TrendingUp size={20} className="text-green-500" /> <span className="font-bold text-sm text-slate-600 dark:text-slate-300 uppercase">Economía</span></div>
-            <div className="flex items-center gap-3"><Users size={20} className="text-purple-500" /> <span className="font-bold text-sm text-slate-600 dark:text-slate-300 uppercase">Derechos</span></div>
-            <div className="flex items-center gap-3"><Landmark size={20} className="text-slate-500 dark:text-slate-400" /> <span className="font-bold text-sm text-slate-600 dark:text-slate-300 uppercase">Estado</span></div>
-          </div>
 
-          <button 
-            onClick={handleStart}
-            className="w-full bg-[#001D4A] text-white py-5 rounded-full text-lg font-black uppercase tracking-widest hover:bg-blue-800 transition-all shadow-xl hover:shadow-2xl flex items-center justify-center gap-3"
-          >
-            Iniciar Test <ChevronRight size={24} />
-          </button>
-          <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-6">25 Preguntas • 3 Minutos</p>
+          {/* Card 2: Ideales Evaluados */}
+          <div className="bg-white dark:bg-slate-800 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all">
+            <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/20 rounded-xl flex items-center justify-center text-[#002B7F] mb-6">
+              <Scale size={24} />
+            </div>
+            <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-4">Ejes Ideológicos</h3>
+            <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed text-sm md:text-base mb-4">
+              Mapeamos tu postura en un espectro multidimensional complejo, no solo "izquierda vs derecha".
+            </p>
+            <div className="grid grid-cols-2 gap-3 text-left">
+              <div className="flex items-center gap-2"><Shield size={16} className="text-blue-500" /> <span className="font-bold text-xs text-slate-600 dark:text-slate-300 uppercase">Seguridad</span></div>
+              <div className="flex items-center gap-2"><TrendingUp size={16} className="text-green-500" /> <span className="font-bold text-xs text-slate-600 dark:text-slate-300 uppercase">Economía</span></div>
+              <div className="flex items-center gap-2"><Users size={16} className="text-purple-500" /> <span className="font-bold text-xs text-slate-600 dark:text-slate-300 uppercase">Derechos</span></div>
+              <div className="flex items-center gap-2"><Landmark size={16} className="text-slate-500" /> <span className="font-bold text-xs text-slate-600 dark:text-slate-300 uppercase">Estado Institucional</span></div>
+            </div>
+          </div>
         </div>
+
+        {/* How to answer guide */}
+        <div className="bg-slate-50 dark:bg-slate-800/50 p-8 md:p-10 rounded-[2rem] border border-slate-200 dark:border-slate-700 text-center">
+           <h3 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-widest mb-6">Metodología de Respuesta</h3>
+           <p className="text-slate-500 dark:text-slate-400 font-medium max-w-2xl mx-auto mb-8 text-sm">
+             Te presentaremos 25 afirmaciones directas sobre el rumbo del país. Para obtener un resultado preciso, evalúa cada una usando la escala de Likert. Sé completamente honesto, el test es anónimo.
+           </p>
+           
+           <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
+             <div className="flex items-center gap-2 bg-white dark:bg-slate-700 px-4 py-2 rounded-lg shadow-sm border border-slate-100 dark:border-slate-600">
+               <div className="w-3 h-3 rounded-full bg-green-600"></div>
+               <span className="text-xs font-bold uppercase text-slate-700 dark:text-slate-300">Muy de Acuerdo</span>
+             </div>
+             <div className="flex items-center gap-2 bg-white dark:bg-slate-700 px-4 py-2 rounded-lg shadow-sm border border-slate-100 dark:border-slate-600">
+               <div className="w-3 h-3 rounded-full bg-green-400"></div>
+               <span className="text-xs font-bold uppercase text-slate-700 dark:text-slate-300">De Acuerdo</span>
+             </div>
+             <div className="flex items-center gap-2 bg-white dark:bg-slate-700 px-4 py-2 rounded-lg shadow-sm border border-slate-100 dark:border-slate-600">
+               <div className="w-3 h-3 rounded-full bg-slate-400"></div>
+               <span className="text-xs font-bold uppercase text-slate-700 dark:text-slate-300">Neutral</span>
+             </div>
+             <div className="flex items-center gap-2 bg-white dark:bg-slate-700 px-4 py-2 rounded-lg shadow-sm border border-slate-100 dark:border-slate-600">
+               <div className="w-3 h-3 rounded-full bg-red-400"></div>
+               <span className="text-xs font-bold uppercase text-slate-700 dark:text-slate-300">En Desacuerdo</span>
+             </div>
+             <div className="flex items-center gap-2 bg-white dark:bg-slate-700 px-4 py-2 rounded-lg shadow-sm border border-slate-100 dark:border-slate-600">
+               <div className="w-3 h-3 rounded-full bg-red-600"></div>
+               <span className="text-xs font-bold uppercase text-slate-700 dark:text-slate-300">Muy en Desacuerdo</span>
+             </div>
+           </div>
+        </div>
+
       </div>
     );
   }

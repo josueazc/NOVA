@@ -10,7 +10,7 @@ Este documento recopila las ideas arquitectónicas y funcionales de alto impacto
 *   **Concepto:** Sistema de recompensas y niveles en el módulo Comunidad.
 *   **Ejecución Técnica:** 
     *   Agregar columnas de `puntos` y `nivel` a la tabla `profiles` en Supabase.
-    *   Ganar medallas (ej. "Ciudadano Informado", "Analista") por completar hitos: leer 3 planes de gobierno, terminar el test político, o mantener discusiones sin reportes de moderación.
+    *   Otorgar insignias/medallas (ej. "Ciudadano Informado", "Analista", "Voz Activa") por completar hitos específicos: llegar a 10 posts en la comunidad, leer los planes de gobierno, hacer el test político, o mantener discusiones sin reportes de moderación.
 
 ## 3. 📡 Conexión a Datos en Tiempo Real (API TSE y SIL)
 *   **Concepto:** Reemplazar los datos *mockeados* por información oficial en vivo (votaciones de diputados, donantes de partidos).

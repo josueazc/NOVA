@@ -3,7 +3,7 @@ import {
   Search, Twitter, Facebook, Instagram, Youtube, ArrowRight, 
   Globe, FileText, ChevronRight, Users, Building2, Landmark, 
   BookOpen, Gavel, PieChart, BrainCircuit, TrendingUp, Calendar, 
-  HelpCircle, LogOut, Settings
+  HelpCircle, LogOut, Settings, Activity
 } from 'lucide-react';
 import PartidosView from './partidos/PartidosView';
 import PlanesView from './planes/PlanesView';
@@ -13,6 +13,7 @@ import TestPoliticoView from './test_politico/TestPoliticoView';
 import PoliticalChatbot from './chat/PoliticalChatbot';
 import ConfiguracionView from './configuracion/ConfiguracionView';
 import DocumentacionView from './documentacion/DocumentacionView';
+import AbstencionismoView from './abstencionismo/AbstencionismoView';
 
 const Dashboard = ({ userName, user, handleSignOut }) => {
   const [activeTab, setActiveTab] = useState('Inicio');
@@ -49,8 +50,8 @@ const Dashboard = ({ userName, user, handleSignOut }) => {
             </div>
           </div>
 
-          <nav className="hidden lg:flex items-center justify-center gap-6 xl:gap-8 mx-8">
-            {['Inicio', 'Test Político', 'La Asamblea', 'Planes', 'Partidos Políticos', 'Comunidad', 'Mi Perfil', 'Asistente IA', 'Documentación'].map((item) => (
+          <nav className="hidden lg:flex items-center justify-center gap-6 xl:gap-8 mx-8 relative">
+            {['Inicio', 'Test Político', 'La Asamblea', 'Planes', 'Partidos Políticos', 'Comunidad', 'Asistente IA'].map((item) => (
               <button 
                 key={item}
                 onClick={() => setActiveTab(item)}
@@ -59,6 +60,23 @@ const Dashboard = ({ userName, user, handleSignOut }) => {
                 {item}
               </button>
             ))}
+            
+            <div className="relative group">
+              <button className={`text-[12px] font-black uppercase tracking-widest transition-all flex items-center gap-1 py-1 ${['Mi Perfil', 'Abstencionismo', 'Documentación'].includes(activeTab) ? 'text-[#002B7F] dark:text-blue-400 border-b-2 border-[#EF1C24]' : 'text-slate-400 hover:text-[#002B7F] dark:hover:text-blue-300'}`}>
+                Otros <ChevronRight size={14} className="rotate-90 group-hover:-rotate-90 transition-transform" />
+              </button>
+              <div className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all flex flex-col overflow-hidden py-2 z-50">
+                {['Mi Perfil', 'Abstencionismo', 'Documentación'].map(subItem => (
+                  <button 
+                    key={subItem}
+                    onClick={() => setActiveTab(subItem)}
+                    className={`text-left px-4 py-3 text-[11px] font-black uppercase tracking-widest transition-colors ${activeTab === subItem ? 'bg-slate-50 dark:bg-slate-700/50 text-[#002B7F] dark:text-blue-400' : 'text-slate-500 hover:bg-slate-50 hover:text-[#002B7F] dark:hover:bg-slate-700/50 dark:hover:text-white'}`}
+                  >
+                    {subItem}
+                  </button>
+                ))}
+              </div>
+            </div>
           </nav>
 
           <div className="flex items-center gap-4">
@@ -124,15 +142,42 @@ const Dashboard = ({ userName, user, handleSignOut }) => {
                     <p className="text-slate-500 dark:text-slate-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest leading-relaxed transition-colors">Datos del TSE y la Asamblea en tiempo real</p>
                   </div>
                   
-                  {/* Iconos Flotantes */}
-                  <div className="absolute -left-4 sm:-left-10 top-[20%] w-16 h-16 sm:w-20 sm:h-20 bg-white dark:bg-slate-700 rounded-3xl shadow-xl flex items-center justify-center text-[#EF1C24] rotate-[-10deg] animate-bounce duration-[4s] transition-colors">
-                    <BrainCircuit size={32} />
-                  </div>
-                  <div className="absolute left-4 bottom-0 w-12 h-12 sm:w-16 sm:h-16 bg-[#002B7F] rounded-2xl shadow-xl flex items-center justify-center text-white rotate-12">
-                    <Gavel size={24} />
-                  </div>
-                  <div className="absolute -right-4 sm:-right-6 top-1/2 w-12 h-12 sm:w-14 sm:h-14 bg-[#EF1C24] rounded-full shadow-lg flex items-center justify-center text-white">
-                    <TrendingUp size={20} />
+                  {/* Sistema Orbital */}
+                  <div className="absolute inset-0 animate-spin-slow pointer-events-none">
+                    
+                    {/* Item 1: Top (12 o'clock) */}
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto hover:scale-110 transition-transform cursor-pointer">
+                      <div className="animate-spin-reverse-slow bg-white dark:bg-slate-800 px-3 sm:px-4 py-2 rounded-2xl shadow-xl flex items-center gap-3 border border-slate-100 dark:border-slate-700 whitespace-nowrap">
+                         <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-900/30 text-[#002B7F] dark:text-blue-400 flex justify-center items-center shrink-0"><Users size={16}/></div>
+                         <div className="hidden sm:block">
+                           <div className="text-xs sm:text-sm font-black text-slate-800 dark:text-white">57 Diputados</div>
+                           <div className="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase tracking-widest">En la Asamblea</div>
+                         </div>
+                      </div>
+                    </div>
+
+                    {/* Item 2: Bottom Right (4 o'clock) */}
+                    <div className="absolute top-[75%] left-[93.3%] -translate-x-1/2 -translate-y-1/2 pointer-events-auto hover:scale-110 transition-transform cursor-pointer">
+                       <div className="animate-spin-reverse-slow bg-white dark:bg-slate-800 px-3 sm:px-4 py-2 rounded-2xl shadow-xl flex items-center gap-3 border border-slate-100 dark:border-slate-700 whitespace-nowrap">
+                         <div className="w-8 h-8 rounded-xl bg-green-50 dark:bg-green-900/30 text-green-600 flex justify-center items-center shrink-0"><TrendingUp size={16}/></div>
+                         <div className="hidden sm:block">
+                           <div className="text-xs sm:text-sm font-black text-slate-800 dark:text-white">3.5M Electores</div>
+                           <div className="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase tracking-widest">Padrón Nacional</div>
+                         </div>
+                      </div>
+                    </div>
+
+                    {/* Item 3: Bottom Left (8 o'clock) */}
+                    <div className="absolute top-[75%] left-[6.7%] -translate-x-1/2 -translate-y-1/2 pointer-events-auto hover:scale-110 transition-transform cursor-pointer">
+                       <div className="animate-spin-reverse-slow bg-white dark:bg-slate-800 px-3 sm:px-4 py-2 rounded-2xl shadow-xl flex items-center gap-3 border border-slate-100 dark:border-slate-700 whitespace-nowrap">
+                         <div className="w-8 h-8 rounded-xl bg-red-50 dark:bg-red-900/30 text-[#EF1C24] flex justify-center items-center shrink-0"><Gavel size={16}/></div>
+                         <div className="hidden sm:block">
+                           <div className="text-xs sm:text-sm font-black text-slate-800 dark:text-white">+120 Proyectos</div>
+                           <div className="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase tracking-widest">En discusión</div>
+                         </div>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -328,8 +373,13 @@ const Dashboard = ({ userName, user, handleSignOut }) => {
         <DocumentacionView />
       )}
 
+      {/* Renderizado Condicional de Abstencionismo */}
+      {activeTab === 'Abstencionismo' && (
+        <AbstencionismoView />
+      )}
+
       {/* Placeholder para otras pestañas */}
-      {activeTab !== 'Inicio' && activeTab !== 'Partidos Políticos' && activeTab !== 'Planes' && activeTab !== 'La Asamblea' && activeTab !== 'Comunidad' && activeTab !== 'Mi Perfil' && activeTab !== 'Test Político' && activeTab !== 'Asistente IA' && activeTab !== 'Configuración' && activeTab !== 'Documentación' && (
+      {activeTab !== 'Inicio' && activeTab !== 'Partidos Políticos' && activeTab !== 'Planes' && activeTab !== 'La Asamblea' && activeTab !== 'Comunidad' && activeTab !== 'Mi Perfil' && activeTab !== 'Test Político' && activeTab !== 'Asistente IA' && activeTab !== 'Configuración' && activeTab !== 'Documentación' && activeTab !== 'Abstencionismo' && (
         <div className="flex-grow flex items-center justify-center p-20 animate-in fade-in zoom-in duration-500">
            <div className="text-center space-y-4">
              <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-[#002B7F]">
@@ -479,7 +529,7 @@ const RevealOnScroll = ({ children }) => {
   return (
     <div 
       ref={ref} 
-      className={`transition-all duration-[1200ms] ease-[cubic-bezier(0.25,0.1,0.25,1.0)] transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`}
+      className={`transition-all duration-[1200ms] ease-[cubic-bezier(0.25,0.1,0.25,1.0)] transform ${isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-16 scale-95'}`}
     >
       {children}
     </div>
