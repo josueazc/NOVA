@@ -107,7 +107,7 @@ const AuthScreen = ({ handleAuth, handleResetPassword, loading, message, setMess
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="group">
                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 ml-1">Nombre</label>
                     <div className="relative">
@@ -137,7 +137,7 @@ const AuthScreen = ({ handleAuth, handleResetPassword, loading, message, setMess
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="group">
                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 ml-1">Provincia</label>
                     <div className="relative">
@@ -209,7 +209,7 @@ const AuthScreen = ({ handleAuth, handleResetPassword, loading, message, setMess
                 </div>
 
                 {isPolitician && (
-                  <div className="grid grid-cols-2 gap-3 animate-in slide-in-from-top-2 duration-300">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 animate-in slide-in-from-top-2 duration-300">
                     <div className="group">
                       <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 ml-1">Cargo</label>
                       <input 

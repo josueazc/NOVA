@@ -613,7 +613,7 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
     <div className="w-full bg-[#f8fafc] dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans pb-24 animate-in fade-in duration-500 pt-8 transition-colors">
       
       {/* Sub-Navegación Interna de Comunidad */}
-      <div className="max-w-3xl mx-auto px-6 mb-8 flex items-center justify-between">
+      <div className="max-w-3xl mx-auto px-6 mb-8 flex flex-wrap items-center justify-between gap-4">
          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setView({ type: 'feed', userId: null })}>
             <div className="bg-[#001D4A] dark:bg-blue-900 p-2 rounded-xl text-white group-hover:bg-blue-800 transition-colors">
               <Globe size={24} />
@@ -784,7 +784,7 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
                   </>
                 )}
                 
-                <div className="flex gap-6 mt-6 pt-6 border-t border-slate-50 dark:border-slate-700">
+                <div className="flex flex-wrap gap-4 sm:gap-6 mt-6 pt-6 border-t border-slate-50 dark:border-slate-700">
                    <div className="text-center cursor-pointer group" onClick={() => setProfileTab('posts')}>
                      <p className={`text-2xl font-black transition-colors ${profileTab === 'posts' ? 'text-[#001D4A] dark:text-white' : 'text-slate-300 dark:text-slate-600 group-hover:text-slate-400 dark:group-hover:text-slate-500'}`}>{posts.filter(p => p.authorId === view.userId || p.repostedBy?.includes(view.userId)).length}</p>
                      <p className={`text-[10px] uppercase font-bold transition-colors ${profileTab === 'posts' ? 'text-slate-500 dark:text-slate-400' : 'text-slate-300 dark:text-slate-600'}`}>Publicaciones</p>
@@ -818,7 +818,7 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
           <div className="mb-12">
             
             {/* Feed Tabs: Para Ti vs Recientes */}
-            <div className="flex items-center gap-2 mb-8 bg-white dark:bg-slate-800 p-2 rounded-full border border-slate-100 dark:border-slate-700 shadow-sm w-fit mx-auto transition-colors">
+            <div className="flex flex-wrap justify-center items-center gap-2 mb-8 bg-white dark:bg-slate-800 p-2 sm:rounded-full rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm w-full sm:w-fit mx-auto transition-colors">
               <button 
                 onClick={() => setFeedTab('fyp')} 
                 className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-black uppercase tracking-widest transition-all ${feedTab === 'fyp' ? 'bg-[#001D4A] dark:bg-blue-600 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'}`}

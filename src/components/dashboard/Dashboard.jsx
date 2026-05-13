@@ -3,7 +3,7 @@ import {
   Search, Twitter, Facebook, Instagram, Youtube, ArrowRight, 
   Globe, FileText, ChevronRight, Users, Building2, Landmark, 
   BookOpen, Gavel, PieChart, BrainCircuit, TrendingUp, Calendar, 
-  HelpCircle, LogOut, Settings, Activity
+  HelpCircle, LogOut, Settings, Activity, Menu, X, Home
 } from 'lucide-react';
 import PartidosView from './partidos/PartidosView';
 import PlanesView from './planes/PlanesView';
@@ -17,6 +17,7 @@ import AbstencionismoView from './abstencionismo/AbstencionismoView';
 
 const Dashboard = ({ userName, user, handleSignOut }) => {
   const [activeTab, setActiveTab] = useState('Inicio');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -79,7 +80,7 @@ const Dashboard = ({ userName, user, handleSignOut }) => {
             </div>
           </nav>
 
-          <div className="flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-4">
             <button 
               onClick={() => setActiveTab('Configuración')}
               className={`p-3.5 rounded-full shadow-xl transition-all active:scale-95 flex items-center justify-center ${activeTab === 'Configuración' ? 'bg-[#001D4A] dark:bg-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-[#001D4A] dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-700'}`}
@@ -95,15 +96,52 @@ const Dashboard = ({ userName, user, handleSignOut }) => {
               Salir
             </button>
           </div>
+          <button 
+            className="lg:hidden p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#002B7F] dark:text-white" 
+            onClick={() => setIsMobileMenuOpen(true)}
+          >
+            <Menu size={24} />
+          </button>
         </header>
+
+        {/* Menú Móvil Overlay */}
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 bg-white dark:bg-slate-900 z-[100] flex flex-col p-6 overflow-y-auto animate-in fade-in zoom-in duration-300 lg:hidden">
+             <div className="flex justify-between items-center mb-8">
+               <div className="flex items-center gap-3">
+                 <div className="bg-[#002B7F] p-2 rounded-xl text-white">
+                   <Landmark size={24} />
+                 </div>
+                 <h2 className="text-xl font-[1000] tracking-tighter text-[#002B7F] dark:text-white">VOTEON</h2>
+               </div>
+               <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 bg-slate-100 dark:bg-slate-800 rounded-full text-slate-500 dark:text-slate-400">
+                 <X size={24} />
+               </button>
+             </div>
+             <div className="flex flex-col gap-4">
+               {['Inicio', 'Test Político', 'La Asamblea', 'Planes', 'Partidos Políticos', 'Comunidad', 'Asistente IA', 'Mi Perfil', 'Abstencionismo', 'Documentación', 'Configuración'].map((item) => (
+                 <button 
+                   key={item}
+                   onClick={() => { setActiveTab(item); setIsMobileMenuOpen(false); }}
+                   className={`text-left px-6 py-4 rounded-2xl text-sm font-black uppercase tracking-widest transition-all ${activeTab === item ? 'bg-[#002B7F] dark:bg-blue-600 text-white' : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}`}
+                 >
+                   {item}
+                 </button>
+               ))}
+             </div>
+             <button onClick={() => { handleSignOut(); setIsMobileMenuOpen(false); }} className="mt-8 bg-[#EF1C24] text-white px-6 py-4 rounded-2xl text-sm font-black flex items-center justify-center gap-2">
+               <LogOut size={18} /> Salir
+             </button>
+          </div>
+        )}
 
         {/* Renderizado condicional del Hero sólo si está en Inicio */}
         {activeTab === 'Inicio' && (
           <main className="flex-grow flex flex-col px-6 sm:px-10 md:px-16 lg:px-24 relative max-w-[1600px] mx-auto w-full pt-6 pb-20">
             
             {/* Fondos Decorativos */}
-            <div className="absolute right-0 top-0 w-[800px] h-[800px] bg-gradient-to-br from-[#EF1C24]/5 via-[#002B7F]/5 to-transparent rounded-full -z-0 translate-x-1/4 -translate-y-1/4 pointer-events-none"></div>
-            <div className="absolute right-10 top-10 w-[600px] h-[600px] bg-gradient-to-tr from-[#002B7F]/10 to-[#EF1C24]/10 rounded-full z-0 blur-3xl opacity-80 hidden lg:block pointer-events-none"></div>
+            <div className="absolute right-0 top-0 w-[800px] h-[800px] max-w-[100vw] bg-gradient-to-br from-[#EF1C24]/5 via-[#002B7F]/5 to-transparent rounded-full -z-0 translate-x-1/4 -translate-y-1/4 pointer-events-none"></div>
+            <div className="absolute right-10 top-10 w-[600px] h-[600px] max-w-[80vw] bg-gradient-to-tr from-[#002B7F]/10 to-[#EF1C24]/10 rounded-full z-0 blur-3xl opacity-80 hidden lg:block pointer-events-none"></div>
 
             <div className="grid lg:grid-cols-2 gap-12 items-center flex-grow relative z-10">
               {/* Texto Izquierdo */}
@@ -134,7 +172,7 @@ const Dashboard = ({ userName, user, handleSignOut }) => {
 
               {/* Ilustración Derecha */}
               <div className="relative flex justify-center lg:justify-end pr-0 lg:pr-10 mt-10 lg:mt-0 animate-in zoom-in duration-1000">
-                <div className="relative w-[320px] h-[320px] sm:w-[450px] sm:h-[450px]">
+                <div className="relative w-[280px] h-[280px] sm:w-[450px] sm:h-[450px]">
                   <div className="absolute inset-0 bg-white dark:bg-slate-800 rounded-full border-[10px] sm:border-[15px] border-white dark:border-slate-800 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] overflow-hidden flex flex-col items-center justify-center p-8 text-center transition-colors">
                     <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#002B7F] to-transparent"></div>
                     <PieChart size={100} className="text-[#002B7F]/10 dark:text-blue-400/20 mb-6 sm:w-[120px] sm:h-[120px]" />
@@ -157,7 +195,7 @@ const Dashboard = ({ userName, user, handleSignOut }) => {
                     </div>
 
                     {/* Item 2: Bottom Right (4 o'clock) */}
-                    <div className="absolute top-[75%] left-[93.3%] -translate-x-1/2 -translate-y-1/2 pointer-events-auto hover:scale-110 transition-transform cursor-pointer">
+                    <div className="absolute top-[85%] left-[85%] sm:top-[75%] sm:left-[93.3%] -translate-x-1/2 -translate-y-1/2 pointer-events-auto hover:scale-110 transition-transform cursor-pointer">
                        <div className="animate-spin-reverse-slow bg-white dark:bg-slate-800 px-3 sm:px-4 py-2 rounded-2xl shadow-xl flex items-center gap-3 border border-slate-100 dark:border-slate-700 whitespace-nowrap">
                          <div className="w-8 h-8 rounded-xl bg-green-50 dark:bg-green-900/30 text-green-600 flex justify-center items-center shrink-0"><TrendingUp size={16}/></div>
                          <div className="hidden sm:block">
@@ -168,7 +206,7 @@ const Dashboard = ({ userName, user, handleSignOut }) => {
                     </div>
 
                     {/* Item 3: Bottom Left (8 o'clock) */}
-                    <div className="absolute top-[75%] left-[6.7%] -translate-x-1/2 -translate-y-1/2 pointer-events-auto hover:scale-110 transition-transform cursor-pointer">
+                    <div className="absolute top-[85%] left-[15%] sm:top-[75%] sm:left-[6.7%] -translate-x-1/2 -translate-y-1/2 pointer-events-auto hover:scale-110 transition-transform cursor-pointer">
                        <div className="animate-spin-reverse-slow bg-white dark:bg-slate-800 px-3 sm:px-4 py-2 rounded-2xl shadow-xl flex items-center gap-3 border border-slate-100 dark:border-slate-700 whitespace-nowrap">
                          <div className="w-8 h-8 rounded-xl bg-red-50 dark:bg-red-900/30 text-[#EF1C24] flex justify-center items-center shrink-0"><Gavel size={16}/></div>
                          <div className="hidden sm:block">
@@ -393,7 +431,7 @@ const Dashboard = ({ userName, user, handleSignOut }) => {
 
       {/* FOOTER */}
       <footer className="bg-[#00174A] dark:bg-slate-950 py-20 px-6 sm:px-10 lg:px-24 text-white w-full border-t-[8px] border-[#EF1C24] transition-colors relative overflow-hidden">
-        <div className="absolute right-0 top-0 w-[800px] h-[800px] bg-gradient-to-br from-[#EF1C24]/10 via-[#002B7F]/10 to-transparent rounded-full z-0 translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+        <div className="absolute right-0 top-0 w-[800px] h-[800px] max-w-[100vw] bg-gradient-to-br from-[#EF1C24]/10 via-[#002B7F]/10 to-transparent rounded-full z-0 translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
         <div className="max-w-[1600px] mx-auto grid md:grid-cols-4 gap-12 lg:gap-16 mb-16 text-center md:text-left relative z-10">
           <div className="space-y-6">
             <div className="flex items-center justify-center md:justify-start gap-3">
