@@ -1,64 +1,73 @@
 /** @type {import('tailwindcss').Config} */
+
+// Tokens definidos como tripletas RGB en src/styles.css
+const token = (name) => `rgb(var(${name}) / <alpha-value>)`;
+
 export default {
   darkMode: 'class',
   content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
+      colors: {
+        canvas: token('--c-canvas'),
+        surface: {
+          DEFAULT: token('--c-surface'),
+          2: token('--c-surface-2'),
+        },
+        line: token('--c-line'),
+        ink: token('--c-ink'),
+        muted: token('--c-muted'),
+        faint: token('--c-faint'),
+        accent: {
+          DEFAULT: token('--c-accent'),
+          soft: token('--c-accent-soft'),
+          ink: token('--c-accent-ink'),
+        },
+        danger: {
+          DEFAULT: token('--c-danger'),
+          soft: token('--c-danger-soft'),
+        },
+        success: {
+          DEFAULT: token('--c-success'),
+          soft: token('--c-success-soft'),
+        },
+        warn: {
+          DEFAULT: token('--c-warn'),
+          soft: token('--c-warn-soft'),
+        },
+      },
       fontFamily: {
-        sans: ['Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+        sans: [
+          '-apple-system', 'BlinkMacSystemFont', 'SF Pro Display',
+          'Helvetica Neue', 'Segoe UI', 'sans-serif',
+        ],
+        serif: ['Instrument Serif', 'Newsreader', 'Georgia', 'serif'],
+        mono: ['JetBrains Mono', 'SF Mono', 'ui-monospace', 'monospace'],
+      },
+      boxShadow: {
+        card: 'var(--shadow-card)',
+        lift: 'var(--shadow-lift)',
       },
       keyframes: {
-        blob: {
-          "0%": {
-            transform: "translate(0px, 0px) scale(1)",
-          },
-          "33%": {
-            transform: "translate(30px, -50px) scale(1.1)",
-          },
-          "66%": {
-            transform: "translate(-20px, 20px) scale(0.9)",
-          },
-          "100%": {
-            transform: "translate(0px, 0px) scale(1)",
-          },
+        'fade-up': {
+          from: { opacity: '0', transform: 'translateY(12px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
         },
-        float: {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" },
+        'scale-in': {
+          from: { opacity: '0', transform: 'scale(0.97)' },
+          to: { opacity: '1', transform: 'scale(1)' },
         },
-        "float-delayed": {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-15px)" },
-        },
-        "float-reverse": {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(15px)" },
-        },
-        "float-horizontal": {
-          "0%, 100%": { transform: "translateX(0)" },
-          "50%": { transform: "translateX(15px)" },
-        },
-        "float-random": {
-          "0%, 100%": { transform: "translate(0, 0) rotate(0deg)" },
-          "25%": { transform: "translate(10px, -15px) rotate(2deg)" },
-          "50%": { transform: "translate(-5px, -20px) rotate(-1deg)" },
-          "75%": { transform: "translate(-15px, -5px) rotate(1deg)" },
-        }
       },
       animation: {
-        blob: "blob 7s infinite",
-        float: "float 4s ease-in-out infinite",
-        "float-delayed": "float-delayed 5s ease-in-out infinite 2s",
-        "float-reverse": "float-reverse 6s ease-in-out infinite 1s",
-        "float-horizontal": "float-horizontal 5s ease-in-out infinite 1.5s",
-        "float-random": "float-random 8s ease-in-out infinite",
-        "spin-slow": "spin 25s linear infinite",
-        "spin-reverse-slow": "spin 25s linear infinite reverse",
+        'fade-up': 'fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'scale-in': 'scale-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'spin-slow': 'spin 25s linear infinite',
+        'spin-reverse-slow': 'spin 25s linear infinite reverse',
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-}
+  plugins: [require('tailwindcss-animate')],
+};
