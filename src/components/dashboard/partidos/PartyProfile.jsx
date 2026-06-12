@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { candidateByParty } from '@/data/elections2026';
 import { 
   History, Trophy, Gavel, Download, UserPlus, 
   ChevronLeft, ChevronRight, CheckCircle2, Flag, 
@@ -9,6 +10,7 @@ import {
 
 const PartyProfile = ({ party, onBack }) => {
   const [activeHistoryIndex, setActiveHistoryIndex] = useState(0);
+  const candidate = candidateByParty(party.id);
   const scrollContainer = useRef(null);
 
   const scrollCarousel = (direction) => {
@@ -22,14 +24,14 @@ const PartyProfile = ({ party, onBack }) => {
   return (
     <div className="w-full font-sans text-ink pb-24 animate-fade-up">
       
-      {/* Botón Flotante para Regresar */}
-      <div className="fixed top-6 left-6 z-50">
-        <button 
+      {/* Volver */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-4">
+        <button
           onClick={onBack}
-          className="bg-white/90  backdrop-blur-md p-4 rounded-full shadow-2xl hover:bg-danger dark:hover:bg-danger hover:text-white text-ink transition-all transform hover:-translate-x-1 group flex items-center gap-2 border border-line"
+          className="inline-flex items-center gap-2 text-sm font-bold text-muted hover:text-accent transition-colors"
         >
-          <ArrowLeft size={24} />
-          <span className="font-black text-[10px] tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity w-0 group-hover:w-auto overflow-hidden">Regresar</span>
+          <ArrowLeft size={16} />
+          Volver al directorio
         </button>
       </div>
 
@@ -61,7 +63,27 @@ const PartyProfile = ({ party, onBack }) => {
       </section>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 mt-10 relative space-y-10">
-        
+
+        {/* Candidatura presidencial 2026 */}
+        {candidate && (
+          <section className="bg-accent text-white rounded-3xl p-8 sm:p-10 shadow-lift relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center gap-6">
+            <Star size={170} className="absolute -right-8 -top-10 opacity-10 pointer-events-none" />
+            <div
+              className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black shrink-0 border-2 border-white/30"
+              style={{ backgroundColor: party.color }}
+            >
+              {candidate.name.split(' ').map((w) => w[0]).slice(0, 2).join('')}
+            </div>
+            <div className="relative">
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/70 mb-1">
+                Candidatura presidencial · Elecciones 2026
+              </p>
+              <h2 className="text-2xl sm:text-3xl font-black tracking-tight">{candidate.name}</h2>
+              <p className="text-white/80 text-sm leading-relaxed mt-1 max-w-2xl">{candidate.background}</p>
+            </div>
+          </section>
+        )}
+
         {/* ================== UPPER SECTION ================== */}
         {/* Dos Columnas: Izquierda Stats/Misión - Derecha Líderes */}
         <div className="grid xl:grid-cols-12 gap-10">
