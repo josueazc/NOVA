@@ -23,8 +23,6 @@ Comparador electoral · Red social ciudadana · IA con fuentes oficiales
 ![PostHog](https://img.shields.io/badge/PostHog-1D4AFF?style=for-the-badge&logo=posthog&logoColor=white)
 ![Sentry](https://img.shields.io/badge/Sentry-362D59?style=for-the-badge&logo=sentry&logoColor=white)
 ![Vitest](https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
 
 </div>
@@ -95,9 +93,9 @@ npm run build    # bundle inicial ~255 kB gracias al code splitting
 
 ## ☁️ Despliegue
 
-Tres rutas en [DEPLOYMENT.md](DEPLOYMENT.md): **Azure Static Web Apps**,
-**Docker** (nginx con headers de seguridad) o **Vercel/Netlify**. CI corre
-tests + build + smoke test de imagen en cada push.
+SPA estática: funciona out-of-the-box en **Vercel** o **Netlify**
+(framework Vite, build `npm run build`, output `dist`, variables `VITE_*`
+en el panel). CI corre tests + build en cada push.
 
 ## ⛓️ Roadmap Web3 (explorando)
 

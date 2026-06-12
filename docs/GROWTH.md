@@ -91,7 +91,7 @@ sostenibilidad: becas cívicas (Luminate, NDI, IFES), donaciones abiertas
 
 | Semanas | Foco | Movidas |
 | --- | --- | --- |
-| 1-2 | Desbloquear | Deploy público (DEPLOYMENT.md), Supabase prod, dominio |
+| 1-2 | Desbloquear | Deploy público (Vercel/Netlify), Supabase prod, dominio |
 | 3-4 | Fundación | PostHog activo, funnel registro→test, 3 hilos en comunidades |
 | 5-8 | Velocidad | Gráfico semanal en redes, 2 cátedras contactadas, export imagen |
 | 9-12 | Componer | Embajadores v1, email semanal, revisión de métricas y doblar lo que funcionó |
