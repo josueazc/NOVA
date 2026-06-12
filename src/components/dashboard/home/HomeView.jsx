@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { Badge, Button, Card, Reveal } from '@/components/ui';
 import { ELECTION, electionStage } from '@/data/electionInfo';
+import { useI18n } from '@/i18n';
 
 const fmt = new Intl.NumberFormat('es-CR');
 
@@ -34,10 +35,10 @@ const MODULES = [
 ];
 
 const STATS = [
-  { label: 'Partidos inscritos', value: fmt.format(ELECTION.parties) },
-  { label: 'Diputaciones', value: fmt.format(ELECTION.deputies) },
-  { label: 'Padrón electoral', value: `${(ELECTION.registeredVoters / 1e6).toFixed(1)} M` },
-  { label: 'Provincias', value: fmt.format(ELECTION.provinces) },
+  { key: 'stats.registeredParties', value: fmt.format(ELECTION.parties) },
+  { key: 'stats.deputies', value: fmt.format(ELECTION.deputies) },
+  { key: 'stats.voters', value: `${(ELECTION.registeredVoters / 1e6).toFixed(1)} M` },
+  { key: 'stats.provinces', value: fmt.format(ELECTION.provinces) },
 ];
 
 const GUIDES = [
@@ -49,6 +50,7 @@ const GUIDES = [
 
 const HomeView = ({ userName, onNavigate }) => {
   const stage = electionStage();
+  const { t } = useI18n();
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -57,31 +59,30 @@ const HomeView = ({ userName, onNavigate }) => {
         <div className="space-y-7">
           <Reveal>
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted">
-              Elecciones nacionales · Costa Rica {ELECTION.year}
+              {t('home.kicker')} {ELECTION.year}
             </p>
           </Reveal>
           <Reveal delay={80}>
             <h1 className="font-serif text-5xl sm:text-6xl xl:text-7xl leading-[1.05] tracking-tight text-ink">
-              Tu país, tus datos,
+              {t('home.heroLine1')}
               <br />
-              <em className="text-accent">tu decisión.</em>
+              <em className="text-accent">{t('home.heroLine2')}</em>
             </h1>
           </Reveal>
           <Reveal delay={160}>
             <p className="text-lg text-muted leading-relaxed max-w-xl">
-              {userName ? `${userName.split(' ')[0]}, bienvenido de vuelta. ` : ''}
-              Información oficial y digerible sobre la Asamblea Legislativa, candidaturas
-              y propuestas políticas — sin sesgos, con fuentes del TSE.
+              {userName ? `${userName.split(' ')[0]}, ${t('home.welcomeBack')} ` : ''}
+              {t('home.heroCopy')}
             </p>
           </Reveal>
           <Reveal delay={240}>
             <div className="flex flex-wrap gap-3 pt-2">
               <Button size="lg" onClick={() => onNavigate('test')}>
-                Realizar test de afinidad
+                {t('home.ctaTest')}
                 <ArrowRight size={15} />
               </Button>
               <Button size="lg" variant="outline" onClick={() => onNavigate('comparador')}>
-                Explorar el comparador
+                {t('home.ctaComparador')}
               </Button>
             </div>
           </Reveal>
@@ -92,10 +93,10 @@ const HomeView = ({ userName, onNavigate }) => {
           <Card padding="p-0" className="overflow-hidden">
             <div className="px-6 py-4 border-b border-line flex items-center justify-between">
               <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">
-                Monitor nacional
+                {t('home.monitor')}
               </span>
               <Badge tone={stage.stage === 'post' ? 'green' : 'blue'} icon={<Vote size={10} />}>
-                {stage.stage === 'post' ? 'Concluido' : 'En curso'}
+                {stage.stage === 'post' ? t('home.concluded') : t('home.ongoing')}
               </Badge>
             </div>
             <div className="px-6 py-5 space-y-4">
@@ -106,15 +107,15 @@ const HomeView = ({ userName, onNavigate }) => {
                 <div>
                   <p className="text-sm font-semibold text-ink">{stage.label}</p>
                   <p className="text-xs text-muted mt-0.5">
-                    Primera ronda: 1 de febrero · Segunda ronda: 5 de abril
+                    {t('home.rounds')}
                   </p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-px bg-line rounded-lg overflow-hidden border border-line">
-                {STATS.map(({ label, value }) => (
-                  <div key={label} className="bg-surface px-4 py-3.5">
+                {STATS.map(({ key, value }) => (
+                  <div key={key} className="bg-surface px-4 py-3.5">
                     <p className="text-xl font-semibold text-ink tracking-tight">{value}</p>
-                    <p className="font-mono text-[9px] uppercase tracking-[0.15em] text-faint mt-0.5">{label}</p>
+                    <p className="font-mono text-[9px] uppercase tracking-[0.15em] text-faint mt-0.5">{t(key)}</p>
                   </div>
                 ))}
               </div>
@@ -128,9 +129,9 @@ const HomeView = ({ userName, onNavigate }) => {
         <Reveal>
           <div className="flex items-end justify-between gap-6 mb-10">
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted mb-3">Módulos</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted mb-3">{t('home.modules')}</p>
               <h2 className="font-serif text-3xl sm:text-4xl text-ink tracking-tight">
-                ¿Cómo quieres informarte hoy?
+                {t('home.modulesTitle')}
               </h2>
             </div>
           </div>
@@ -156,7 +157,7 @@ const HomeView = ({ userName, onNavigate }) => {
                       {mod.desc}
                     </p>
                     <span className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-ink group-hover:gap-3 transition-all">
-                      Abrir <ArrowRight size={13} />
+                      {t('common.open')} <ArrowRight size={13} />
                     </span>
                   </div>
                 </Card>
@@ -170,16 +171,13 @@ const HomeView = ({ userName, onNavigate }) => {
       <section className="py-16 sm:py-24 grid lg:grid-cols-2 gap-12 items-center">
         <Reveal>
           <div className="space-y-6">
-            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted">Educación cívica</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted">{t('home.civicEd')}</p>
             <h2 className="font-serif text-3xl sm:text-4xl text-ink tracking-tight leading-tight">
-              ¿Confundido con la política?
+              {t('home.civicTitle1')}
               <br />
-              <em>Empecemos por lo básico.</em>
+              <em>{t('home.civicTitle2')}</em>
             </h2>
-            <p className="text-muted leading-relaxed max-w-md">
-              Entender el sistema electoral no tiene por qué ser tedioso. Pregúntale al
-              asistente y recibe respuestas con fuentes oficiales.
-            </p>
+            <p className="text-muted leading-relaxed max-w-md">{t('home.civicCopy')}</p>
             <div className="grid sm:grid-cols-2 gap-2.5">
               {GUIDES.map((q, i) => (
                 <button
@@ -203,7 +201,7 @@ const HomeView = ({ userName, onNavigate }) => {
               className="absolute -top-20 -right-20 w-64 h-64 rounded-full pointer-events-none"
               style={{ background: 'radial-gradient(circle, rgb(var(--c-accent) / 0.05), transparent 70%)' }}
             />
-            <Badge tone="yellow" className="mb-5">Dato del día</Badge>
+            <Badge tone="yellow" className="mb-5">{t('home.factOfDay')}</Badge>
             <blockquote className="font-serif text-2xl sm:text-[1.7rem] leading-snug text-ink">
               “Durante las elecciones, el TSE adquiere el rango de un poder de la República,
               al mismo nivel que el Ejecutivo.”
@@ -227,14 +225,13 @@ const HomeView = ({ userName, onNavigate }) => {
               <Users2 size={20} />
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-ink tracking-tight">
-              La democracia se construye <em>conversando</em>
+              {t('home.ctaCommunityTitle1')} <em>{t('home.ctaCommunityTitle2')}</em>
             </h2>
             <p className="text-muted leading-relaxed">
-              Únete al debate ciudadano: publica tu opinión, sigue a candidatos verificados
-              y descubre qué temas marcan tendencia en tu provincia.
+              {t('home.ctaCommunityCopy')}
             </p>
             <Button size="lg" onClick={() => onNavigate('comunidad')}>
-              Ir a la comunidad
+              {t('home.ctaCommunity')}
               <ArrowRight size={15} />
             </Button>
           </div>

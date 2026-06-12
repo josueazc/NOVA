@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Menu, X, Sun, Moon, LogOut, Settings, Bell, User } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useI18n, AVAILABLE_LANGS } from '@/i18n';
 
 const PRIMARY = ROUTES.filter((r) => r.primary);
 const SECONDARY = ROUTES.filter((r) => !r.primary && !['config', 'notificaciones'].includes(r.id));
@@ -30,6 +31,21 @@ const ThemeToggle = () => {
   );
 };
 
+const LangToggle = () => {
+  const { lang, setLang } = useI18n();
+  const next = AVAILABLE_LANGS.find((l) => l.code !== lang) || AVAILABLE_LANGS[0];
+  return (
+    <button
+      onClick={() => setLang(next.code)}
+      aria-label={`Cambiar idioma a ${next.label}`}
+      title={next.label}
+      className="px-2 py-1.5 rounded-md font-mono text-[10px] uppercase tracking-[0.15em] text-muted hover:text-ink hover:bg-surface-2 transition-colors"
+    >
+      {lang}
+    </button>
+  );
+};
+
 const NavLink = ({ route, active, onNavigate, className = '' }) => (
   <a
     href={route.hash}
@@ -41,13 +57,15 @@ const NavLink = ({ route, active, onNavigate, className = '' }) => (
     className={`relative text-[13px] whitespace-nowrap transition-colors py-1.5
       ${active ? 'text-ink font-semibold' : 'text-muted hover:text-ink'} ${className}`}
   >
-    {route.label}
+    {route.i18nLabel || route.label}
     {active && <span className="absolute inset-x-0 -bottom-[13px] h-px bg-ink hidden lg:block" />}
   </a>
 );
 
 const AppShell = ({ route, onNavigate, userName, unreadCount = 0, onSignOut, children }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { t } = useI18n();
+  const withLabel = (r) => ({ ...r, i18nLabel: t(`nav.${r.id}`, r.label) });
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
@@ -70,7 +88,7 @@ const AppShell = ({ route, onNavigate, userName, unreadCount = 0, onSignOut, chi
 
           <nav className="hidden lg:flex items-center gap-5" aria-label="Navegación principal">
             {PRIMARY.map((r) => (
-              <NavLink key={r.id} route={r} active={route === r.id} onNavigate={go} />
+              <NavLink key={r.id} route={withLabel(r)} active={route === r.id} onNavigate={go} />
             ))}
           </nav>
 
@@ -104,6 +122,7 @@ const AppShell = ({ route, onNavigate, userName, unreadCount = 0, onSignOut, chi
             >
               <Settings size={16} />
             </button>
+            <LangToggle />
             <ThemeToggle />
             <button
               onClick={onSignOut}
@@ -111,7 +130,7 @@ const AppShell = ({ route, onNavigate, userName, unreadCount = 0, onSignOut, chi
                 hover:text-danger border border-line rounded-md px-3 py-1.5 transition-colors"
             >
               <LogOut size={13} />
-              Salir
+              {t('common.logout')}
             </button>
             <button
               onClick={() => setMenuOpen(true)}
@@ -141,7 +160,7 @@ const AppShell = ({ route, onNavigate, userName, unreadCount = 0, onSignOut, chi
             </div>
             {userName && (
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint mb-4">
-                Sesión: {userName}
+                {t('common.session')}: {userName}
               </p>
             )}
             <nav className="flex flex-col" aria-label="Navegación móvil">
@@ -159,7 +178,7 @@ const AppShell = ({ route, onNavigate, userName, unreadCount = 0, onSignOut, chi
                       ${route === r.id ? 'text-ink font-semibold bg-surface-2' : 'text-muted hover:text-ink'}`}
                     style={{ '--index': i }}
                   >
-                    {r.label}
+                    {t(`nav.${r.id}`, r.label)}
                   </a>
                 ))}
             </nav>
@@ -169,7 +188,7 @@ const AppShell = ({ route, onNavigate, userName, unreadCount = 0, onSignOut, chi
                 text-danger bg-danger-soft border border-danger/10 rounded-md px-4 py-2.5 transition-all active:scale-[0.98]"
             >
               <LogOut size={14} />
-              Cerrar sesión
+              {t('common.logoutLong')}
             </button>
           </div>
         </div>
@@ -183,13 +202,10 @@ const AppShell = ({ route, onNavigate, userName, unreadCount = 0, onSignOut, chi
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 grid gap-10 md:grid-cols-3">
           <div className="space-y-3 max-w-sm">
             <span className="font-serif italic text-xl text-ink">VoteOn</span>
-            <p className="text-sm text-muted leading-relaxed">
-              Herramienta ciudadana independiente para las elecciones de Costa Rica 2026.
-              Datos abiertos del TSE y la Asamblea Legislativa, sin sesgos partidarios.
-            </p>
+            <p className="text-sm text-muted leading-relaxed">{t('footer.tagline')}</p>
           </div>
           <div>
-            <h4 className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint mb-4">Módulos</h4>
+            <h4 className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint mb-4">{t('footer.modules')}</h4>
             <ul className="space-y-2.5">
               {PRIMARY.filter((r) => r.id !== 'inicio').map((r) => (
                 <li key={r.id}>
@@ -201,28 +217,28 @@ const AppShell = ({ route, onNavigate, userName, unreadCount = 0, onSignOut, chi
                     }}
                     className="text-sm text-muted hover:text-ink transition-colors"
                   >
-                    {r.label}
+                    {t(`nav.${r.id}`, r.label)}
                   </a>
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h4 className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint mb-4">Transparencia</h4>
+            <h4 className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint mb-4">{t('footer.transparency')}</h4>
             <ul className="space-y-2.5 text-sm text-muted">
               <li>
                 <a href="https://www.tse.go.cr" target="_blank" rel="noreferrer" className="hover:text-ink transition-colors">
-                  Fuentes oficiales del TSE
+                  {t('footer.tseSources')}
                 </a>
               </li>
               <li>
                 <a href="http://www.asamblea.go.cr" target="_blank" rel="noreferrer" className="hover:text-ink transition-colors">
-                  Asamblea Legislativa
+                  {t('footer.assembly')}
                 </a>
               </li>
               <li>
                 <a href="https://github.com/josueazc/VoteOn2" target="_blank" rel="noreferrer" className="hover:text-ink transition-colors">
-                  Código abierto en GitHub
+                  {t('footer.openSource')}
                 </a>
               </li>
             </ul>
@@ -231,10 +247,10 @@ const AppShell = ({ route, onNavigate, userName, unreadCount = 0, onSignOut, chi
         <div className="border-t border-line">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">
-              © {new Date().getFullYear()} VoteOn — Proyecto cívico
+              © {new Date().getFullYear()} VoteOn — {t('footer.civicProject')}
             </p>
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">
-              Hecho en Costa Rica
+              {t('footer.madeIn')}
             </p>
           </div>
         </div>
