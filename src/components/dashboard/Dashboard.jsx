@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Construction } from 'lucide-react';
 import AppShell from '@/components/layout/AppShell';
 import useHashRoute from '@/hooks/useHashRoute';
 import { EmptyState } from '@/components/ui';
+import { unreadCount } from '@/services/notifications';
+import NotificacionesView from './notificaciones/NotificacionesView';
 import HomeView from './home/HomeView';
 import PartidosView from './partidos/PartidosView';
 import PlanesView from './planes/PlanesView';
@@ -26,6 +28,18 @@ const Placeholder = ({ label }) => (
 
 const Dashboard = ({ userName, user, handleSignOut }) => {
   const [route, navigate] = useHashRoute();
+  const [unread, setUnread] = useState(0);
+
+  const refreshUnread = useCallback(() => {
+    if (!user?.id) return;
+    unreadCount(user.id).then(setUnread).catch(() => {});
+  }, [user?.id]);
+
+  useEffect(() => {
+    refreshUnread();
+    const interval = setInterval(refreshUnread, 60000);
+    return () => clearInterval(interval);
+  }, [refreshUnread]);
 
   const renderView = () => {
     switch (route) {
@@ -54,7 +68,7 @@ const Dashboard = ({ userName, user, handleSignOut }) => {
       case 'comparador':
         return <ComparadorView />;
       case 'notificaciones':
-        return <Placeholder label="Notificaciones" />;
+        return <NotificacionesView user={user} onCountChange={setUnread} />;
       case 'participacion':
         return <Placeholder label="Participación ciudadana" />;
       default:
@@ -63,7 +77,7 @@ const Dashboard = ({ userName, user, handleSignOut }) => {
   };
 
   return (
-    <AppShell route={route} onNavigate={navigate} userName={userName} onSignOut={handleSignOut}>
+    <AppShell route={route} onNavigate={navigate} userName={userName} unreadCount={unread} onSignOut={handleSignOut}>
       <div key={route} className="animate-fade-in">
         {renderView()}
       </div>

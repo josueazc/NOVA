@@ -1,15 +1,25 @@
 import React, { useState } from 'react';
 import {
   Heart, MessageSquare, Repeat, Bookmark, Trash2, Flag,
-  BadgeCheck, UserPlus, UserCheck, ChevronUp, ChevronDown, Hash, EyeOff,
+  BadgeCheck, UserPlus, UserCheck, ChevronUp, ChevronDown, Hash, EyeOff, SearchCheck,
 } from 'lucide-react';
-import { Avatar, Badge, Button, Modal, Select, Textarea, useToast } from '@/components/ui';
+import { Avatar, Badge, Button, Modal, Select, Spinner, Textarea, useToast } from '@/components/ui';
 import { partidosData } from '@/data/partidosData';
 import { timeAgo } from '@/utils/text';
 import { fetchComments, addComment, deleteComment } from '@/services/community';
+import { factCheck, hasAIConfig } from '@/services/ai';
 import { MOCK_BOTS_COMMENTS } from './mockData';
 
 const isMock = (id) => String(id).startsWith('mock_') || String(id).includes('_mock');
+
+const VERDICTS = {
+  true: { label: 'Verdadero', tone: 'green' },
+  mostly_true: { label: 'Mayormente cierto', tone: 'green' },
+  mixed: { label: 'Mixto', tone: 'yellow' },
+  mostly_false: { label: 'Mayormente falso', tone: 'red' },
+  false: { label: 'Falso', tone: 'red' },
+  unverifiable: { label: 'No verificable', tone: 'neutral' },
+};
 
 const REPORT_REASONS = [
   ['toxicity', 'Toxicidad o ataques'],
@@ -75,6 +85,23 @@ const PostCard = ({
   const [reportReason, setReportReason] = useState('toxicity');
   const [reportDetails, setReportDetails] = useState('');
   const [revealed, setRevealed] = useState(false);
+  const [factOpen, setFactOpen] = useState(false);
+  const [factLoading, setFactLoading] = useState(false);
+  const [factResult, setFactResult] = useState(null);
+
+  const runFactCheck = async () => {
+    setFactOpen(true);
+    if (factResult || factLoading) return;
+    setFactLoading(true);
+    try {
+      setFactResult(await factCheck(post.text));
+    } catch (err) {
+      toast.error(`Verificación no disponible: ${err.message}`);
+      setFactOpen(false);
+    } finally {
+      setFactLoading(false);
+    }
+  };
 
   const loadComments = async () => {
     if (isMock(post.id)) {
@@ -229,6 +256,9 @@ const PostCard = ({
             onClick={() => onSave(post.id)}
           />
           <div className="flex-1" />
+          {hasAIConfig() && (
+            <ActionButton icon={<SearchCheck size={14} />} onClick={runFactCheck} />
+          )}
           {isOwn ? (
             <ActionButton icon={<Trash2 size={14} />} onClick={() => onDelete(post.id)} />
           ) : (
@@ -298,6 +328,55 @@ const PostCard = ({
           </div>
         )}
       </div>
+
+      {/* Modal de fact-check */}
+      <Modal open={factOpen} onClose={() => setFactOpen(false)} title="Verificación de datos (IA)">
+        {factLoading ? (
+          <div className="flex items-center gap-3 text-muted text-sm py-6 justify-center">
+            <Spinner size={16} /> Analizando afirmaciones…
+          </div>
+        ) : factResult ? (
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 flex-wrap">
+              <Badge tone={VERDICTS[factResult.verdict]?.tone || 'neutral'}>
+                {VERDICTS[factResult.verdict]?.label || factResult.verdict}
+              </Badge>
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-faint">Confianza</span>
+                <div className="w-24 h-1.5 bg-surface-2 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-accent rounded-full transition-all duration-700"
+                    style={{ width: `${Math.round((factResult.confidence || 0) * 100)}%` }}
+                  />
+                </div>
+                <span className="font-mono text-[10px] text-muted">
+                  {Math.round((factResult.confidence || 0) * 100)}%
+                </span>
+              </div>
+            </div>
+            {factResult.claim_detectado && (
+              <blockquote className="text-sm text-ink border-l-2 border-line pl-3 italic">
+                “{factResult.claim_detectado}”
+              </blockquote>
+            )}
+            <p className="text-sm text-muted leading-relaxed">{factResult.explanation}</p>
+            {factResult.sources_suggested?.length > 0 && (
+              <div>
+                <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-faint mb-1.5">Dónde verificar</p>
+                <ul className="space-y-1">
+                  {factResult.sources_suggested.map((s, i) => (
+                    <li key={i} className="text-sm text-ink">· {s}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <p className="text-[11px] text-faint leading-relaxed border-t border-line pt-3">
+              Verificación automática con IA: puede contener errores y no sustituye el
+              periodismo de verificación profesional.
+            </p>
+          </div>
+        ) : null}
+      </Modal>
 
       {/* Modal de reporte */}
       <Modal
