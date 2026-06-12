@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, Loader2, Database, ShieldAlert, Sparkles, UploadCloud, FileText, X } from 'lucide-react';
+import { geminiRequest } from '@/services/ai';
 
 const PoliticalChatbot = () => {
   const [input, setInput] = useState('');
@@ -61,12 +62,6 @@ const PoliticalChatbot = () => {
     setIsLoading(true);
 
     try {
-      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-
-      if (!apiKey) {
-        throw new Error("Falta la API Key de Gemini en el archivo .env");
-      }
-
       // Preparar el historial (sin el mensaje de saludo)
       const history = messages.filter(msg => msg.id !== 1).map(msg => ({
         role: msg.sender === 'bot' ? 'model' : 'user',
@@ -350,34 +345,10 @@ ${context || 'No hay información en la base de conocimiento de texto.'}
         { text: userMsg }
       ];
 
-      const requestBody = {
-        systemInstruction: {
-          parts: [{ text: systemInstruction }]
-        },
-        contents: [
-          ...history,
-          { role: 'user', parts: userParts }
-        ],
-        generationConfig: {
-          temperature: 0.1, // Temperatura baja para evitar alucinaciones
-        }
-      };
-
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestBody)
-      });
-
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.error?.message || 'Error en la API de Gemini');
-      }
-
-      const data = await response.json();
-      const botText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Lo siento, no pude procesar tu solicitud.';
+      const botText = await geminiRequest(
+        [...history, { role: 'user', parts: userParts }],
+        { system: systemInstruction, temperature: 0.1, maxOutputTokens: 4096 }
+      );
 
       setMessages(prev => [...prev, { id: Date.now() + 1, text: botText, sender: "bot" }]);
 
