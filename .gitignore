@@ -27,3 +27,10 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# Tooling
+.claude/
+supabase/.temp/
+
+# Coverage
+coverage/
