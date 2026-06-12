@@ -1,11 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { Menu, X, Sun, Moon, LogOut, Settings, Bell, User } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  Menu, X, Sun, Moon, LogOut, Settings, Bell, User,
+  ChevronDown, Activity, Map as MapIcon, BookOpen, FileText, BarChart3,
+} from 'lucide-react';
 import { ROUTES } from '@/config/routes';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useI18n, AVAILABLE_LANGS } from '@/i18n';
 
 const PRIMARY = ROUTES.filter((r) => r.primary);
-const SECONDARY = ROUTES.filter((r) => !r.primary && !['config', 'notificaciones'].includes(r.id));
+// "Más": vistas secundarias que vienen del config — perfil/config/notif los
+// dejamos como iconos sueltos y el resto entra al desplegable.
+const MORE_IDS = ['participacion', 'abstencionismo', 'docs'];
+const MORE_ICONS = {
+  participacion: Activity,
+  abstencionismo: MapIcon,
+  docs: BookOpen,
+  perfil: User,
+};
 
 const Wordmark = ({ onClick }) => (
   <button onClick={onClick} className="flex items-baseline gap-2 group" aria-label="Ir al inicio">
@@ -64,8 +75,12 @@ const NavLink = ({ route, active, onNavigate, className = '' }) => (
 
 const AppShell = ({ route, onNavigate, userName, unreadCount = 0, onSignOut, children }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = useRef(null);
   const { t } = useI18n();
   const withLabel = (r) => ({ ...r, i18nLabel: t(`nav.${r.id}`, r.label) });
+  const moreItems = MORE_IDS.map((id) => ROUTES.find((r) => r.id === id)).filter(Boolean);
+  const moreActive = moreItems.some((r) => r.id === route);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
@@ -73,6 +88,16 @@ const AppShell = ({ route, onNavigate, userName, unreadCount = 0, onSignOut, chi
       document.body.style.overflow = '';
     };
   }, [menuOpen]);
+
+  // Cierra el desplegable "Más" al hacer click fuera
+  useEffect(() => {
+    if (!moreOpen) return;
+    const onClickAway = (e) => {
+      if (moreRef.current && !moreRef.current.contains(e.target)) setMoreOpen(false);
+    };
+    document.addEventListener('mousedown', onClickAway);
+    return () => document.removeEventListener('mousedown', onClickAway);
+  }, [moreOpen]);
 
   const go = (id) => {
     onNavigate(id);
@@ -90,6 +115,52 @@ const AppShell = ({ route, onNavigate, userName, unreadCount = 0, onSignOut, chi
             {PRIMARY.map((r) => (
               <NavLink key={r.id} route={withLabel(r)} active={route === r.id} onNavigate={go} />
             ))}
+
+            {/* Desplegable "Más" */}
+            <div className="relative" ref={moreRef}>
+              <button
+                onClick={() => setMoreOpen((v) => !v)}
+                aria-expanded={moreOpen}
+                aria-haspopup="menu"
+                className={`relative flex items-center gap-1 text-[13px] whitespace-nowrap transition-colors py-1.5
+                  ${moreActive || moreOpen ? 'text-ink font-semibold' : 'text-muted hover:text-ink'}`}
+              >
+                Más
+                <ChevronDown size={13} className={`transition-transform ${moreOpen ? 'rotate-180' : ''}`} />
+                {moreActive && <span className="absolute inset-x-0 -bottom-[13px] h-px bg-ink" />}
+              </button>
+              {moreOpen && (
+                <div
+                  role="menu"
+                  className="absolute right-0 top-full mt-3 w-60 bg-surface border border-line rounded-2xl shadow-lift p-2 animate-scale-in z-[110]"
+                >
+                  {moreItems.map((r) => {
+                    const Icon = MORE_ICONS[r.id];
+                    const active = route === r.id;
+                    return (
+                      <button
+                        key={r.id}
+                        role="menuitem"
+                        onClick={() => {
+                          setMoreOpen(false);
+                          go(r.id);
+                        }}
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors
+                          ${active ? 'bg-accent-soft text-accent font-bold' : 'text-ink hover:bg-surface-2'}`}
+                      >
+                        {Icon && (
+                          <span className={`w-8 h-8 rounded-lg flex items-center justify-center
+                            ${active ? 'bg-accent text-white' : 'bg-surface-2 text-muted'}`}>
+                            <Icon size={14} />
+                          </span>
+                        )}
+                        <span>{t(`nav.${r.id}`, r.label)}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </nav>
 
           <div className="flex items-center gap-0.5">
