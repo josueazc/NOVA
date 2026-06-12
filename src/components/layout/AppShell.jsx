@@ -9,7 +9,7 @@ const SECONDARY = ROUTES.filter((r) => !r.primary && !['config', 'notificaciones
 
 const Wordmark = ({ onClick }) => (
   <button onClick={onClick} className="flex items-baseline gap-2 group" aria-label="Ir al inicio">
-    <span className="font-serif italic text-2xl text-ink leading-none group-hover:text-accent transition-colors">
+    <span className="font-black tracking-tighter text-2xl text-ink leading-none group-hover:text-accent transition-colors">
       NOVA
     </span>
     <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-faint border border-line rounded px-1.5 py-0.5">
@@ -201,7 +201,7 @@ const AppShell = ({ route, onNavigate, userName, unreadCount = 0, onSignOut, chi
       <footer className="border-t border-line mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 grid gap-10 md:grid-cols-3">
           <div className="space-y-3 max-w-sm">
-            <span className="font-serif italic text-xl text-ink">NOVA</span>
+            <span className="font-black tracking-tighter text-xl text-ink">NOVA</span>
             <p className="text-sm text-muted leading-relaxed">{t('footer.tagline')}</p>
           </div>
           <div>

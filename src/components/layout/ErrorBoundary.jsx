@@ -24,7 +24,7 @@ class ErrorBoundary extends React.Component {
         <div className="min-h-screen flex items-center justify-center bg-canvas px-6">
           <div className="max-w-md text-center space-y-4">
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-faint">Error inesperado</p>
-            <h1 className="font-serif text-3xl text-ink">Algo salió mal</h1>
+            <h1 className="font-black tracking-tight text-3xl text-ink">Algo salió mal</h1>
             <p className="text-sm text-muted leading-relaxed">
               Ocurrió un error al renderizar esta vista. Puedes recargar la página;
               si el problema persiste, repórtalo en la comunidad.

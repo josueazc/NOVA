@@ -136,7 +136,7 @@ const ComparadorView = () => {
             <Scale size={18} />
           </span>
           <div>
-            <h1 className="font-serif text-3xl text-ink tracking-tight leading-none">Comparador político</h1>
+            <h1 className="font-black tracking-tight text-3xl text-ink tracking-tight leading-none">Comparador político</h1>
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint mt-1">
               Elecciones 2026 · {PARTY_IDS.length} partidos · {TOPICS.length} temas
             </p>

@@ -106,8 +106,8 @@ const ComunidadView = ({ userName, user, defaultView = 'feed' }) => {
             <MessagesSquare size={18} />
           </span>
           <div>
-            <h1 className="font-serif text-3xl text-ink tracking-tight leading-none">
-              Debate<em className="text-danger">CR</em>
+            <h1 className="font-black tracking-tight text-3xl text-ink tracking-tight leading-none">
+              Debate<span className="text-danger">CR</span>
             </h1>
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint mt-1">
               Comunidad política ciudadana

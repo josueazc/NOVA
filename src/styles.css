@@ -8,57 +8,57 @@
    permitir opacidad via Tailwind (rgb(var(--token) / <alpha-value>)).
    ========================================================================== */
 :root {
-  /* Lienzo y superficies */
-  --c-canvas: 251 251 250;      /* #FBFBFA hueso cálido */
+  /* Lienzo y superficies: blanco como base */
+  --c-canvas: 255 255 255;      /* #FFFFFF */
   --c-surface: 255 255 255;     /* #FFFFFF */
-  --c-surface-2: 247 246 243;   /* #F7F6F3 */
-  --c-line: 234 234 232;        /* #EAEAE8 */
+  --c-surface-2: 244 247 252;   /* #F4F7FC azul hielo */
+  --c-line: 226 232 242;        /* #E2E8F2 */
 
-  /* Tinta */
-  --c-ink: 25 25 24;            /* #191918 casi negro cálido */
-  --c-muted: 120 119 116;       /* #787774 */
-  --c-faint: 155 154 151;       /* #9B9A97 */
+  /* Tinta: azul marino profundo */
+  --c-ink: 13 27 51;            /* #0D1B33 */
+  --c-muted: 90 105 132;        /* #5A6984 */
+  --c-faint: 148 160 184;       /* #94A0B8 */
 
-  /* Identidad VoteOn: azul CR como acento puntual */
-  --c-accent: 11 47 126;        /* #0B2F7E */
-  --c-accent-soft: 225 234 254; /* #E1EAFE */
-  --c-accent-ink: 31 58 138;    /* texto sobre soft */
+  /* Identidad VoteOn: azul bandera + rojo bandera */
+  --c-accent: 0 43 127;         /* #002B7F azul CR */
+  --c-accent-soft: 232 238 251; /* #E8EEFB */
+  --c-accent-ink: 0 43 127;
 
-  /* Semánticos (pasteles apagados) */
-  --c-danger: 159 47 45;        /* #9F2F2D */
-  --c-danger-soft: 253 235 236; /* #FDEBEC */
-  --c-success: 52 101 56;       /* #346538 */
-  --c-success-soft: 237 243 236;/* #EDF3EC */
-  --c-warn: 149 100 0;          /* #956400 */
-  --c-warn-soft: 251 243 219;   /* #FBF3DB */
+  /* Semánticos */
+  --c-danger: 213 16 32;        /* rojo CR ligeramente calibrado */
+  --c-danger-soft: 254 233 234;
+  --c-success: 22 122 56;
+  --c-success-soft: 233 246 237;
+  --c-warn: 153 101 0;
+  --c-warn-soft: 252 243 219;
 
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.03);
-  --shadow-lift: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 1px 3px rgba(13, 27, 51, 0.06);
+  --shadow-lift: 0 8px 24px -8px rgba(0, 43, 127, 0.18);
 }
 
 .dark {
-  --c-canvas: 22 22 21;         /* #161615 carbón cálido */
-  --c-surface: 31 31 30;        /* #1F1F1E */
-  --c-surface-2: 38 38 37;      /* #262625 */
-  --c-line: 50 50 48;           /* #323230 */
+  --c-canvas: 9 16 33;          /* #091021 azul noche */
+  --c-surface: 15 24 45;        /* #0F182D */
+  --c-surface-2: 22 33 58;      /* #16213A */
+  --c-line: 36 49 78;           /* #24314E */
 
-  --c-ink: 237 236 234;         /* #EDECEA */
-  --c-muted: 155 154 151;       /* #9B9A97 */
-  --c-faint: 110 110 107;
+  --c-ink: 235 240 250;
+  --c-muted: 152 165 192;
+  --c-faint: 104 118 148;
 
-  --c-accent: 143 176 244;      /* azul claro legible sobre oscuro */
-  --c-accent-soft: 30 42 69;
-  --c-accent-ink: 173 198 250;
+  --c-accent: 110 152 240;      /* azul claro legible */
+  --c-accent-soft: 21 38 77;
+  --c-accent-ink: 158 188 252;
 
-  --c-danger: 229 138 136;
-  --c-danger-soft: 62 36 36;
-  --c-success: 140 187 144;
-  --c-success-soft: 36 48 37;
-  --c-warn: 219 166 80;
-  --c-warn-soft: 56 46 24;
+  --c-danger: 255 107 112;
+  --c-danger-soft: 66 27 32;
+  --c-success: 109 199 138;
+  --c-success-soft: 24 53 35;
+  --c-warn: 228 178 90;
+  --c-warn-soft: 61 48 22;
 
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-lift: 0 2px 10px rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-lift: 0 8px 24px -8px rgba(0, 0, 0, 0.5);
 }
 
 /* ============================================================================

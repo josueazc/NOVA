@@ -58,14 +58,14 @@ const AuthScreen = ({ handleAuth, handleResetPassword, loading, message, setMess
           style={{ background: 'radial-gradient(80% 60% at 0% 100%, rgb(var(--c-accent) / 0.06), transparent)' }}
         />
         <div className="relative flex items-baseline gap-2">
-          <span className="font-serif italic text-2xl text-ink">NOVA</span>
+          <span className="font-black tracking-tighter text-2xl text-ink">NOVA</span>
           <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-faint border border-line rounded px-1.5 py-0.5">
             CR 2026
           </span>
         </div>
         <div className="relative space-y-6 max-w-md">
-          <h1 className="font-serif text-5xl leading-[1.08] tracking-tight text-ink">
-            La democracia empieza con <em className="text-accent">información</em>.
+          <h1 className="font-black tracking-tight text-5xl leading-[1.08] tracking-tight text-ink">
+            La democracia empieza con <span className="text-accent">información</span>.
           </h1>
           <p className="text-muted leading-relaxed">
             Compara propuestas, sigue a la Asamblea, debate con otros ciudadanos y
@@ -90,11 +90,11 @@ const AuthScreen = ({ handleAuth, handleResetPassword, loading, message, setMess
         <div className="w-full max-w-md py-8 animate-fade-up">
           {/* Marca en móvil */}
           <div className="lg:hidden flex items-baseline gap-2 mb-8">
-            <span className="font-serif italic text-2xl text-ink">NOVA</span>
+            <span className="font-black tracking-tighter text-2xl text-ink">NOVA</span>
             <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-faint border border-line rounded px-1.5 py-0.5">CR 2026</span>
           </div>
 
-          <h2 className="font-serif text-3xl text-ink tracking-tight mb-1.5">
+          <h2 className="font-black tracking-tight text-3xl text-ink tracking-tight mb-1.5">
             {isSignUp ? 'Crea tu perfil ciudadano' : 'Bienvenido de vuelta'}
           </h2>
           <p className="text-sm text-muted mb-7">

@@ -44,7 +44,11 @@ export default {
           '-apple-system', 'BlinkMacSystemFont', 'SF Pro Display',
           'Helvetica Neue', 'Segoe UI', 'sans-serif',
         ],
-        serif: ['Instrument Serif', 'Newsreader', 'Georgia', 'serif'],
+        // Sin serif en la identidad: alias al stack sans por seguridad
+        serif: [
+          '-apple-system', 'BlinkMacSystemFont', 'SF Pro Display',
+          'Helvetica Neue', 'Segoe UI', 'sans-serif',
+        ],
         mono: ['JetBrains Mono', 'SF Mono', 'ui-monospace', 'monospace'],
       },
       boxShadow: {

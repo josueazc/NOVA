@@ -63,10 +63,10 @@ const HomeView = ({ userName, onNavigate }) => {
             </p>
           </Reveal>
           <Reveal delay={80}>
-            <h1 className="font-serif text-5xl sm:text-6xl xl:text-7xl leading-[1.05] tracking-tight text-ink">
+            <h1 className="font-black tracking-tight text-5xl sm:text-6xl xl:text-7xl leading-[1.05] tracking-tight text-ink">
               {t('home.heroLine1')}
               <br />
-              <em className="text-accent">{t('home.heroLine2')}</em>
+              <span className="text-accent">{t('home.heroLine2')}</span>
             </h1>
           </Reveal>
           <Reveal delay={160}>
@@ -130,7 +130,7 @@ const HomeView = ({ userName, onNavigate }) => {
           <div className="flex items-end justify-between gap-6 mb-10">
             <div>
               <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted mb-3">{t('home.modules')}</p>
-              <h2 className="font-serif text-3xl sm:text-4xl text-ink tracking-tight">
+              <h2 className="font-black tracking-tight text-3xl sm:text-4xl text-ink tracking-tight">
                 {t('home.modulesTitle')}
               </h2>
             </div>
@@ -172,10 +172,10 @@ const HomeView = ({ userName, onNavigate }) => {
         <Reveal>
           <div className="space-y-6">
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted">{t('home.civicEd')}</p>
-            <h2 className="font-serif text-3xl sm:text-4xl text-ink tracking-tight leading-tight">
+            <h2 className="font-black tracking-tight text-3xl sm:text-4xl text-ink tracking-tight leading-tight">
               {t('home.civicTitle1')}
               <br />
-              <em>{t('home.civicTitle2')}</em>
+              <span className="text-accent">{t('home.civicTitle2')}</span>
             </h2>
             <p className="text-muted leading-relaxed max-w-md">{t('home.civicCopy')}</p>
             <div className="grid sm:grid-cols-2 gap-2.5">
@@ -202,7 +202,7 @@ const HomeView = ({ userName, onNavigate }) => {
               style={{ background: 'radial-gradient(circle, rgb(var(--c-accent) / 0.05), transparent 70%)' }}
             />
             <Badge tone="yellow" className="mb-5">{t('home.factOfDay')}</Badge>
-            <blockquote className="font-serif text-2xl sm:text-[1.7rem] leading-snug text-ink">
+            <blockquote className="font-black tracking-tight text-2xl sm:text-[1.7rem] leading-snug text-ink">
               “Durante las elecciones, el TSE adquiere el rango de un poder de la República,
               al mismo nivel que el Ejecutivo.”
             </blockquote>
@@ -224,8 +224,8 @@ const HomeView = ({ userName, onNavigate }) => {
             <span className="w-11 h-11 rounded-xl bg-danger-soft text-danger inline-flex items-center justify-center">
               <Users2 size={20} />
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl text-ink tracking-tight">
-              {t('home.ctaCommunityTitle1')} <em>{t('home.ctaCommunityTitle2')}</em>
+            <h2 className="font-black tracking-tight text-3xl sm:text-4xl text-ink tracking-tight">
+              {t('home.ctaCommunityTitle1')} <span className="text-accent">{t('home.ctaCommunityTitle2')}</span>
             </h2>
             <p className="text-muted leading-relaxed">
               {t('home.ctaCommunityCopy')}

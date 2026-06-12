@@ -83,7 +83,7 @@ const NotificacionesView = ({ user, onCountChange }) => {
             <Bell size={18} />
           </span>
           <div>
-            <h1 className="font-serif text-3xl text-ink tracking-tight leading-none">Notificaciones</h1>
+            <h1 className="font-black tracking-tight text-3xl text-ink tracking-tight leading-none">Notificaciones</h1>
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint mt-1">
               {unread > 0 ? `${unread} sin leer` : 'Al día'}
             </p>

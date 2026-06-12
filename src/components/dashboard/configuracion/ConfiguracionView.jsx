@@ -94,7 +94,7 @@ const ConfiguracionView = ({ user }) => {
           <Settings size={18} />
         </span>
         <div>
-          <h1 className="font-serif text-3xl text-ink tracking-tight leading-none">Configuración</h1>
+          <h1 className="font-black tracking-tight text-3xl text-ink tracking-tight leading-none">Configuración</h1>
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint mt-1">
             {user?.email || 'Administra tu cuenta'}
           </p>
