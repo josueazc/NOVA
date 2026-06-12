@@ -460,7 +460,7 @@ ${context || 'No hay información en la base de conocimiento de texto.'}
       </div>
      </div>
 
-     <div className="flex-grow overflow-y-auto p-6 space-y-6 bg-slate-50/50 /50 transition-colors">
+     <div className="flex-grow overflow-y-auto p-6 space-y-6 bg-surface-2 /50 transition-colors">
       {messages.map(msg => (
        <div key={msg.id} className={`flex gap-4 ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
         <div className={`w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 mt-1 shadow-md ${msg.sender === 'user' ? 'bg-blue-600 text-white' : 'bg-accent text-white transition-colors'}`}>

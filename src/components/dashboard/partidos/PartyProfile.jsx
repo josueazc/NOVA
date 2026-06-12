@@ -96,7 +96,7 @@ const PartyProfile = ({ party, onBack }) => {
                >
                   <Download size={18}/> Descargar Estatutos
                </button>
-               <button className="w-full p-5 bg-slate-900  text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg hover:bg-slate-800  transition-colors flex items-center justify-center gap-3">
+               <button className="w-full p-5 bg-ink  text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg hover:bg-ink/90  transition-colors flex items-center justify-center gap-3">
                   <UserPlus size={18}/> Formulario de Afiliación
                </button>
             </div>
@@ -174,7 +174,7 @@ const PartyProfile = ({ party, onBack }) => {
             )}
 
             {/* Frase Inspiradora movida para llenar el espacio de la derecha */}
-            <div className="bg-slate-900 p-10 lg:p-14 rounded-3xl text-white shadow-2xl relative overflow-hidden flex-1 flex flex-col justify-center items-center text-center w-full">
+            <div className="bg-ink p-10 lg:p-14 rounded-3xl text-white shadow-2xl relative overflow-hidden flex-1 flex flex-col justify-center items-center text-center w-full">
                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] rounded-full blur-[100px]" style={{ backgroundColor: `${party.color}40` }}></div>
                <Quote className="text-white/20 mb-6 relative z-10" size={60}/>
                <p className="text-3xl lg:text-5xl font-black tracking-tight text-white leading-[1.2] italic max-w-4xl mx-auto relative z-10">

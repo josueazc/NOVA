@@ -36,7 +36,7 @@ const QUESTIONS = [
 const OPTIONS = [
  { value: 2, label: "Muy de acuerdo", color: "bg-green-600", hover: "hover:bg-green-700" },
  { value: 1, label: "De acuerdo", color: "bg-green-400", hover: "hover:bg-green-500" },
- { value: 0, label: "Neutral", color: "bg-slate-400", hover: "hover:bg-slate-500" },
+ { value: 0, label: "Neutral", color: "bg-surface-2", hover: "hover:bg-surface-2" },
  { value: -1, label: "En desacuerdo", color: "bg-red-400", hover: "hover:bg-red-500" },
  { value: -2, label: "Muy en desacuerdo", color: "bg-red-600", hover: "hover:bg-red-700" }
 ];
@@ -74,7 +74,7 @@ const TestPoliticoView = () => {
   switch(category) {
    case 'Seguridad': return <Shield size={20} className="text-blue-500" />;
    case 'Economía': return <TrendingUp size={20} className="text-green-500" />;
-   case 'Estado': return <Landmark size={20} className="text-slate-500" />;
+   case 'Estado': return <Landmark size={20} className="text-muted" />;
    case 'Derechos': return <Users size={20} className="text-purple-500" />;
    case 'Ambiente': return <Leaf size={20} className="text-emerald-500" />;
    case 'Corrupción': return <Gavel size={20} className="text-red-500" />;
@@ -162,7 +162,7 @@ const TestPoliticoView = () => {
     
     {/* Header Hero */}
     <div className="text-center space-y-8 bg-surface p-10 md:p-16 rounded-3xl shadow-xl border border-line transition-colors mb-12 relative overflow-hidden">
-     <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 /30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
+     <div className="absolute top-0 right-0 w-64 h-64 bg-accent /30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
      <div className="relative z-10">
       <div className="w-20 h-20 bg-accent rounded-2xl flex items-center justify-center mx-auto shadow-2xl mb-8 rotate-3 hover:rotate-0 transition-transform">
        <BarChart2 size={36} className="text-white" />
@@ -181,7 +181,7 @@ const TestPoliticoView = () => {
        >
         Comenzar Evaluación <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform" />
        </button>
-       <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mt-4">25 Preguntas • 3 Minutos • 100% Anónimo</p>
+       <p className="text-[10px] text-muted font-bold uppercase tracking-[0.2em] mt-4">25 Preguntas • 3 Minutos • 100% Anónimo</p>
       </div>
      </div>
     </div>
@@ -202,7 +202,7 @@ const TestPoliticoView = () => {
 
      {/* Card 2: Ideales Evaluados */}
      <div className="bg-surface p-8 rounded-2xl border border-line shadow-sm hover:shadow-md transition-all">
-      <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-accent mb-6">
+      <div className="w-12 h-12 bg-accent rounded-xl flex items-center justify-center text-accent mb-6">
        <Scale size={24} />
       </div>
       <h3 className="text-xl font-black text-ink uppercase tracking-tighter mb-4">Ejes Ideológicos</h3>
@@ -213,7 +213,7 @@ const TestPoliticoView = () => {
        <div className="flex items-center gap-2"><Shield size={16} className="text-blue-500" /> <span className="font-bold text-xs text-muted uppercase">Seguridad</span></div>
        <div className="flex items-center gap-2"><TrendingUp size={16} className="text-green-500" /> <span className="font-bold text-xs text-muted uppercase">Economía</span></div>
        <div className="flex items-center gap-2"><Users size={16} className="text-purple-500" /> <span className="font-bold text-xs text-muted uppercase">Derechos</span></div>
-       <div className="flex items-center gap-2"><Landmark size={16} className="text-slate-500" /> <span className="font-bold text-xs text-muted uppercase">Estado Institucional</span></div>
+       <div className="flex items-center gap-2"><Landmark size={16} className="text-muted" /> <span className="font-bold text-xs text-muted uppercase">Estado Institucional</span></div>
       </div>
      </div>
     </div>
@@ -235,7 +235,7 @@ const TestPoliticoView = () => {
         <span className="text-xs font-bold uppercase text-muted">De Acuerdo</span>
        </div>
        <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-line">
-        <div className="w-3 h-3 rounded-full bg-slate-400"></div>
+        <div className="w-3 h-3 rounded-full bg-surface-2"></div>
         <span className="text-xs font-bold uppercase text-muted">Neutral</span>
        </div>
        <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-line">
@@ -260,7 +260,7 @@ const TestPoliticoView = () => {
     
     <div className="text-center mb-12">
      <h2 className="text-sm font-black text-faint uppercase tracking-[0.3em] mb-2">Resultados del Análisis</h2>
-     <h1 className="text-4xl md:text-5xl font-black text-accent tracking-tighter uppercase italic transition-colors">Tu Afinidad <span className="text-red-600">Política</span></h1>
+     <h1 className="text-4xl md:text-5xl font-black text-accent tracking-tighter uppercase transition-colors">Tu Afinidad <span className="text-red-600">Política</span></h1>
     </div>
 
     {/* WINNER CARD */}
@@ -272,7 +272,7 @@ const TestPoliticoView = () => {
         {winner.data.bandera}
       </div>
       <div className="text-center md:text-left">
-       <div className="inline-flex items-center gap-2 bg-blue-800/50 px-4 py-1.5 rounded-full border border-blue-500/30 mb-4">
+       <div className="inline-flex items-center gap-2 bg-accent/50 px-4 py-1.5 rounded-full border border-blue-500/30 mb-4">
         <CheckCircle size={16} className="text-green-400" />
         <span className="text-xs font-black uppercase tracking-widest text-blue-100">Partido Más Afín</span>
        </div>
@@ -289,7 +289,7 @@ const TestPoliticoView = () => {
 
     {/* PERFIL IDEOLÓGICO */}
     <div className="bg-surface rounded-2xl p-8 md:p-10 shadow-lg border border-line mb-12 transition-colors">
-     <h3 className="text-xl font-black text-accent uppercase tracking-tighter italic mb-6 flex items-center gap-3 transition-colors">
+     <h3 className="text-xl font-black text-accent uppercase tracking-tighter mb-6 flex items-center gap-3 transition-colors">
       <User size={24} className="text-red-600" /> 📍 Tu Perfil Ideológico
      </h3>
      <p className="text-muted text-lg leading-relaxed font-medium transition-colors">
@@ -298,7 +298,7 @@ const TestPoliticoView = () => {
     </div>
 
     {/* RANKING COMPLETO */}
-    <h3 className="text-xl font-black text-accent uppercase tracking-tighter italic mb-6 ml-2 transition-colors">📊 Ranking Completo</h3>
+    <h3 className="text-xl font-black text-accent uppercase tracking-tighter mb-6 ml-2 transition-colors">📊 Ranking Completo</h3>
     <div className="space-y-4">
      {results.map((result, idx) => (
       <div key={result.id} className="bg-surface p-4 rounded-2xl shadow-sm border border-line flex items-center gap-4 group hover:border-blue-200 transition-colors">
@@ -312,7 +312,7 @@ const TestPoliticoView = () => {
         </div>
         <div className="w-full bg-surface-2 h-2 rounded-full overflow-hidden transition-colors">
          <div 
-          className={`h-full rounded-full transition-all duration-1000 ${idx === 0 ? 'bg-green-500' : 'bg-accent dark:bg-blue-500'}`}
+          className={`h-full rounded-full transition-all duration-1000 ${idx === 0 ? 'bg-green-500' : 'bg-accent dark:bg-accent'}`}
           style={{ width: `${result.score}%` }}
          ></div>
         </div>
@@ -329,7 +329,7 @@ const TestPoliticoView = () => {
        setShowResults(false);
        setStarted(false);
       }}
-      className="inline-flex items-center gap-2 text-slate-400 hover:text-accent dark:hover:text-blue-400 font-black text-sm uppercase tracking-widest transition-colors"
+      className="inline-flex items-center gap-2 text-muted hover:text-accent dark:hover:text-blue-400 font-black text-sm uppercase tracking-widest transition-colors"
      >
       <RefreshCw size={16} /> Volver a tomar el test
      </button>

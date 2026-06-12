@@ -73,7 +73,7 @@ const AbstencionismoView = () => {
         <div key={i} className={`${s.bg} p-6 rounded-3xl border border-line hover:shadow-lg transition-all group`}>
          <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 shadow-inner" style={{ backgroundColor: s.color + '15', color: s.color }}>{s.icon}</div>
          <div className="text-2xl sm:text-3xl font-black tracking-tighter" style={{ color: s.color }}>{s.value}</div>
-         <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">{s.label}</div>
+         <div className="text-[9px] font-black text-muted uppercase tracking-widest mt-1">{s.label}</div>
         </div>
        ))}
       </div>
@@ -106,8 +106,8 @@ const AbstencionismoView = () => {
         })}
        </div>
        <div className="mt-6 pt-6 border-t border-line flex flex-wrap gap-4 justify-center">
-        <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-gradient-to-t from-[#002B7F] to-[#3B82F6]"></div><span className="text-[10px] font-bold text-slate-400">Elección regular</span></div>
-        <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-gradient-to-t from-[#EF1C24] to-[#FF6B6B]"></div><span className="text-[10px] font-bold text-slate-400">Máximo histórico</span></div>
+        <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-gradient-to-t from-[#002B7F] to-[#3B82F6]"></div><span className="text-[10px] font-bold text-muted">Elección regular</span></div>
+        <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-gradient-to-t from-[#EF1C24] to-[#FF6B6B]"></div><span className="text-[10px] font-bold text-muted">Máximo histórico</span></div>
        </div>
       </div>
      </section>
@@ -219,7 +219,7 @@ const AbstencionismoView = () => {
         </div>
 
         <div className="bg-surface rounded-2xl p-8 shadow-sm border border-line">
-         <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Municipal vs Nacional</h3>
+         <h3 className="text-[10px] font-black uppercase tracking-widest text-muted mb-3">Municipal vs Nacional</h3>
          {comparativaMunicipalNacional.map(c => (
           <div key={c.tipo} className="flex justify-between items-center py-2 border-b border-line last:border-0">
            <span className="text-xs font-bold text-muted">{c.tipo}</span>
@@ -250,7 +250,7 @@ const AbstencionismoView = () => {
           <p className="text-sm text-muted font-medium leading-relaxed mb-6">{e.descripcion}</p>
           <div className="flex gap-3">
            <span className={`text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${e.impacto === 'Alto' ? 'bg-green-50 dark:bg-green-900/20 text-green-600' : 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600'}`}>Impacto {e.impacto}</span>
-           <span className="text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-surface-2 text-slate-500">{e.plazo}</span>
+           <span className="text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-surface-2 text-muted">{e.plazo}</span>
           </div>
          </div>
         </div>

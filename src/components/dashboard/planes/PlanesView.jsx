@@ -179,19 +179,19 @@ const PlanesView = () => {
         <label className="text-[10px] font-black uppercase tracking-[0.2em] text-faint mb-2 block transition-colors">Selecciona el Partido</label>
         <button 
          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-         className={`w-full bg-surface-2 border-2 rounded-2xl px-6 py-4 flex items-center justify-between transition-all ${isDropdownOpen ? 'border-slate-300 ring-4 ring-slate-100 dark:ring-slate-600' : 'border-line'}`}
+         className={`w-full bg-surface-2 border-2 rounded-2xl px-6 py-4 flex items-center justify-between transition-all ${isDropdownOpen ? 'border-line ring-4 ring-slate-100 dark:ring-slate-600' : 'border-line'}`}
         >
          {selectedParty ? (
           <div className="flex items-center gap-3">
            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[10px] font-black" style={{ backgroundColor: selectedParty.color }}>
             {selectedParty.short}
            </div>
-           <span className="font-bold text-slate-700 transition-colors">{selectedParty.name}</span>
+           <span className="font-bold text-muted transition-colors">{selectedParty.name}</span>
           </div>
          ) : (
-          <span className="text-slate-400 font-bold text-sm italic transition-colors">Elige un partido político...</span>
+          <span className="text-muted font-bold text-sm transition-colors">Elige un partido político...</span>
          )}
-         <ChevronDown className={`text-slate-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} size={20} />
+         <ChevronDown className={`text-muted transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} size={20} />
         </button>
 
         {/* Lista Desplegable */}
@@ -205,13 +205,13 @@ const PlanesView = () => {
               setSelectedParty(p);
               setIsDropdownOpen(false);
              }}
-             className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-colors group"
+             className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-surface-2 transition-colors group"
             >
              <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-xs font-black shadow-sm" style={{ backgroundColor: p.color }}>
               {p.short}
              </div>
              <div className="text-left">
-              <p className="font-black text-slate-700 leading-none mb-1 transition-colors">{p.short}</p>
+              <p className="font-black text-muted leading-none mb-1 transition-colors">{p.short}</p>
               <p className="text-[10px] font-bold text-faint uppercase tracking-widest transition-colors">{p.name}</p>
              </div>
             </button>
@@ -223,7 +223,7 @@ const PlanesView = () => {
 
        <div 
         onClick={() => fileInputRef.current.click()}
-        className={`border-4 border-dashed rounded-3xl p-8 text-center cursor-pointer transition-all ${fileName ? 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800' : 'bg-surface-2 border-line hover:border-slate-300 dark:hover:border-slate-500'}`}
+        className={`border-4 border-dashed rounded-3xl p-8 text-center cursor-pointer transition-all ${fileName ? 'bg-surface-2 dark:bg-surface-2 border-line dark:border-line' : 'bg-surface-2 border-line hover:border-line dark:hover:border-line'}`}
        >
         <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept=".pdf,.txt" className="hidden" />
         {loadingPdfLib ? (
@@ -234,7 +234,7 @@ const PlanesView = () => {
         ) : fileName ? (
          <div className="flex items-center justify-center gap-3 py-4">
           <FileText className="text-green-500" />
-          <span className="font-bold text-slate-700 truncate max-w-[200px] transition-colors">{fileName}</span>
+          <span className="font-bold text-muted truncate max-w-[200px] transition-colors">{fileName}</span>
          </div>
         ) : (
          <div className="text-faint flex flex-col items-center gap-2 py-4 transition-colors">
@@ -292,7 +292,7 @@ const PlanesView = () => {
          !analysisResult ? 'opacity-30 cursor-not-allowed bg-surface border-line' :
          selectedArea === area.id 
           ? 'text-white border-transparent shadow-2xl scale-105 z-10' 
-          : 'bg-surface text-faint border-white dark:border-slate-800 hover:border-slate-100 dark:hover:border-slate-700'
+          : 'bg-surface text-faint border-white dark:border-line hover:border-line dark:hover:border-line'
         }`}
         style={{ backgroundColor: selectedArea === area.id ? accentColor : undefined }}
        >
@@ -322,17 +322,17 @@ const PlanesView = () => {
           {React.cloneElement(areasTematicas.find(a => a.id === selectedArea).icon, { size: 32 })}
          </div>
          <div>
-          <h4 className="text-3xl font-black tracking-tighter uppercase text-slate-900">{areasTematicas.find(a => a.id === selectedArea).label}</h4>
-          <p className="text-[10px] font-black uppercase tracking-widest opacity-60 text-slate-900">Datos verificados del plan oficial</p>
+          <h4 className="text-3xl font-black tracking-tighter uppercase text-muted">{areasTematicas.find(a => a.id === selectedArea).label}</h4>
+          <p className="text-[10px] font-black uppercase tracking-widest opacity-60 text-muted">Datos verificados del plan oficial</p>
          </div>
         </div>
-        <Target className="text-slate-200" size={40} />
+        <Target className="text-muted" size={40} />
        </div>
 
        <div className="p-8 md:p-12 space-y-4">
         {analysisResult[selectedArea]?.length > 0 ? (
          analysisResult[selectedArea].map((prop, i) => (
-          <div key={i} className="flex gap-6 p-6 rounded-2xl bg-surface-2/30 hover:bg-white border-2 border-transparent hover:border-slate-100 dark:hover:border-slate-600 transition-all group">
+          <div key={i} className="flex gap-6 p-6 rounded-2xl bg-surface-2/30 hover:bg-white border-2 border-transparent hover:border-line dark:hover:border-line transition-all group">
            <div className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-black text-xs text-white shadow-md" style={{ backgroundColor: accentColor }}>
             {i + 1}
            </div>
@@ -341,14 +341,14 @@ const PlanesView = () => {
          ))
         ) : (
          <div className="py-20 text-center flex flex-col items-center">
-          <XCircle size={48} className="text-slate-200 mb-4" />
-          <p className="text-slate-400 font-black uppercase tracking-widest text-xs">No se hallaron propuestas sobre este tema en el PDF.</p>
+          <XCircle size={48} className="text-muted mb-4" />
+          <p className="text-muted font-black uppercase tracking-widest text-xs">No se hallaron propuestas sobre este tema en el PDF.</p>
          </div>
         )}
        </div>
       </div>
      ) : (
-       <div className="bg-slate-100/50 /50 border-2 border-dashed border-line rounded-3xl py-24 flex flex-col items-center justify-center text-faint transition-colors">
+       <div className="bg-surface-2 /50 border-2 border-dashed border-line rounded-3xl py-24 flex flex-col items-center justify-center text-faint transition-colors">
         <Search size={48} className="mb-4 opacity-20 dark:opacity-40" />
         <p className="font-black uppercase tracking-[0.4em] text-xs text-center">Selecciona un partido y sube su PDF para ver los resultados</p>
       </div>

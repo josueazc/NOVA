@@ -94,7 +94,7 @@ const PartidosView = () => {
 
                  <InfoTile label="Escalas Activas" value="Nac/Prov" icon={<Target size={28}/>} />
                  
-                 <div className="bg-accent p-8 rounded-3xl shadow-xl border border-blue-800 dark:border-slate-700 flex flex-col justify-center items-center text-center group cursor-pointer hover:bg-[#00174A]  transition-colors relative overflow-hidden">
+                 <div className="bg-accent p-8 rounded-3xl shadow-xl border border-blue-800 dark:border-line flex flex-col justify-center items-center text-center group cursor-pointer hover:bg-[#00174A]  transition-colors relative overflow-hidden">
                     <Calendar size={32} className="text-danger mb-4" />
                     <h3 className="text-xl font-black text-white">Hitos 2026</h3>
                     <p className="text-blue-200  text-[10px] font-bold uppercase tracking-widest mt-2 transition-colors">Ver Calendario</p>
@@ -133,11 +133,11 @@ const PartidosView = () => {
 const PartyCard = ({ party, onClick }) => (
   <div 
     onClick={onClick}
-    className="bg-surface rounded-3xl p-6 shadow-card hover:shadow-2xl hover:shadow-[#002B7F]/10 transition-all duration-500 hover:-translate-y-4 group cursor-pointer border border-white dark:border-slate-700 hover:border-slate-100 dark:hover:border-slate-600 flex flex-col h-[420px] relative overflow-hidden"
+    className="bg-surface rounded-3xl p-6 shadow-card hover:shadow-2xl hover:shadow-[#002B7F]/10 transition-all duration-500 hover:-translate-y-4 group cursor-pointer border border-white dark:border-line hover:border-line dark:hover:border-line flex flex-col h-[420px] relative overflow-hidden"
   >
     
     {/* Contenedor de bandera */}
-    <div className="w-full h-56 rounded-2xl overflow-hidden shadow-inner mb-6 relative z-10 flex-shrink-0 bg-slate-100">
+    <div className="w-full h-56 rounded-2xl overflow-hidden shadow-inner mb-6 relative z-10 flex-shrink-0 bg-surface-2">
       <div className="absolute inset-0 bg-black/15 z-20 pointer-events-none group-hover:bg-black/0 transition-colors duration-700"></div>
       <div className="absolute inset-0 border border-black/10 z-30 pointer-events-none"></div>
       <div className="w-full h-full transform group-hover:scale-105 transition-transform duration-700 ease-out">
@@ -161,7 +161,7 @@ const PartyCard = ({ party, onClick }) => (
     </div>
 
     {/* Fondo decorativo */}
-    <div className="absolute inset-0 bg-gradient-to-t from-slate-50/80  to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0 pointer-events-none"></div>
+    <div className="absolute inset-0 bg-gradient-to-t from-surface-2/80  to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0 pointer-events-none"></div>
 
     {/* Botón flotante */}
     <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 z-20">
