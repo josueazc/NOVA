@@ -8,13 +8,45 @@ const App = () => {
   const [message, setMessage] = useState(null);
   const [session, setSession] = useState(null);
 
+  // Fallback programático para asegurar que el perfil exista en la base de datos con todos sus atributos
+  const ensureProfile = async (sessionUser) => {
+    if (!sessionUser) return;
+    try {
+      const meta = sessionUser.user_metadata || {};
+      const profileData = {
+        id: sessionUser.id,
+        email: sessionUser.email,
+        full_name: meta.full_name || '',
+        province: meta.province || '',
+        dni: meta.dni || '',
+        bio: meta.bio || '',
+        party: meta.party || '',
+        is_politician: meta.is_politician || false,
+        cargo: meta.cargo || '',
+        cargo_info: meta.cargo_info || ''
+      };
+
+      // Forzar que todos los atributos se guarden en public.profiles
+      const { error } = await supabase.from('profiles').upsert([profileData], { onConflict: 'id' });
+      if (error) {
+        console.warn("Advertencia de sincronización de perfil:", error);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     if (!supabase) return;
 
-    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+    supabase.auth.getSession().then(async ({ data }) => {
+      setSession(data.session);
+      if (data.session?.user) await ensureProfile(data.session.user);
+    });
 
-    const { data } = supabase.auth.onAuthStateChange((_event, newSession) => {
+    const { data } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
       setSession(newSession);
+      if (newSession?.user) await ensureProfile(newSession.user);
     });
 
     return () => data.subscription.unsubscribe();
@@ -55,8 +87,8 @@ const App = () => {
       if (error) {
         setMessage({ type: 'error', text: `Error al crear perfil: ${error.message}` });
       } else {
-        setMessage({ type: 'success', text: 'Tu cuenta ha sido creada con éxito. Ya puedes iniciar sesión.' });
-        setIsSignUp(false); // Pasamos a la pantalla de login
+        setMessage({ type: 'success', text: '¡Cuenta creada con éxito! Por favor, inicia sesión con tu nueva cuenta.' });
+        setIsSignUp(false);
       }
     } else {
       // INICIO DE SESIÓN DIRECTO CON CONTRASEÑA
@@ -71,7 +103,6 @@ const App = () => {
         setMessage({ type: 'error', text: error.message === 'Invalid login credentials' ? 'Contraseña o correo incorrecto.' : error.message });
       } else {
         setMessage({ type: 'success', text: 'Accediendo al sistema electoral...' });
-        // Supabase asignará la sesión automáticamente y el useEffect mostrará la pantalla de Dashboard
       }
     }
   };
@@ -97,9 +128,11 @@ const App = () => {
     }
   };
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    setMessage(null);
+  const handleSignOut = () => {
+    supabase.auth.signOut().catch(console.error);
+    setSession(null);
+    localStorage.clear();
+    window.location.href = '/';
   };
 
   if (session) {
