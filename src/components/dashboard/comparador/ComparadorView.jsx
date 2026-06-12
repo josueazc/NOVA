@@ -17,8 +17,28 @@ const AXIS_LABELS = {
   derechos: ['+ progresista', '+ conservador'],
 };
 
+// Explicación en una línea de qué mide el eje de cada tema
+const AXIS_EXPLAIN = {
+  educacion: 'A la izquierda, partidos que apuestan por más inversión estatal en educación; a la derecha, los que priorizan autonomía de centros y participación privada.',
+  salud: 'A la izquierda, defensa de la CCSS como prestador único; a la derecha, apertura a que el sector privado atienda asegurados.',
+  economia: 'A la izquierda, más participación del Estado en la economía; a la derecha, más mercado y menos regulación.',
+  seguridad: 'A la izquierda, atacar las causas sociales del delito; a la derecha, mano dura, penas más altas y más policía.',
+  ambiente: 'A la izquierda, conservación estricta; a la derecha, aprovechamiento económico de los recursos.',
+  tecnologia: 'A la izquierda, internet y tecnología como servicio público; a la derecha, desregulación para que el mercado innove.',
+  derechos: 'A la izquierda, agenda progresista de derechos; a la derecha, defensa de valores tradicionales.',
+};
+
+const tendencyLabel = (stance) => {
+  if (stance <= -4) return { text: 'Tiende fuerte a la izquierda del eje', tone: 'blue' };
+  if (stance < 0) return { text: 'Se inclina a la izquierda del eje', tone: 'blue' };
+  if (stance === 0) return { text: 'Posición de centro', tone: 'neutral' };
+  if (stance < 4) return { text: 'Se inclina a la derecha del eje', tone: 'yellow' };
+  return { text: 'Tiende fuerte a la derecha del eje', tone: 'red' };
+};
+
 const MODES = [
-  { value: 'tema', label: 'Por tema' },
+  { value: 'simple', label: 'Vista simple' },
+  { value: 'tema', label: 'Gráficos por tema' },
   { value: 'frente', label: 'Frente a frente' },
   { value: 'mapa', label: 'Mapa ideológico' },
 ];
@@ -69,7 +89,7 @@ const ProposalCard = ({ proposal }) => {
 
 const ComparadorView = () => {
   const toast = useToast();
-  const [mode, setMode] = useState('tema');
+  const [mode, setMode] = useState('simple');
   const [topic, setTopic] = useState('educacion');
   const [query, setQuery] = useState('');
   const [partyA, setPartyA] = useState('pln');
@@ -146,6 +166,63 @@ const ComparadorView = () => {
 
       <Tabs tabs={MODES} active={mode} onChange={setMode} className="mb-8" />
 
+      {/* ============ MODO: VISTA SIMPLE ============ */}
+      {mode === 'simple' && (
+        <div className="space-y-6 animate-fade-up">
+          <Card padding="p-6" className="bg-accent-soft/40 border-accent/15">
+            <h2 className="text-lg font-black text-ink tracking-tight mb-1">¿Qué tema te importa más?</h2>
+            <p className="text-sm text-muted leading-relaxed">
+              Elige un tema y te mostramos, en lenguaje simple, qué propone cada partido.
+              Sin gráficos ni jerga: solo las propuestas, una por partido.
+            </p>
+          </Card>
+
+          <div className="flex gap-1.5 flex-wrap">
+            {TOPICS.map((tp) => (
+              <button
+                key={tp.id}
+                onClick={() => setTopic(tp.id)}
+                className={`px-4 py-2 rounded-full text-sm font-bold border-2 transition-all
+                  ${topic === tp.id ? 'bg-accent text-white border-accent shadow-lift' : 'bg-surface text-muted border-line hover:border-accent hover:text-accent'}`}
+              >
+                {tp.label}
+              </button>
+            ))}
+          </div>
+
+          <p className="text-sm text-muted leading-relaxed max-w-3xl">{AXIS_EXPLAIN[topic]}</p>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {proposalsByTopic(topic).map((prop, i) => {
+              const party = partidosData[prop.partyId];
+              const candidate = candidateByParty(prop.partyId);
+              const tendency = tendencyLabel(prop.stance);
+              if (!party) return null;
+              return (
+                <div key={prop.partyId} className="stagger-item" style={{ '--index': i }}>
+                  <Card padding="p-5" className="h-full flex flex-col gap-3" style={{ borderTop: `3px solid ${party.color}` }}>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-black text-ink">{party.siglas}</span>
+                      {candidate && (
+                        <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-faint truncate">{candidate.name}</span>
+                      )}
+                    </div>
+                    <p className="text-[15px] font-bold text-ink leading-snug">{prop.title}</p>
+                    <p className="text-sm text-muted leading-relaxed flex-1">{prop.summary}</p>
+                    <Badge tone={tendency.tone}>{tendency.text}</Badge>
+                  </Card>
+                </div>
+              );
+            })}
+          </div>
+
+          <p className="text-xs text-faint">
+            ¿Quieres más detalle? Prueba los <button onClick={() => setMode('tema')} className="text-accent font-bold hover:underline">gráficos por tema</button> o
+            el <button onClick={() => setMode('frente')} className="text-accent font-bold hover:underline">frente a frente</button>.
+          </p>
+        </div>
+      )}
+
       {/* ============ MODO: POR TEMA ============ */}
       {mode === 'tema' && (
         <div className="space-y-6 animate-fade-up">
@@ -175,9 +252,10 @@ const ComparadorView = () => {
           </div>
 
           <Card padding="p-5 sm:p-6">
-            <h3 className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint mb-4">
-              Posiciones en {TOPICS.find((t) => t.id === topic)?.label}
+            <h3 className="text-base font-black text-ink tracking-tight mb-1">
+              ¿Dónde se ubica cada partido en {TOPICS.find((t) => t.id === topic)?.label.toLowerCase()}?
             </h3>
+            <p className="text-sm text-muted leading-relaxed mb-4 max-w-3xl">{AXIS_EXPLAIN[topic]}</p>
             <StanceChart
               proposals={proposalsByTopic(topic)}
               leftLabel={AXIS_LABELS[topic]?.[0]}
@@ -337,6 +415,12 @@ const ComparadorView = () => {
               <MapIcon size={15} className="text-accent" />
               <h3 className="text-sm font-semibold text-ink">¿Dónde se ubica cada partido?</h3>
             </div>
+            <p className="text-sm text-muted leading-relaxed mb-4 max-w-3xl">
+              El eje horizontal mide la postura económica: a la izquierda, partidos que quieren
+              más participación del Estado; a la derecha, los que prefieren más mercado. El eje
+              vertical mide lo social: abajo, posiciones progresistas; arriba, conservadoras.
+              Ejemplo: un partido arriba a la derecha combina economía de mercado con valores tradicionales.
+            </p>
             <IdeologyMap />
           </Card>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
