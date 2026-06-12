@@ -365,7 +365,7 @@ ${context || 'No hay información en la base de conocimiento de texto.'}
   };
 
   return (
-    <div className="flex-grow flex flex-col bg-slate-50 dark:bg-slate-900 w-full animate-in fade-in duration-500 pb-10 transition-colors">
+    <div className="flex-grow flex flex-col w-full animate-in fade-in duration-500 pb-10 transition-colors">
 
       {/* Header del Tab */}
       <div className="bg-[#001D4A] dark:bg-slate-950 text-white py-12 px-6 lg:px-24 w-full rounded-b-[3rem] shadow-xl relative overflow-hidden shrink-0 transition-colors">

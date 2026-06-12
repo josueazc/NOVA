@@ -39,7 +39,7 @@ const PartidosView = () => {
 
   // De lo contrario, mostramos el dashboard principal de partidos
   return (
-    <div className="w-full bg-slate-50 dark:bg-slate-900 font-sans text-slate-900 dark:text-slate-100 pb-24 pt-12 flex-grow border-t border-slate-200 dark:border-slate-800 animate-in fade-in slide-in-from-bottom-4 duration-500 transition-colors">
+    <div className="w-full font-sans text-ink pb-24 pt-12 flex-grow animate-in fade-in slide-in-from-bottom-4 duration-500 transition-colors">
       
       <main className="max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-24">
         

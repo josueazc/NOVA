@@ -130,7 +130,7 @@ const AsambleaView = () => {
   ];
 
   return (
-    <div className="w-full bg-[#f8fafc] dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans selection:bg-blue-100 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8 pb-20 transition-colors">
+    <div className="w-full text-ink font-sans animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8 pb-20 transition-colors">
       <main className="w-full max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-24 space-y-24">
         
         {/* Sección 1: ¿Qué es la Asamblea? e Historia */}

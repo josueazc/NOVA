@@ -7,7 +7,7 @@ import DatabaseTables from './DatabaseTables';
 
 const DocumentacionView = () => {
   return (
-    <div className="w-full bg-[#f8fafc] dark:bg-slate-900 font-sans pb-24 animate-in fade-in duration-500 transition-colors">
+    <div className="w-full font-sans pb-24 animate-in fade-in duration-500 transition-colors">
       
       {/* Header (VOTEON) */}
       <div className="bg-[#001D4A] dark:bg-slate-950 text-white py-16 px-6 lg:px-24 rounded-b-[3rem] shadow-xl relative overflow-hidden shrink-0 transition-colors">

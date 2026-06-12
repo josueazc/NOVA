@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Mail, Lock, ArrowRight, UserPlus, LogIn, ShieldCheck, CheckCircle, AlertCircle, XCircle, User, MapPin, CreditCard, Camera } from 'lucide-react';
-import { partidosData } from '../../data/partidosData';
+import React, { useEffect, useState } from 'react';
+import { ArrowRight, CheckCircle2, XCircle, AlertCircle, LogIn, UserPlus } from 'lucide-react';
+import { Button, Input, Select, Textarea } from '@/components/ui';
+import { partidosData } from '@/data/partidosData';
+
+const PROVINCES = ['San José', 'Alajuela', 'Cartago', 'Heredia', 'Guanacaste', 'Puntarenas', 'Limón'];
 
 const Requirement = ({ met, text }) => (
-  <div className={`flex items-center text-[9px] font-black transition-colors ${met ? 'text-green-600' : 'text-slate-400'}`}>
-    {met ? <CheckCircle size={10} className="mr-1" /> : <XCircle size={10} className="mr-1 opacity-50" />}
+  <span className={`inline-flex items-center gap-1 font-mono text-[10px] transition-colors ${met ? 'text-success' : 'text-faint'}`}>
+    {met ? <CheckCircle2 size={11} /> : <XCircle size={11} className="opacity-60" />}
     {text}
-  </div>
+  </span>
 );
 
 const AuthScreen = ({ handleAuth, handleResetPassword, loading, message, setMessage }) => {
@@ -23,293 +26,214 @@ const AuthScreen = ({ handleAuth, handleResetPassword, loading, message, setMess
   const [cargo, setCargo] = useState('');
   const [cargoInfo, setCargoInfo] = useState('');
 
-  const provincias = ["San José", "Alajuela", "Cartago", "Heredia", "Guanacaste", "Puntarenas", "Limón"];
-
-  const [validations, setValidations] = useState({
-    hasUpper: false,
-    hasNumber: false,
-    hasSpecial: false,
-    minLength: false
-  });
+  const [validations, setValidations] = useState({ hasUpper: false, hasNumber: false, hasSpecial: false, minLength: false });
 
   useEffect(() => {
     setValidations({
       hasUpper: /[A-Z]/.test(password),
       hasNumber: /[0-9]/.test(password),
       hasSpecial: /[!@#$%^&*(),.?":{}|<>]/.test(password),
-      minLength: password.length >= 8
+      minLength: password.length >= 8,
     });
   }, [password]);
 
-  const isPasswordValid = Object.values(validations).every(v => v);
+  const isPasswordValid = Object.values(validations).every(Boolean);
 
   const onSubmit = (e) => {
     e.preventDefault();
     handleAuth({ isSignUp, firstName, lastName, email, password, province, dni, bio, party, isPolitician, cargo, cargoInfo, isPasswordValid, setIsSignUp });
   };
 
+  const switchMode = (signUp) => {
+    setIsSignUp(signUp);
+    setMessage(null);
+  };
+
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4 font-sans text-slate-900 relative">
-      <div className="max-w-lg w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 my-8 animate-in zoom-in-95 duration-500">
-        
-        <div className="relative overflow-hidden">
-          <div className="h-2 bg-[#EF1C24]"></div>
-          <div className="bg-[#002B7F] p-8 text-white text-center relative">
-            <div className="absolute -top-4 -right-4 opacity-10 rotate-12">
-              <ShieldCheck size={120} />
-            </div>
-            <h1 className="text-4xl font-black tracking-tighter mb-1 drop-shadow-md">VoteOn</h1>
-            <div className="flex items-center justify-center gap-2">
-               <span className="h-px w-4 bg-white opacity-50"></span>
-               <p className="text-white text-[10px] font-bold tracking-[0.2em]">PLATAFORMA CIUDADANA</p>
-               <span className="h-px w-4 bg-white opacity-50"></span>
-            </div>
-          </div>
+    <div className="min-h-[100dvh] bg-canvas grid lg:grid-cols-[1fr_1.1fr]">
+      {/* Panel editorial izquierdo */}
+      <aside className="hidden lg:flex flex-col justify-between p-12 bg-surface-2 border-r border-line relative overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(80% 60% at 0% 100%, rgb(var(--c-accent) / 0.06), transparent)' }}
+        />
+        <div className="relative flex items-baseline gap-2">
+          <span className="font-serif italic text-2xl text-ink">VoteOn</span>
+          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-faint border border-line rounded px-1.5 py-0.5">
+            CR 2026
+          </span>
         </div>
-        
-        <div className="p-6 sm:p-10">
-          <div className="flex mb-8 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
-            <button 
+        <div className="relative space-y-6 max-w-md">
+          <h1 className="font-serif text-5xl leading-[1.08] tracking-tight text-ink">
+            La democracia empieza con <em className="text-accent">información</em>.
+          </h1>
+          <p className="text-muted leading-relaxed">
+            Compara propuestas, sigue a la Asamblea, debate con otros ciudadanos y
+            decide con datos oficiales del TSE — todo en un solo lugar.
+          </p>
+          <ul className="space-y-2.5">
+            {['Comparador de propuestas por tema', 'Comunidad política moderada', 'Asistente IA con fuentes oficiales'].map((f) => (
+              <li key={f} className="flex items-center gap-2.5 text-sm text-ink">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
+                {f}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <p className="relative font-mono text-[10px] uppercase tracking-[0.25em] text-faint">
+          Libertad · Justicia · Pura vida
+        </p>
+      </aside>
+
+      {/* Formulario */}
+      <main className="flex items-center justify-center p-6 sm:p-12 overflow-y-auto">
+        <div className="w-full max-w-md py-8 animate-fade-up">
+          {/* Marca en móvil */}
+          <div className="lg:hidden flex items-baseline gap-2 mb-8">
+            <span className="font-serif italic text-2xl text-ink">VoteOn</span>
+            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-faint border border-line rounded px-1.5 py-0.5">CR 2026</span>
+          </div>
+
+          <h2 className="font-serif text-3xl text-ink tracking-tight mb-1.5">
+            {isSignUp ? 'Crea tu perfil ciudadano' : 'Bienvenido de vuelta'}
+          </h2>
+          <p className="text-sm text-muted mb-7">
+            {isSignUp ? 'Únete al debate informado de cara a las elecciones.' : 'Inicia sesión para continuar al panel.'}
+          </p>
+
+          {/* Selector entrar/registro */}
+          <div className="flex bg-surface-2 border border-line rounded-lg p-1 mb-6" role="tablist">
+            <button
               type="button"
-              onClick={() => { setIsSignUp(false); setMessage(null); }}
-              className={`flex-1 flex items-center justify-center py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${!isSignUp ? 'bg-white shadow-md text-[#002B7F]' : 'text-slate-500 hover:text-[#002B7F]'}`}
+              role="tab"
+              aria-selected={!isSignUp}
+              onClick={() => switchMode(false)}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-[13px] font-medium transition-all
+                ${!isSignUp ? 'bg-surface text-ink shadow-card' : 'text-muted hover:text-ink'}`}
             >
-              <LogIn size={16} className="mr-2" /> Entrar
+              <LogIn size={14} /> Entrar
             </button>
-            <button 
+            <button
               type="button"
-              onClick={() => { setIsSignUp(true); setMessage(null); }}
-              className={`flex-1 flex items-center justify-center py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${isSignUp ? 'bg-white shadow-md text-[#002B7F]' : 'text-slate-500 hover:text-[#002B7F]'}`}
+              role="tab"
+              aria-selected={isSignUp}
+              onClick={() => switchMode(true)}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-[13px] font-medium transition-all
+                ${isSignUp ? 'bg-surface text-ink shadow-card' : 'text-muted hover:text-ink'}`}
             >
-              <UserPlus size={16} className="mr-2" /> Registro
+              <UserPlus size={14} /> Registro
             </button>
           </div>
 
           {message && (
-            <div className={`mb-6 p-4 rounded-2xl flex items-center text-sm font-medium animate-in fade-in slide-in-from-top-2 ${message.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-[#EF1C24] border border-red-100'}`}>
-              {message.type === 'success' ? <CheckCircle size={18} className="mr-2 flex-shrink-0" /> : <AlertCircle size={18} className="mr-2 flex-shrink-0" />}
+            <div
+              role="alert"
+              className={`mb-5 px-4 py-3 rounded-lg flex items-start gap-2.5 text-sm animate-fade-up border
+                ${message.type === 'success' ? 'bg-success-soft text-success border-success/20' : 'bg-danger-soft text-danger border-danger/20'}`}
+            >
+              {message.type === 'success' ? <CheckCircle2 size={16} className="mt-0.5 shrink-0" /> : <AlertCircle size={16} className="mt-0.5 shrink-0" />}
               {message.text}
             </div>
           )}
 
           <form className="space-y-4" onSubmit={onSubmit}>
-            
             {isSignUp && (
-              <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <div className="flex justify-center mb-6">
-                  <div className="relative group cursor-pointer">
-                    <div className="w-20 h-20 bg-slate-100 rounded-full border-2 border-dashed border-slate-300 flex items-center justify-center text-slate-400 group-hover:border-[#002B7F] group-hover:text-[#002B7F] transition-all overflow-hidden">
-                      <Camera size={32} />
-                    </div>
-                    <div className="absolute bottom-0 right-0 bg-[#002B7F] text-white p-1 rounded-full border-2 border-white shadow-sm">
-                      <UserPlus size={12} />
-                    </div>
-                  </div>
+              <div className="space-y-4 animate-fade-up">
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <Input label="Nombre" required value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="Nombre" />
+                  <Input label="Apellido" required value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Apellido" />
                 </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="group">
-                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 ml-1">Nombre</label>
-                    <div className="relative">
-                      <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                      <input 
-                        type="text" 
-                        required={isSignUp}
-                        placeholder="Nombre"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        className="w-full pl-10 pr-3 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-[#002B7F] focus:bg-white outline-none transition-all text-sm font-medium"
-                      />
-                    </div>
-                  </div>
-                  <div className="group">
-                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 ml-1">Apellido</label>
-                    <div className="relative">
-                      <input 
-                        type="text" 
-                        required={isSignUp}
-                        placeholder="Apellido"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-[#002B7F] focus:bg-white outline-none transition-all text-sm font-medium"
-                      />
-                    </div>
-                  </div>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <Select label="Provincia" required value={province} onChange={(e) => setProvince(e.target.value)}>
+                    <option value="">Selecciona…</option>
+                    {PROVINCES.map((p) => (
+                      <option key={p} value={p}>{p}</option>
+                    ))}
+                  </Select>
+                  <Input label="Cédula" required value={dni} onChange={(e) => setDni(e.target.value)} placeholder="0-0000-0000" />
                 </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="group">
-                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 ml-1">Provincia</label>
-                    <div className="relative">
-                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                      <select 
-                        required={isSignUp}
-                        value={province}
-                        onChange={(e) => setProvince(e.target.value)}
-                        className="w-full pl-10 pr-3 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-[#002B7F] focus:bg-white outline-none transition-all text-sm font-medium appearance-none cursor-pointer"
-                      >
-                        <option value="">Seleccioná...</option>
-                        {provincias.map(p => <option key={p} value={p}>{p}</option>)}
-                      </select>
-                    </div>
-                  </div>
-                  <div className="group">
-                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 ml-1">Cédula</label>
-                    <div className="relative">
-                      <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                      <input 
-                        type="text" 
-                        required={isSignUp}
-                        placeholder="0-0000-0000"
-                        value={dni}
-                        onChange={(e) => setDni(e.target.value)}
-                        className="w-full pl-10 pr-3 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-[#002B7F] focus:bg-white outline-none transition-all text-sm font-medium"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="group">
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 ml-1">Bio (Opcional)</label>
-                  <textarea 
-                    placeholder="Contanos un poco sobre tus intereses ciudadanos..."
-                    value={bio}
-                    onChange={(e) => setBio(e.target.value)}
-                    rows="2"
-                    className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-[#002B7F] focus:bg-white outline-none transition-all text-sm font-medium resize-none"
-                  ></textarea>
-                </div>
-
-                <div className="group">
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 ml-1">Preferencia Política</label>
-                  <div className="relative">
-                    <select 
-                      value={party}
-                      onChange={(e) => setParty(e.target.value)}
-                      required={isSignUp && isPolitician}
-                      className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-[#002B7F] focus:bg-white outline-none transition-all text-sm font-medium appearance-none cursor-pointer"
-                    >
-                      <option value="">{isPolitician ? "Selecciona un Partido (Obligatorio)" : "Ninguna o Independiente"}</option>
-                      {Object.values(partidosData).map(p => (
-                        <option key={p.id} value={p.id}>{p.nombre}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="group flex items-center gap-2">
-                  <input 
-                    type="checkbox" 
-                    id="isPolitician"
+                <Textarea label="Bio (opcional)" rows={2} value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Cuéntanos sobre tus intereses ciudadanos…" />
+                <Select
+                  label="Preferencia política"
+                  value={party}
+                  required={isPolitician}
+                  onChange={(e) => setParty(e.target.value)}
+                >
+                  <option value="">{isPolitician ? 'Selecciona un partido (obligatorio)' : 'Ninguna o independiente'}</option>
+                  {Object.values(partidosData).map((p) => (
+                    <option key={p.id} value={p.id}>{p.nombre}</option>
+                  ))}
+                </Select>
+                <label className="flex items-center gap-2.5 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
                     checked={isPolitician}
                     onChange={(e) => setIsPolitician(e.target.checked)}
-                    className="w-4 h-4 text-[#002B7F] rounded focus:ring-[#002B7F] border-slate-300"
+                    className="w-4 h-4 rounded border-line text-accent focus:ring-accent/30"
                   />
-                  <label htmlFor="isPolitician" className="text-sm font-bold text-slate-700">Soy Funcionario Político / Candidato</label>
-                </div>
-
+                  <span className="text-sm text-ink">Soy funcionario político o candidato</span>
+                </label>
                 {isPolitician && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 animate-in slide-in-from-top-2 duration-300">
-                    <div className="group">
-                      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 ml-1">Cargo</label>
-                      <input 
-                        type="text" 
-                        required={isSignUp && isPolitician}
-                        placeholder="Ej: Diputado, Alcalde..."
-                        value={cargo}
-                        onChange={(e) => setCargo(e.target.value)}
-                        className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-[#002B7F] focus:bg-white outline-none transition-all text-sm font-medium"
-                      />
-                    </div>
-                    <div className="group">
-                      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 ml-1">Detalles del Cargo</label>
-                      <input 
-                        type="text" 
-                        placeholder="Ej: San José, 2022-2026..."
-                        value={cargoInfo}
-                        onChange={(e) => setCargoInfo(e.target.value)}
-                        className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-[#002B7F] focus:bg-white outline-none transition-all text-sm font-medium"
-                      />
-                    </div>
+                  <div className="grid sm:grid-cols-2 gap-4 animate-fade-up">
+                    <Input label="Cargo" required value={cargo} onChange={(e) => setCargo(e.target.value)} placeholder="Diputado, alcalde…" />
+                    <Input label="Detalles del cargo" value={cargoInfo} onChange={(e) => setCargoInfo(e.target.value)} placeholder="San José, 2022-2026…" />
                   </div>
                 )}
               </div>
             )}
 
-            <div className="group">
-              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 ml-1 group-focus-within:text-[#002B7F] transition-colors">Correo Electrónico</label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#002B7F] transition-colors" size={18} />
-                <input 
-                  type="email" 
-                  required
-                  placeholder="ejemplo@gmail.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-[#002B7F] focus:bg-white outline-none transition-all text-slate-700 font-medium placeholder:text-slate-300"
-                />
-              </div>
-            </div>
-
-            <div className="group">
-              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 ml-1 group-focus-within:text-[#002B7F] transition-colors">Contraseña</label>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#002B7F] transition-colors" size={18} />
-                <input 
-                  type="password" 
-                  required
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-[#002B7F] focus:bg-white outline-none transition-all text-slate-700 font-medium placeholder:text-slate-300"
-                />
-              </div>
-              
-              {!isSignUp && (
+            <Input
+              label="Correo electrónico"
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="ejemplo@correo.com"
+              autoComplete="email"
+            />
+            <div>
+              <Input
+                label="Contraseña"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                autoComplete={isSignUp ? 'new-password' : 'current-password'}
+              />
+              {!isSignUp ? (
                 <div className="mt-2 text-right">
-                  <button 
-                    type="button" 
-                    onClick={() => handleResetPassword(email)} 
-                    className="text-[10px] font-bold text-[#002B7F] hover:underline"
+                  <button
+                    type="button"
+                    onClick={() => handleResetPassword(email)}
+                    className="text-xs text-accent hover:underline"
                   >
                     ¿Olvidaste tu contraseña?
                   </button>
                 </div>
-              )}
-              
-              {isSignUp && (
-                <div className="mt-3 grid grid-cols-2 gap-x-2 gap-y-1.5 px-1">
+              ) : (
+                <div className="mt-2.5 grid grid-cols-2 gap-x-3 gap-y-1.5">
                   <Requirement met={validations.minLength} text="8+ caracteres" />
                   <Requirement met={validations.hasUpper} text="Mayúscula" />
                   <Requirement met={validations.hasNumber} text="Número" />
-                  <Requirement met={validations.hasSpecial} text="Especial (@#$)" />
+                  <Requirement met={validations.hasSpecial} text="Carácter especial" />
                 </div>
               )}
             </div>
 
-            <button 
-              disabled={loading || (isSignUp && (!isPasswordValid || !firstName || !lastName || !province || !dni))}
-              className="w-full bg-[#EF1C24] hover:bg-[#d11920] disabled:bg-slate-300 text-white font-bold py-4 rounded-2xl shadow-xl shadow-red-100 transition-all flex items-center justify-center group active:scale-[0.98] mt-2 h-[60px]"
+            <Button
+              type="submit"
+              size="lg"
+              loading={loading}
+              disabled={isSignUp && (!isPasswordValid || !firstName || !lastName || !province || !dni)}
+              className="w-full !mt-6 group"
             >
-              {loading ? (
-                <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-              ) : (
-                <>
-                  <span>{isSignUp ? 'Crear Perfil Ciudadano' : 'Entrar a VoteOn'}</span>
-                  <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
-                </>
-              )}
-            </button>
+              {isSignUp ? 'Crear perfil ciudadano' : 'Entrar a VoteOn'}
+              <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
+            </Button>
           </form>
-
         </div>
-        
-        <div className="bg-slate-50 p-6 text-center border-t border-slate-100">
-          <p className="text-[10px] text-slate-400 leading-relaxed font-bold uppercase tracking-widest">
-            Libertad • Justicia • <span className="text-[#EF1C24]">Pura Vida</span>
-          </p>
-        </div>
-      </div>
+      </main>
     </div>
   );
 };
