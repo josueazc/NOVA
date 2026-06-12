@@ -4,7 +4,9 @@ import AppShell from '@/components/layout/AppShell';
 import useHashRoute from '@/hooks/useHashRoute';
 import { EmptyState } from '@/components/ui';
 import { unreadCount } from '@/services/notifications';
+import { identify, pageView } from '@/services/analytics';
 import NotificacionesView from './notificaciones/NotificacionesView';
+import ParticipacionView from './participacion/ParticipacionView';
 import HomeView from './home/HomeView';
 import PartidosView from './partidos/PartidosView';
 import PlanesView from './planes/PlanesView';
@@ -41,6 +43,15 @@ const Dashboard = ({ userName, user, handleSignOut }) => {
     return () => clearInterval(interval);
   }, [refreshUnread]);
 
+  useEffect(() => {
+    identify(user);
+  }, [user]);
+
+  useEffect(() => {
+    pageView(route, user);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route]);
+
   const renderView = () => {
     switch (route) {
       case 'inicio':
@@ -70,7 +81,7 @@ const Dashboard = ({ userName, user, handleSignOut }) => {
       case 'notificaciones':
         return <NotificacionesView user={user} onCountChange={setUnread} />;
       case 'participacion':
-        return <Placeholder label="Participación ciudadana" />;
+        return <ParticipacionView user={user} />;
       default:
         return <HomeView userName={userName} onNavigate={navigate} />;
     }
