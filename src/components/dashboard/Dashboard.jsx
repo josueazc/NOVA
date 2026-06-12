@@ -13,6 +13,7 @@ import PoliticalChatbot from './chat/PoliticalChatbot';
 import ConfiguracionView from './configuracion/ConfiguracionView';
 import DocumentacionView from './documentacion/DocumentacionView';
 import AbstencionismoView from './abstencionismo/AbstencionismoView';
+import ComparadorView from './comparador/ComparadorView';
 
 const Placeholder = ({ label }) => (
   <EmptyState
@@ -51,7 +52,7 @@ const Dashboard = ({ userName, user, handleSignOut }) => {
       case 'abstencionismo':
         return <AbstencionismoView />;
       case 'comparador':
-        return <Placeholder label="Comparador político" />;
+        return <ComparadorView />;
       case 'notificaciones':
         return <Placeholder label="Notificaciones" />;
       case 'participacion':
