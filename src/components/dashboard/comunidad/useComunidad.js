@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useToast } from '@/components/ui';
 import * as community from '@/services/community';
+import { checkRateLimit } from '@/utils/rateLimit';
 import { MOCK_BOTS_POSTS } from './mockData';
 
 const isMock = (id) => String(id).startsWith('mock_') || String(id).includes('_mock');
@@ -61,6 +62,11 @@ export const useComunidad = (user) => {
 
   const publish = async ({ text, media, topic }) => {
     if (!requireUser()) return false;
+    const limit = checkRateLimit(`post:${user.id}`, { max: 5, windowMs: 60000 });
+    if (!limit.ok) {
+      toast.error(`Estás publicando muy rápido. Intenta en ${limit.retryInSeconds} s.`);
+      return false;
+    }
     try {
       const result = await community.createPost({ userId: user.id, text, media, topic });
       if (result.warned) {

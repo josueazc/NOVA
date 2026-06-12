@@ -1,23 +1,33 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import { Construction } from 'lucide-react';
 import AppShell from '@/components/layout/AppShell';
 import useHashRoute from '@/hooks/useHashRoute';
-import { EmptyState } from '@/components/ui';
+import { EmptyState, SkeletonCard } from '@/components/ui';
 import { unreadCount } from '@/services/notifications';
 import { identify, pageView } from '@/services/analytics';
-import NotificacionesView from './notificaciones/NotificacionesView';
-import ParticipacionView from './participacion/ParticipacionView';
 import HomeView from './home/HomeView';
-import PartidosView from './partidos/PartidosView';
-import PlanesView from './planes/PlanesView';
-import AsambleaView from './asamblea/AsambleaView';
-import ComunidadView from './comunidad/ComunidadView';
-import TestPoliticoView from './test_politico/TestPoliticoView';
-import PoliticalChatbot from './chat/PoliticalChatbot';
-import ConfiguracionView from './configuracion/ConfiguracionView';
-import DocumentacionView from './documentacion/DocumentacionView';
-import AbstencionismoView from './abstencionismo/AbstencionismoView';
-import ComparadorView from './comparador/ComparadorView';
+
+// Code splitting: cada vista carga solo cuando se visita.
+// Documentación (mermaid ~1 MB) deja de pesar en el bundle inicial.
+const PartidosView = lazy(() => import('./partidos/PartidosView'));
+const PlanesView = lazy(() => import('./planes/PlanesView'));
+const AsambleaView = lazy(() => import('./asamblea/AsambleaView'));
+const ComunidadView = lazy(() => import('./comunidad/ComunidadView'));
+const TestPoliticoView = lazy(() => import('./test_politico/TestPoliticoView'));
+const PoliticalChatbot = lazy(() => import('./chat/PoliticalChatbot'));
+const ConfiguracionView = lazy(() => import('./configuracion/ConfiguracionView'));
+const DocumentacionView = lazy(() => import('./documentacion/DocumentacionView'));
+const AbstencionismoView = lazy(() => import('./abstencionismo/AbstencionismoView'));
+const ComparadorView = lazy(() => import('./comparador/ComparadorView'));
+const NotificacionesView = lazy(() => import('./notificaciones/NotificacionesView'));
+const ParticipacionView = lazy(() => import('./participacion/ParticipacionView'));
+
+const ViewFallback = () => (
+  <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-4">
+    <SkeletonCard />
+    <SkeletonCard />
+  </div>
+);
 
 const Placeholder = ({ label }) => (
   <EmptyState
@@ -90,7 +100,7 @@ const Dashboard = ({ userName, user, handleSignOut }) => {
   return (
     <AppShell route={route} onNavigate={navigate} userName={userName} unreadCount={unread} onSignOut={handleSignOut}>
       <div key={route} className="animate-fade-in">
-        {renderView()}
+        <Suspense fallback={<ViewFallback />}>{renderView()}</Suspense>
       </div>
     </AppShell>
   );
