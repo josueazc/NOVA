@@ -58,7 +58,7 @@ const AuthScreen = ({ handleAuth, handleResetPassword, loading, message, setMess
           style={{ background: 'radial-gradient(80% 60% at 0% 100%, rgb(var(--c-accent) / 0.06), transparent)' }}
         />
         <div className="relative flex items-baseline gap-2">
-          <span className="font-serif italic text-2xl text-ink">VoteOn</span>
+          <span className="font-serif italic text-2xl text-ink">NOVA</span>
           <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-faint border border-line rounded px-1.5 py-0.5">
             CR 2026
           </span>
@@ -90,7 +90,7 @@ const AuthScreen = ({ handleAuth, handleResetPassword, loading, message, setMess
         <div className="w-full max-w-md py-8 animate-fade-up">
           {/* Marca en móvil */}
           <div className="lg:hidden flex items-baseline gap-2 mb-8">
-            <span className="font-serif italic text-2xl text-ink">VoteOn</span>
+            <span className="font-serif italic text-2xl text-ink">NOVA</span>
             <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-faint border border-line rounded px-1.5 py-0.5">CR 2026</span>
           </div>
 
@@ -228,7 +228,7 @@ const AuthScreen = ({ handleAuth, handleResetPassword, loading, message, setMess
               disabled={isSignUp && (!isPasswordValid || !firstName || !lastName || !province || !dni)}
               className="w-full !mt-6 group"
             >
-              {isSignUp ? 'Crear perfil ciudadano' : 'Entrar a VoteOn'}
+              {isSignUp ? 'Crear perfil ciudadano' : 'Entrar a NOVA'}
               <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
             </Button>
           </form>

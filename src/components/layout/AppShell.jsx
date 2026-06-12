@@ -10,7 +10,7 @@ const SECONDARY = ROUTES.filter((r) => !r.primary && !['config', 'notificaciones
 const Wordmark = ({ onClick }) => (
   <button onClick={onClick} className="flex items-baseline gap-2 group" aria-label="Ir al inicio">
     <span className="font-serif italic text-2xl text-ink leading-none group-hover:text-accent transition-colors">
-      VoteOn
+      NOVA
     </span>
     <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-faint border border-line rounded px-1.5 py-0.5">
       CR 2026
@@ -201,7 +201,7 @@ const AppShell = ({ route, onNavigate, userName, unreadCount = 0, onSignOut, chi
       <footer className="border-t border-line mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 grid gap-10 md:grid-cols-3">
           <div className="space-y-3 max-w-sm">
-            <span className="font-serif italic text-xl text-ink">VoteOn</span>
+            <span className="font-serif italic text-xl text-ink">NOVA</span>
             <p className="text-sm text-muted leading-relaxed">{t('footer.tagline')}</p>
           </div>
           <div>
@@ -247,7 +247,7 @@ const AppShell = ({ route, onNavigate, userName, unreadCount = 0, onSignOut, chi
         <div className="border-t border-line">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">
-              © {new Date().getFullYear()} VoteOn — {t('footer.civicProject')}
+              © {new Date().getFullYear()} NOVA — {t('footer.civicProject')}
             </p>
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">
               {t('footer.madeIn')}

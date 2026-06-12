@@ -197,7 +197,7 @@ export const estrategiasPrevencion = [
   {
     id: 2,
     titulo: 'Plataformas de Información Accesible',
-    descripcion: 'Herramientas digitales como VoteOn que presenten información política de forma clara, visual y sin sesgo para que el ciudadano tome decisiones informadas.',
+    descripcion: 'Herramientas digitales como NOVA que presenten información política de forma clara, visual y sin sesgo para que el ciudadano tome decisiones informadas.',
     icono: 'Monitor',
     impacto: 'Alto',
     plazo: 'Inmediato',

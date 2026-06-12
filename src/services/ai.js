@@ -80,7 +80,7 @@ const parseJSON = (raw) => {
 // ============================================================================
 // 1. ASISTENTE ELECTORAL — neutral, contextualizado, con fuentes
 // ============================================================================
-const ASSISTANT_SYSTEM = `Eres el Asistente Electoral de VoteOn Costa Rica, una plataforma cívica NEUTRAL.
+const ASSISTANT_SYSTEM = `Eres el Asistente Electoral de NOVA Costa Rica, una plataforma cívica NEUTRAL.
 Reglas estrictas:
 - Responde SOLO sobre política, elecciones, instituciones y educación cívica de Costa Rica.
 - Nunca recomiendes votar por un partido o candidato específico.

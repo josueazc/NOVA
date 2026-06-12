@@ -263,9 +263,9 @@ const AbstencionismoView = () => {
               <div className="relative z-10 max-w-2xl">
                 <div className="inline-block bg-white/10 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6">Tu voto importa</div>
                 <h3 className="text-3xl sm:text-4xl font-[1000] leading-tight tracking-tighter mb-4">Informarte es el primer paso para participar.</h3>
-                <p className="text-blue-200 font-medium text-lg leading-relaxed mb-8">VoteOn existe para que conozcas a los candidatos, sus propuestas y tomes una decisión informada. La democracia la construimos todos.</p>
+                <p className="text-blue-200 font-medium text-lg leading-relaxed mb-8">NOVA existe para que conozcas a los candidatos, sus propuestas y tomes una decisión informada. La democracia la construimos todos.</p>
                 <div className="flex items-center gap-3 text-[#EF1C24] font-black text-xs uppercase tracking-widest">
-                  Explora VoteOn <ArrowRight size={16} />
+                  Explora NOVA <ArrowRight size={16} />
                 </div>
               </div>
             </div>

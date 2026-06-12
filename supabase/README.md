@@ -1,4 +1,4 @@
-# Base de datos — VoteOn
+# Base de datos — NOVA
 
 ## Setup
 

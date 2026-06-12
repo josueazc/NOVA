@@ -44,7 +44,7 @@ flowchart TD
     classDef module fill:#ef4444,stroke:#991b1b,color:#fff,rx:10px
     classDef sub fill:#f8fafc,stroke:#cbd5e1,color:#0f172a,rx:5px
 
-    A([Entrada a VoteOn]):::start --> B{¿Autenticado?}
+    A([Entrada a NOVA]):::start --> B{¿Autenticado?}
     B -- No --> C[Página de Registro / Login]:::auth
     C --> D[Creación de Perfil en BD]:::sub
     B -- Sí --> E[Dashboard Principal]:::start

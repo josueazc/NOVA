@@ -1,6 +1,6 @@
-# Despliegue — VoteOn
+# Despliegue — NOVA
 
-VoteOn es una SPA estática (Vite) + Supabase como backend. Cualquier hosting
+NOVA es una SPA estática (Vite) + Supabase como backend. Cualquier hosting
 estático sirve; aquí están las tres rutas recomendadas.
 
 ## Variables de entorno

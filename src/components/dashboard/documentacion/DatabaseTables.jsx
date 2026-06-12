@@ -46,7 +46,7 @@ const DatabaseTables = () => {
       <div className="space-y-8">
         <TableDefinition 
           tableName="profiles" 
-          description="Extiende la tabla de autenticación nativa (auth.users). Almacena la información pública y política de cada ciudadano registrado en VoteOn."
+          description="Extiende la tabla de autenticación nativa (auth.users). Almacena la información pública y política de cada ciudadano registrado en NOVA."
           columns={[
             { name: "id", type: "uuid", constraint: "Primary Key, FK a auth.users", desc: "Identificador único del usuario, gestionado por Supabase Auth." },
             { name: "full_name", type: "text", constraint: "Not Null", desc: "Nombre completo ingresado durante el registro." },
