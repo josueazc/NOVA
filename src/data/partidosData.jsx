@@ -289,9 +289,8 @@ export const partidosData = {
       { ano: '2026', porcentaje: 48.54, color: '#14A44D' },
     ],
     historiaDetallada: [
-      { año: '2018', hito: 'Fundación', desc: 'Rodrigo Chaves funda el partido.' },
-      { año: '2022', hito: 'Victoria presidencial', desc: 'Rodrigo Chaves gana segunda ronda con 52.8%.' },
-      { año: '2026', hito: 'Elecciones 2026', desc: 'Candidata: Laura Fernández Sibaja.' },
+      { año: '2022', hito: 'Antecedente oficialista', desc: 'Rodrigo Chaves gana la presidencia con el PPSD (52,8% en segunda ronda).' },
+      { año: '2026', hito: 'Debut y victoria', desc: 'Pueblo Soberano lleva a Laura Fernández Sibaja y gana la primera ronda con 48,5%.' },
     ],
     listaGobiernos: [
       { año: '2022-2026', presidente: 'Rodrigo Chaves Robles', obra: 'Digitalización del Estado y lucha anticorrupción.' },
