@@ -582,8 +582,34 @@ begin
 end; $$;
 
 -- ============================================================================
--- 10. STORAGE
+-- 10. STORAGE — bucket público 'comunidad_media' para medios de la comunidad
 -- ----------------------------------------------------------------------------
--- Crear bucket público 'comunidad_media' desde el panel de Supabase
--- (Storage -> New bucket -> public). Límite recomendado: 5 MB por archivo.
+-- Se crea automáticamente al correr la migración (antes había que hacerlo a
+-- mano en el panel; sin este bucket, subir imágenes en la comunidad falla).
 -- ============================================================================
+insert into storage.buckets (id, name, public)
+values ('comunidad_media', 'comunidad_media', true)
+on conflict (id) do update set public = true;
+
+-- Lectura pública de los archivos del bucket
+drop policy if exists "comunidad_media lectura publica" on storage.objects;
+create policy "comunidad_media lectura publica"
+  on storage.objects for select
+  using (bucket_id = 'comunidad_media');
+
+-- Subida solo para usuarios autenticados
+drop policy if exists "comunidad_media subida autenticados" on storage.objects;
+create policy "comunidad_media subida autenticados"
+  on storage.objects for insert to authenticated
+  with check (bucket_id = 'comunidad_media');
+
+-- Cada quien gestiona (actualiza/borra) solo sus propios archivos
+drop policy if exists "comunidad_media actualizar propios" on storage.objects;
+create policy "comunidad_media actualizar propios"
+  on storage.objects for update to authenticated
+  using (bucket_id = 'comunidad_media' and owner = auth.uid());
+
+drop policy if exists "comunidad_media borrar propios" on storage.objects;
+create policy "comunidad_media borrar propios"
+  on storage.objects for delete to authenticated
+  using (bucket_id = 'comunidad_media' and owner = auth.uid());
