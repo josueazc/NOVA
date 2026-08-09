@@ -7,9 +7,9 @@
 Plataforma cívica independiente para las elecciones de **Costa Rica 2026** 🇨🇷
 Comparador electoral · Red social ciudadana · IA con fuentes oficiales
 
-[![CI](https://github.com/josueazc/VoteOn2/actions/workflows/ci.yml/badge.svg)](https://github.com/josueazc/VoteOn2/actions)
+[![CI](https://github.com/josueazc/NOVA/actions/workflows/ci.yml/badge.svg)](https://github.com/josueazc/NOVA/actions)
 [![License](https://img.shields.io/badge/proyecto-c%C3%ADvico-0B2F7E)](docs/GROWTH.md)
-[![PRs Welcome](https://img.shields.io/badge/PRs-bienvenidos-346538)](https://github.com/josueazc/VoteOn2/pulls)
+[![PRs Welcome](https://img.shields.io/badge/PRs-bienvenidos-346538)](https://github.com/josueazc/NOVA/pulls)
 
 <br/>
 
@@ -73,10 +73,10 @@ degrada con gracia sin API key.
 ## 🚀 Empezar
 
 ```bash
-git clone https://github.com/josueazc/VoteOn2.git
-cd VoteOn2
+git clone https://github.com/josueazc/NOVA.git
+cd NOVA
 npm install
-cp .env.example .env   # completa Supabase y Gemini
+cp .env.example .env   # completa Supabase y la IA (Anthropic o Gemini)
 npm run dev
 ```
 
@@ -84,7 +84,7 @@ npm run dev
    [`supabase/migrations/00_init.sql`](supabase/migrations/00_init.sql)
    → guía completa en [supabase/README.md](supabase/README.md)
 2. 📦 Crea el bucket público `comunidad_media` en Storage
-3. 🔑 Consigue tu API key en [Google AI Studio](https://aistudio.google.com/apikey)
+3. 🔑 Consigue tu API key de IA: [Anthropic](https://console.anthropic.com/settings/keys) (default) o [Google AI Studio](https://aistudio.google.com/apikey). Configura `VITE_AI_PROVIDER` en `.env`
 
 ```bash
 npm test         # 29 tests (Vitest + RTL)
@@ -96,21 +96,6 @@ npm run build    # bundle inicial ~255 kB gracias al code splitting
 SPA estática: funciona out-of-the-box en **Vercel** o **Netlify**
 (framework Vite, build `npm run build`, output `dist`, variables `VITE_*`
 en el panel). CI corre tests + build en cada push.
-
-## ⛓️ Roadmap Web3 (explorando)
-
-NOVA es una plataforma de *confianza pública* — exactamente el problema que
-blockchain resuelve bien cuando se usa con criterio. Ideas en evaluación:
-
-- **Anclaje de integridad:** hash de cada fact-check y snapshot del comparador
-  anclado on-chain → cualquiera puede auditar que no se editó después.
-- **Insignias soulbound:** verificación de candidatos y embajadores como
-  tokens intransferibles.
-- **Sondeos resistentes a manipulación:** consultas comunitarias con
-  commit-reveal o pruebas zk (no elecciones reales — eso es del TSE).
-- **Transparencia de fondos:** donaciones en cripto con libro público.
-
-Detalle y trade-offs en la sección Web3 de [docs/GROWTH.md](docs/GROWTH.md).
 
 ## 🤝 Neutralidad
 

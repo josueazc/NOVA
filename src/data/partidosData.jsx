@@ -30,17 +30,18 @@ const FlagPLP = () => (
 
 const FlagFA = () => (
   <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-    <rect width="120" height="80" fill="#CC0000" />
-    <polygon points="0,0 46,0 26,80 0,80" fill="#8B0000" />
-    <text x="73" y="47" textAnchor="middle" fontSize="14" fontWeight="900" fill="white" fontFamily="system-ui,sans-serif" letterSpacing="2">FA</text>
+    <rect width="120" height="80" fill="#FCD116" />
+    <rect width="120" height="24" y="0" fill="#DA291C" />
+    <rect width="120" height="18" y="62" fill="#2E7D32" />
+    <text x="60" y="50" textAnchor="middle" fontSize="15" fontWeight="900" fill="#DA291C" fontFamily="system-ui,sans-serif" letterSpacing="2">FA</text>
   </svg>
 );
 
 const FlagNR = () => (
   <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-    <rect width="120" height="80" fill="#1B1F3B" />
-    {[10, 22, 34].map(y => (
-      <rect key={y} width="90" height="5" x="15" y={y} fill="#7C3AED" rx="2" />
+    <rect width="120" height="80" fill="#15317E" />
+    {[12, 24, 36].map(y => (
+      <rect key={y} width="90" height="5" x="15" y={y} fill="#FFFFFF" rx="2" />
     ))}
     <text x="60" y="66" textAnchor="middle" fontSize="9" fontWeight="900" fill="white" fontFamily="system-ui,sans-serif" letterSpacing="1">NUEVA REPÚBLICA</text>
   </svg>
@@ -48,17 +49,17 @@ const FlagNR = () => (
 
 const FlagPPS = () => (
   <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-    <rect width="120" height="80" fill="#D97706" />
-    <circle cx="60" cy="34" r="22" fill="white" opacity="0.15" />
-    <circle cx="60" cy="34" r="13" fill="white" opacity="0.2" />
-    <text x="60" y="38" textAnchor="middle" fontSize="11" fontWeight="900" fill="white" fontFamily="system-ui,sans-serif" letterSpacing="1">PPS</text>
-    <text x="60" y="70" textAnchor="middle" fontSize="8" fontWeight="700" fill="rgba(255,255,255,0.8)" fontFamily="system-ui,sans-serif" letterSpacing="0.5">PROGRESO SOCIAL</text>
+    <rect width="120" height="80" fill="#14A44D" />
+    <circle cx="60" cy="33" r="22" fill="white" opacity="0.18" />
+    <circle cx="60" cy="33" r="13" fill="white" opacity="0.22" />
+    <text x="60" y="37" textAnchor="middle" fontSize="11" fontWeight="900" fill="white" fontFamily="system-ui,sans-serif" letterSpacing="1">PPSO</text>
+    <text x="60" y="70" textAnchor="middle" fontSize="8" fontWeight="700" fill="rgba(255,255,255,0.85)" fontFamily="system-ui,sans-serif" letterSpacing="0.5">PUEBLO SOBERANO</text>
   </svg>
 );
 
 const FlagPIN = () => (
   <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-    <rect width="120" height="80" fill="#059669" />
+    <rect width="120" height="80" fill="#0067B1" />
     <rect x="5" y="5" width="110" height="70" fill="none" stroke="white" strokeWidth="5" />
     <text x="60" y="46" textAnchor="middle" fontSize="13" fontWeight="900" fill="white" fontFamily="system-ui,sans-serif" letterSpacing="2">PIN</text>
   </svg>
@@ -66,10 +67,10 @@ const FlagPIN = () => (
 
 const FlagAC = () => (
   <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-    <rect width="120" height="80" fill="#0EA5E9" />
-    <rect width="42" height="80" fill="#0C4A6E" />
-    <text x="21" y="47" textAnchor="middle" fontSize="13" fontWeight="900" fill="white" fontFamily="system-ui,sans-serif" letterSpacing="1">AC</text>
-    <text x="82" y="44" textAnchor="middle" fontSize="8" fontWeight="800" fill="white" fontFamily="system-ui,sans-serif" letterSpacing="0.5">ACCIÓN</text>
+    <rect width="120" height="80" fill="#1D4ED8" />
+    <rect width="120" height="26" y="54" fill="#F5C518" />
+    <text x="60" y="34" textAnchor="middle" fontSize="14" fontWeight="900" fill="white" fontFamily="system-ui,sans-serif" letterSpacing="1">CAC</text>
+    <text x="60" y="72" textAnchor="middle" fontSize="8" fontWeight="800" fill="#15317E" fontFamily="system-ui,sans-serif" letterSpacing="0.5">AGENDA CIUDADANA</text>
   </svg>
 );
 
@@ -97,7 +98,7 @@ export const partidosData = {
       { ano: '2014', porcentaje: 29.7, color: '#4ade80' },
       { ano: '2018', porcentaje: 18.6, color: '#86efac' },
       { ano: '2022', porcentaje: 27.3, color: '#16a34a' },
-      { ano: '2026', porcentaje: 0, color: '#e2e8f0' },
+      { ano: '2026', porcentaje: 33.65, color: '#0B7A3B' },
     ],
     historiaDetallada: [
       { año: '1951', hito: 'Fundación', desc: 'Acta constitutiva en La Lucha.' },
@@ -143,7 +144,7 @@ export const partidosData = {
       { ano: '2014', porcentaje: 6.0, color: '#60a5fa' },
       { ano: '2018', porcentaje: 16.0, color: '#3b82f6' },
       { ano: '2022', porcentaje: 12.4, color: '#1d4ed8' },
-      { ano: '2026', porcentaje: 0, color: '#e2e8f0' },
+      { ano: '2026', porcentaje: 2.66, color: '#C8102E' },
     ],
     historiaDetallada: [
       { año: '1983', hito: 'Fundación', desc: 'Fusión de partidos en la Coalición Unidad.' },
@@ -183,7 +184,7 @@ export const partidosData = {
     fraseImpacto: 'El gobierno debe ser el árbitro, no el jugador.',
     historialVotos: [
       { ano: '2022', porcentaje: 12.4, color: '#f97316' },
-      { ano: '2026', porcentaje: 0, color: '#e2e8f0' },
+      { ano: '2026', porcentaje: 0.34, color: '#F97316' },
     ],
     historiaDetallada: [
       { año: '2019', hito: 'Fundación', desc: 'Inscripción ante el TSE.' },
@@ -218,7 +219,7 @@ export const partidosData = {
       { ano: '2014', porcentaje: 17.7, color: '#dc2626' },
       { ano: '2018', porcentaje: 3.3, color: '#ef4444' },
       { ano: '2022', porcentaje: 11.1, color: '#b91c1c' },
-      { ano: '2026', porcentaje: 0, color: '#e2e8f0' },
+      { ano: '2026', porcentaje: 3.76, color: '#DA291C' },
     ],
     historiaDetallada: [
       { año: '2004', hito: 'Fundación', desc: 'Nace como alternativa a la izquierda costarricense.' },
@@ -234,8 +235,8 @@ export const partidosData = {
   nr: {
     id: 'nr',
     nombre: 'Nueva República',
-    siglas: 'NR',
-    color: '#7C3AED',
+    siglas: 'PNR',
+    color: '#15317E',
     escala: 'Nacional',
     imagen: '',
     bandera: <FlagNR />,
@@ -252,7 +253,7 @@ export const partidosData = {
     historialVotos: [
       { ano: '2018', porcentaje: 25.0, color: '#7c3aed' },
       { ano: '2022', porcentaje: 14.9, color: '#6d28d9' },
-      { ano: '2026', porcentaje: 0, color: '#e2e8f0' },
+      { ano: '2026', porcentaje: 2.19, color: '#15317E' },
     ],
     historiaDetallada: [
       { año: '2018', hito: 'Debut explosivo', desc: 'Fabricio Alvarado: 25% en primera ronda.' },
@@ -267,9 +268,9 @@ export const partidosData = {
 
   pps: {
     id: 'pps',
-    nombre: 'Partido Progreso Social Democrático',
-    siglas: 'PPS',
-    color: '#D97706',
+    nombre: 'Partido Pueblo Soberano',
+    siglas: 'PPSO',
+    color: '#14A44D',
     escala: 'Nacional',
     imagen: '',
     bandera: <FlagPPS />,
@@ -278,14 +279,14 @@ export const partidosData = {
     diputadosActuales: 10,
     lema: 'Progreso con justicia social',
     historiaTexto:
-      'El PPS fue fundado por Rodrigo Chaves, quien llegó a la presidencia en 2022 con un discurso antisistema y promesas de modernización del Estado. Para 2026 postula a Laura Fernández Sibaja como continuadora.',
+      'Pueblo Soberano es la agrupación oficialista que llevó la candidatura de Laura Fernández Sibaja en 2026, alineada con el legado del presidente Rodrigo Chaves (2022-2026). Ganó la primera ronda de 2026 con cerca del 48,5 % de los votos.',
     mision: 'Transformar el Estado costarricense eliminando la corrupción y burocracia que frenan el desarrollo.',
     vision: 'Un gobierno eficiente y cercano a la ciudadanía que responde con resultados concretos.',
     valores: ['Eficiencia', 'Anticorrupción', 'Ciudadanía', 'Resultados'],
     fraseImpacto: 'Costa Rica necesita un gobierno que cumpla lo que promete.',
     historialVotos: [
       { ano: '2022', porcentaje: 52.8, color: '#d97706' },
-      { ano: '2026', porcentaje: 0, color: '#e2e8f0' },
+      { ano: '2026', porcentaje: 48.54, color: '#14A44D' },
     ],
     historiaDetallada: [
       { año: '2018', hito: 'Fundación', desc: 'Rodrigo Chaves funda el partido.' },
@@ -305,7 +306,7 @@ export const partidosData = {
     id: 'pin',
     nombre: 'Partido Integración Nacional',
     siglas: 'PIN',
-    color: '#059669',
+    color: '#0067B1',
     escala: 'Nacional',
     imagen: '',
     bandera: <FlagPIN />,
@@ -322,7 +323,7 @@ export const partidosData = {
     historialVotos: [
       { ano: '2018', porcentaje: 9.5, color: '#059669' },
       { ano: '2022', porcentaje: 1.8, color: '#047857' },
-      { ano: '2026', porcentaje: 0, color: '#e2e8f0' },
+      { ano: '2026', porcentaje: 0.15, color: '#0067B1' },
     ],
     historiaDetallada: [
       { año: '1996', hito: 'Fundación', desc: 'Nace como partido de base popular.' },
@@ -337,9 +338,9 @@ export const partidosData = {
 
   ac: {
     id: 'ac',
-    nombre: 'Acción Ciudadana',
-    siglas: 'AC',
-    color: '#0EA5E9',
+    nombre: 'Coalición Agenda Ciudadana',
+    siglas: 'CAC',
+    color: '#1D4ED8',
     escala: 'Nacional',
     imagen: '',
     bandera: <FlagAC />,
@@ -348,7 +349,7 @@ export const partidosData = {
     diputadosActuales: 2,
     lema: 'El poder a la ciudadanía',
     historiaTexto:
-      'El Partido Acción Ciudadana llegó al poder en 2014 y 2018. Para 2026 postula a Claudia Dobles Camargo, exministra de Vivienda bajo Carlos Alvarado, como candidata presidencial con una agenda de transición climática e inclusión.',
+      'La Coalición Agenda Ciudadana agrupó a fuerzas de centro-progresistas —con raíces en el Partido Acción Ciudadana, que gobernó en 2014 y 2018— y llevó la candidatura de Claudia Dobles Camargo en 2026, con una agenda de transición climática e inclusión.',
     mision: 'Construir una democracia de calidad basada en la participación ciudadana y la ética pública.',
     vision: 'Costa Rica gobernada con transparencia, inclusión y compromiso ambiental.',
     valores: ['Ética', 'Participación', 'Inclusión', 'Ambiente'],
@@ -357,7 +358,7 @@ export const partidosData = {
       { ano: '2014', porcentaje: 30.6, color: '#0ea5e9' },
       { ano: '2018', porcentaje: 48.4, color: '#0284c7' },
       { ano: '2022', porcentaje: 1.0, color: '#bae6fd' },
-      { ano: '2026', porcentaje: 0, color: '#e2e8f0' },
+      { ano: '2026', porcentaje: 4.91, color: '#1D4ED8' },
     ],
     historiaDetallada: [
       { año: '2000', hito: 'Fundación', desc: 'Ottón Solís funda el PAC.' },

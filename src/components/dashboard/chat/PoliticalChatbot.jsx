@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, Loader2, Database, ShieldAlert, Sparkles, UploadCloud, FileText, X } from 'lucide-react';
 import { geminiRequest } from '@/services/ai';
+import { ELECTION_KNOWLEDGE } from '@/data/electionKnowledge';
 
 const PoliticalChatbot = () => {
  const [input, setInput] = useState('');
  const [context, setContext] = useState('');
  const [files, setFiles] = useState([]);
  const [messages, setMessages] = useState([
-  { id: 1, text: "¡Hola! Soy tu Asistente IA estricto. Solo responderé basándome en la información que introduzcas en mi base de conocimiento. Puedes escribir texto o subir archivos PDF y TXT. I can also speak multiple languages! ¿Qué deseas consultar?", sender: "bot" }
+  { id: 1, text: "¡Hola! Soy el Asistente IA de NOVA. Puedo responder sobre las elecciones de Costa Rica 2026 —candidaturas, calendario del TSE y propuestas por tema— con base en los datos oficiales de la plataforma. También puedes ampliar mi base subiendo documentos PDF/TXT o pegando texto. I can also answer in multiple languages! ¿Qué deseas consultar?", sender: "bot" }
  ]);
  const [isLoading, setIsLoading] = useState(false);
  const fileInputRef = useRef(null);
@@ -72,15 +73,16 @@ const PoliticalChatbot = () => {
    const systemInstruction = `Eres un asistente de IA muy estricto. 
 Tu única fuente de verdad es la "Base de Conocimiento" que se te proporciona a continuación (texto) y en los documentos PDF adjuntos.
 REGLAS CRÍTICAS:
-1. SI la respuesta a la pregunta del usuario NO está explícitamente en la Base de Conocimiento o en los PDFs adjuntos, DEBES negarte a responder indicando amablemente que no tienes esa información en tus documentos base.
+1. SI la respuesta a la pregunta del usuario NO está en la Base de Conocimiento o en los PDFs adjuntos, DEBES negarte a responder indicando amablemente que no tienes esa información en tus documentos base.
 2. NUNCA inventes, deduzcas ni utilices conocimiento externo de internet o de tu entrenamiento previo.
-3. IDIOMAS: Debes detectar el idioma en el que el usuario te hace la pregunta y responder EXCLUSIVAMENTE en ese mismo idioma (ej. si pregunta en inglés, responde en inglés; si en francés, en francés).
-4. Responde de forma clara, directa y estructurada.
+3. NEUTRALIDAD: nunca recomiendes ni sugieras votar por un partido o candidatura. Presenta las posiciones tal como están descritas, sin favorecer a ninguna.
+4. IDIOMAS: Debes detectar el idioma en el que el usuario te hace la pregunta y responder EXCLUSIVAMENTE en ese mismo idioma (ej. si pregunta en inglés, responde en inglés; si en francés, en francés).
+5. Responde de forma clara, directa y estructurada.
 
-BASE DE CONOCIMIENTO TEXTUAL ACTUAL:
-Te voy a dar un **bloque grande de contenido listo para usar como base de conocimiento** para tu chatbot. Está organizado por temas para que lo puedas pegar directo (o dividir en secciones en tu sistema).
+BASE DE CONOCIMIENTO OFICIAL DE NOVA — ELECCIONES COSTA RICA 2026:
+${ELECTION_KNOWLEDGE}
 
----
+--- Referencia cívica general de Costa Rica ---
 
 # 🇨🇷 POLÍTICA DE COSTA RICA — BASE DE CONOCIMIENTO
 
@@ -307,18 +309,6 @@ Podés usar estos conceptos como triggers:
 
 ---
 
-## 🔥 Ideas para respuestas inteligentes del chatbot
-
-El bot podría:
-
-* Explicar partidos según ideología del usuario
-* Recomendar partido basado en respuestas
-* Mostrar proyectos de ley relevantes
-* Explicar términos políticos simples
-* Comparar partidos
-
----
-
 ## 🧠 Resumen clave
 
 La política en Costa Rica se basa en:
@@ -329,14 +319,9 @@ El poder real no está solo en ganar elecciones, sino en **lograr acuerdos y apr
 
 ---
 
-Si querés, en el siguiente paso te puedo:
-
-* convertir todo esto en formato JSON para tu chatbot
-* o hacerte respuestas automáticas tipo FAQ
-* o integrarlo directo con tu sistema web 🔥
-
+--- DOCUMENTOS Y TEXTO APORTADOS POR LA PERSONA USUARIA ---
 """
-${context || 'No hay información en la base de conocimiento de texto.'}
+${context || 'No hay documentos adicionales aportados por la persona usuaria.'}
 """`;
 
    // Los archivos se envían en la petición del usuario para que Gemini los lea como contexto adicional
