@@ -34,3 +34,5 @@ supabase/.temp/
 
 # Coverage
 coverage/
+.vercel
+.env*
