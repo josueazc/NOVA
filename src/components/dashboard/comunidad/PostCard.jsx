@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Heart, MessageSquare, Repeat, Bookmark, Trash2, Flag,
-  BadgeCheck, UserPlus, UserCheck, ChevronUp, ChevronDown, Hash, EyeOff, SearchCheck,
+  BadgeCheck, UserPlus, UserCheck, ChevronUp, ChevronDown, Hash, EyeOff, SearchCheck, Send,
 } from 'lucide-react';
 import { Avatar, Badge, Button, Modal, Select, Spinner, Textarea, useToast } from '@/components/ui';
 import { partidosData } from '@/data/partidosData';
@@ -324,6 +324,9 @@ const PostCard = ({
                 className="flex-1 bg-surface border border-line rounded-md px-3.5 py-2.5 text-sm text-ink
                   placeholder:text-faint outline-none focus:border-accent focus:ring-2 focus:ring-accent/15 transition-colors"
               />
+              <Button type="submit" size="sm" disabled={!commentText.trim()}>
+                <Send size={13} />
+              </Button>
             </form>
           </div>
         )}
