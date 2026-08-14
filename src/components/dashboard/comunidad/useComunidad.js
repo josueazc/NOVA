@@ -26,7 +26,7 @@ export const useComunidad = (user) => {
       community.fetchTrending(all).then(setTrending);
     } catch (err) {
       console.error('Error al cargar posts:', err);
-      setError('No se pudieron cargar las publicaciones.');
+      setError(`No se pudieron cargar las publicaciones: ${err.message || err}`);
       setPosts([...MOCK_BOTS_POSTS]);
     } finally {
       setLoading(false);

@@ -22,7 +22,7 @@ const ParticipacionView = ({ user }) => {
   useEffect(() => {
     const load = async () => {
       if (!supabase) {
-        setData({ provinces: [], totals: null, topics: [], mine: null });
+        setData({ provinces: [], totals: null, topics: [], mine: null, error: 'Supabase no está configurado (falta VITE_SUPABASE_URL o VITE_SUPABASE_ANON_KEY).' });
         return;
       }
       try {
@@ -37,6 +37,9 @@ const ParticipacionView = ({ user }) => {
             ? supabase.from('posts').select('likes, comment_count').eq('author_id', user.id)
             : Promise.resolve({ data: null }),
         ]);
+
+        const firstError = [provRes, postsRes, weekRes, usersRes, topicRes, mineRes].find((r) => r?.error)?.error;
+        if (firstError) throw firstError;
 
         const topicCounts = {};
         (topicRes.data || []).forEach(({ topic }) => {
@@ -66,7 +69,7 @@ const ParticipacionView = ({ user }) => {
         });
       } catch (err) {
         console.warn('Participación:', err.message);
-        setData({ provinces: [], totals: null, topics: [], mine: null });
+        setData({ provinces: [], totals: null, topics: [], mine: null, error: err.message || String(err) });
       }
     };
     load();
@@ -141,7 +144,11 @@ const ParticipacionView = ({ user }) => {
         <EmptyState
           icon={<Activity size={22} />}
           title="Sin datos disponibles"
-          description="Conecta Supabase y ejecuta la migración para ver las métricas de participación."
+          description={
+            data.error
+              ? `Error al cargar: ${data.error}`
+              : 'Conecta Supabase y ejecuta la migración para ver las métricas de participación.'
+          }
         />
       ) : (
         <div className="space-y-6">

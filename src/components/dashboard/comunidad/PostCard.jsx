@@ -80,6 +80,7 @@ const PostCard = ({
   const toast = useToast();
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState(null);
+  const [commentsError, setCommentsError] = useState(null);
   const [commentText, setCommentText] = useState('');
   const [reportOpen, setReportOpen] = useState(false);
   const [reportReason, setReportReason] = useState('toxicity');
@@ -108,10 +109,13 @@ const PostCard = ({
       setComments(MOCK_BOTS_COMMENTS[post.id] || []);
       return;
     }
+    setCommentsError(null);
     try {
       setComments(await fetchComments(post.id));
     } catch (err) {
-      toast.error(`No se pudieron cargar los comentarios: ${err.message}`);
+      const msg = err.message || String(err);
+      toast.error(`No se pudieron cargar los comentarios: ${msg}`);
+      setCommentsError(msg);
       setComments([]);
     }
   };
@@ -140,9 +144,12 @@ const PostCard = ({
     try {
       await addComment({ postId: post.id, userId: currentUserId, text: commentText });
       setCommentText('');
+      setCommentsError(null);
       loadComments();
     } catch (err) {
-      toast.error(`Error al comentar: ${err.message}`);
+      const msg = err.message || String(err);
+      toast.error(`Error al comentar: ${msg}`);
+      setCommentsError(msg);
     }
   };
 
@@ -281,6 +288,11 @@ const PostCard = ({
         {/* Comentarios */}
         {showComments && (
           <div className="space-y-3 pt-1 animate-fade-up">
+            {commentsError && (
+              <p className="text-xs text-danger bg-danger-soft border border-danger/15 rounded-md px-3 py-2">
+                {commentsError}
+              </p>
+            )}
             {comments === null ? (
               <div className="space-y-2">
                 <div className="skeleton-shimmer h-12 rounded-lg" />
